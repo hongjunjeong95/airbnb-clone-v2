@@ -53,7 +53,7 @@ class Room(core_models.TimeStampedModel):
     guests = models.IntegerField()
     bedrooms = models.IntegerField()
     beds = models.IntegerField()
-    bathsrooms = models.IntegerField()
+    bathrooms = models.IntegerField()
     description = models.TextField()
     host = models.ForeignKey(
         "users.User", related_name="rooms", on_delete=models.CASCADE
@@ -64,3 +64,4 @@ class Room(core_models.TimeStampedModel):
     amenities = models.ManyToManyField("Amenity", related_name="rooms", blank=True)
     facilities = models.ManyToManyField("Facility", related_name="rooms", blank=True)
     house_rules = models.ManyToManyField("HouseRule", related_name="rooms", blank=True)
+    instant_book = models.BooleanField(default=False)
