@@ -24,6 +24,9 @@ class Review(core_models.TimeStampedModel):
         validators=[MinValueValidator(1), MaxValueValidator(5)]
     )
     value = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
+    avg = models.FloatField(
+        validators=[MinValueValidator(1), MaxValueValidator(5)], default=1
+    )
     user = models.ForeignKey(
         "users.User", related_name="reviews", on_delete=models.CASCADE
     )
@@ -33,3 +36,15 @@ class Review(core_models.TimeStampedModel):
 
     def __str__(self):
         return f"{self.review} - {self.room}"
+
+    def save(self, *args, **kwargs):
+        self.avg = (
+            self.accuracy
+            + self.communication
+            + self.cleanliness
+            + self.location
+            + self.check_in
+            + self.value
+        ) / 6
+        self.avg = round(self.avg, 2)
+        super().save(*args, **kwargs)
