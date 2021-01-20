@@ -49,6 +49,7 @@ PROJECT_APPS = [
     "conversations.apps.ConversationsConfig",
     "lists.apps.ListsConfig",
     "reservations.apps.ReservationsConfig",
+    "reviews.apps.ReviewsConfig",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS
