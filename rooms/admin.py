@@ -1,8 +1,14 @@
 from django.contrib import admin
-from . import models
+from . import models as room_models
+from photos import models as photo_models
 
 
-@admin.register(models.RoomType, models.Facility, models.Amenity, models.HouseRule)
+@admin.register(
+    room_models.RoomType,
+    room_models.Facility,
+    room_models.Amenity,
+    room_models.HouseRule,
+)
 class ImteAdmin(admin.ModelAdmin):
 
     """ Item Admin Definition """
@@ -13,7 +19,11 @@ class ImteAdmin(admin.ModelAdmin):
         return obj.rooms.count()
 
 
-@admin.register(models.Room)
+class PhotoInline(admin.TabularInline):
+    model = photo_models.Photo
+
+
+@admin.register(room_models.Room)
 class RoomAdmin(admin.ModelAdmin):
 
     """ Room Admin Definition """
@@ -32,6 +42,7 @@ class RoomAdmin(admin.ModelAdmin):
         "room_type",
         "count_amenities",
         "count_facilities",
+        "count_photos",
     )
 
     list_filter = (
@@ -99,6 +110,8 @@ class RoomAdmin(admin.ModelAdmin):
         "house_rules",
     )
 
+    inlines = (PhotoInline,)
+
     def count_amenities(self, obj):
         return obj.amenities.count()
 
@@ -108,3 +121,8 @@ class RoomAdmin(admin.ModelAdmin):
         return obj.facilities.count()
 
     count_facilities.short_description = "Facility Count"
+
+    def count_photos(self, obj):
+        return obj.photos.count()
+
+    count_photos.short_description = "Photo Count"
