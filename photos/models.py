@@ -6,8 +6,11 @@ class Photo(core_models.TimeStampedModel):
 
     """ Photo Model Definition """
 
-    cpation = models.CharField(max_length=50)
+    caption = models.CharField(max_length=50)
     file = models.ImageField()
     room = models.ForeignKey(
         "rooms.Room", related_name="photos", on_delete=models.CASCADE
     )
+
+    def __str__(self):
+        return self.caption
