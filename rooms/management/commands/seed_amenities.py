@@ -1,11 +1,10 @@
-from django.core.management.base import BaseCommand, CommandError
-from django_seed import Seed
+from django.core.management.base import BaseCommand
 from rooms.models import Amenity
 
 
 class Command(BaseCommand):
 
-    help = "This command creates many users"
+    help = "This command creates many amenities"
 
     def handle(self, *args, **options):
         amenities = [
@@ -53,7 +52,7 @@ class Command(BaseCommand):
             "TV",
         ]
 
-        for a in amenities:
-            Amenity.objects.create(name=a)
+        for amenity in amenities:
+            Amenity.objects.create(name=amenity)
 
         self.stdout.write(self.style.SUCCESS("Create amenities"))
