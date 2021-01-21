@@ -28,3 +28,5 @@ class MessageAdmin(admin.ModelAdmin):
     """ Message Admin Definition """
 
     list_display = ("__str__", "created")
+
+    raw_id_fields = ("user", "conversation")
