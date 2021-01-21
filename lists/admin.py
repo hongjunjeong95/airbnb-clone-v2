@@ -12,5 +12,7 @@ class ListAdmin(admin.ModelAdmin):
 
     filter_horizontal = ("rooms",)
 
+    raw_id_fields = ("user",)
+
     def count_rooms(self, obj):
         return obj.rooms.count()
