@@ -5,8 +5,37 @@
   
   <ul>
     {% for room in rooms %}
-      <li>{{room.name}} / {{room.price}}</li>
+      <li>
+        <div class="house-image">
+          {% if room.host.superhost %}
+            <span>Superhost</span>
+          {% endif %}
+          <img width='50px' src="{{room.get_first_photo}}" alt="">
+          <i class="far fa-heart"></i>
+        </div>
+        <div class="house-info">
+          <div class="house__score">
+            <i class="fas fa-star"></i>
+            <span class="review-points">{{room.get_review_points}}</span>
+          </div>
+          <div class="house__description">
+            {{room.country}} &bull; {{room.address}}
+          </div>
+        </div>
+      </li>
     {% endfor %}
   </ul>
+
+  
+  {% if rooms.has_previous %}
+    <a href="?page={{rooms.previous_page_number}}">Prev</a>
+  {% endif %}
+
+  Page {{rooms.number}} of {{rooms.paginator.num_pages}}
+
+  {% if rooms.has_next %}
+    <a href="?page={{rooms.next_page_number}}">Next</a>
+  {% endif %}
+    
     
 {% endblock content %}
