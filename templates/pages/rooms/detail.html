@@ -11,6 +11,7 @@
     <div class="rating">
       <i class="fas fa-star"></i>
       <span>{{room.get_review_points}}</span>
+      <span>({{room.reviews.count}})</span>
     </div>
     <span class="superhost">
       {% if room.host.superhost %}
@@ -23,14 +24,131 @@
       <span class="country">{{room.country.name}}</span>
     </div>
   </div>
-  <div class="photos"style="height:100vh">
+  <div class="photos">
     <img src="{{room.get_first_photo}}" alt="" width="400px" class="photos__left">
     <div class="photos__right">
-      
       {% for photo in room.get_four_photo %}
         <img src="{{photo.file.url}}" alt=""  width="100px">
       {% endfor %}
+    </div>
+  </div>
+  <main>
+    <div class="main__left">
+      <div class="space">
+        <div class="space__left">
+          <h2 class="space__name">{{room.room_type}} hosted by {{room.host.first_name}}</h2>
+          <div class="space__info">
+            <span>Maximum</span>
+            <span>{{room.guests}} guests</span>
+            <span>{{room.beds}} beds</span>
+            <span>{{room.bedrooms}} bedrooms</span>
+            <span>{{room.bathrooms}} bathrooms</span>
+          </div>
+        </div>
+        <div class="space__right">
+          <img src="{{room.get_first_photo}}" width="200px" alt="">
+        </div>
+      </div>
+      <div class="description">
+        <span class="content">{{room.description}}</span>
+        <button class="connect_host">Connect host</button>
+      </div>
+      <div class="amenities">
+        <h4>Amenity</h4>
+        {% for amenity in room.amenities.all %}
+          <li>{{amenity}}</li>
+        {% endfor %}
+      </div>
+      <div class="facilities">
+        <h4>Facility</h4>
+        {% for facility in room.facilities.all %}
+          <li>{{facility}}</li>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="main__right">
+      <div class="calendar"></div>
+    </div>
+  </main>
+  <div class="reviews">
+    <div class="reviews__rating">
+      <i class="fas fa-star"></i>
+      <span>{{room.get_review_points}} points</span>
+      <span>({{room.reviews.count}})</span>
+    </div>
+    <div class="reviews__points">
+      <div>
+        <span>accuracy</span>
+        <span class="bar">{{room.calculate_accuracy}}</span>
+      </div>
+      <div>
+        <span>communication</span>
+        <span class="bar">{{room.calculate_communication}}</span>
+      </div>
+      <div>
+        <span>cleanliness</span>
+        <span class="bar">{{room.calculate_cleanliness}}</span>
+      </div>
+      <div>
+        <span>location</span>
+        <span class="bar">{{room.calculate_location}}</span>
+      </div>
+      <div>
+        <span>check_in</span>
+        <span class="bar">{{room.calculate_check_in}}</span>
+      </div>
+      <div>
+        <span>value</span>
+        <span class="bar">{{room.calculate_value}}</span>
+      </div>
+    </div>
+    
+    {% for review in room.reviews.all %}
+      <div class="profile">
+        <img src="{{review.user.avatar.url}}" alt="" class="avatar" width="100px">
+        <div>
+          {{review.user}}
+          {{review.created}}
+        </div>
+      </div>
+      <div class="content">
+        {{review.review}}
+      </div>
+    {% endfor %}
+  </div>
+  <div class="host-info">
+    <div class="host-info__left">
+      <div class="host-info__profile">
+        <img src="{{room.get_first_photo}}" width="50px" alt="" class="profile__room-avatar">
+        <div>
+          <h3>Host : {{room.host.first_name}}</h3>
+          <span>Member Since: {{joined_month}}, {{room.host.date_joined.year}}</span>
+        </div>
+      </div>
+      <div>
+        <div class="host-info__reviews">
+          <i class="fas fa-star"></i>
+          <span>Reviews {{room.reviews.count}}</span>
+        </div>
+        <div class="host-info__superhost">
+          {% if room.host.superhost %}
+            Superhost
+          {% endif %}
+        </div>
+      </div>
+      
+        {% if room.host.superhost %}
+          <p>
+            {{room.host.first_name}} is superhost. Superhost is a host who boasts rich experience and
+            high rating and do their best to make their guests comfortable in their accommodation.
+          </p>
+        {% endif %}
         
+    </div>
+    <div class="host-info__right">
+      <span>Response rate : 100%</span>
+      <span>Response time : In one hour</span>
+      <button>Connect the host</button>
     </div>
   </div>
 {% endblock content %}

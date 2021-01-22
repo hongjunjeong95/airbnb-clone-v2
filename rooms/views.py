@@ -32,7 +32,13 @@ def HomeView(request):
 def RoomDetail(request, pk):
     try:
         room = room_models.Room.objects.get(pk=pk)
-        return render(request, "pages/rooms/detail.html", context={"room": room})
+        month = room.host.date_joined.strftime("%b")
+
+        return render(
+            request,
+            "pages/rooms/detail.html",
+            context={"room": room, "joined_month": month},
+        )
     except room_models.Room.DoesNotExist:
         print("Model does not exsit")
         return redirect(reverse("core:home"))
