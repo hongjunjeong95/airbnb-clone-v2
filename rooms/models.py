@@ -77,6 +77,10 @@ class Room(core_models.TimeStampedModel):
         (photo,) = self.photos.all()[:1]
         return photo.file.url
 
+    def get_four_photo(self):
+        photos = self.photos.all()[1:5]
+        return photos
+
     def get_review_points(self):
         reviews = self.reviews.all()
         all_ratings = 0

@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+
+{% block page_title %}
+  {{room.name}}
+{% endblock page_title %}
+
+{% block content %}
+  <h1>{{room.name}}</h1>
+  <div class="header">
+    <div class="rating">
+      <i class="fas fa-star"></i>
+      <span>{{room.get_review_points}}</span>
+    </div>
+    <span class="superhost">
+      {% if room.host.superhost %}
+        Superhost
+      {% endif %}
+    </span>
+    <div class="location">
+      <span class="address">{{room.address}}</span>
+      <span class="city">{{room.city}}</span>
+      <span class="country">{{room.country.name}}</span>
+    </div>
+  </div>
+  <div class="photos"style="height:100vh">
+    <img src="{{room.get_first_photo}}" alt="" width="400px" class="photos__left">
+    <div class="photos__right">
+      
+      {% for photo in room.get_four_photo %}
+        <img src="{{photo.file.url}}" alt=""  width="100px">
+      {% endfor %}
+        
+    </div>
+  </div>
+{% endblock content %}
