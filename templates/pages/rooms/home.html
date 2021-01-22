@@ -2,6 +2,11 @@
 
 
 {% block content %}
-  hi
-{% endblock content %}
   
+  <ul>
+    {% for room in rooms %}
+      <li>{{room.name}} / {{room.price}}</li>
+    {% endfor %}
+  </ul>
+    
+{% endblock content %}
