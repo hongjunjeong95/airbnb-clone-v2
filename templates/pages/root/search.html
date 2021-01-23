@@ -10,8 +10,8 @@
 
 {% block content %}
   
-  <form method="get" action="{% url 'core:search' %}">
-    <div class="form__country">
+  <form method="get" action="{% url 'core:search' %}" class="search-from">
+    <div class="search-from__country">
       <label for="country">Country</label>
       <select name="country" id="country">
         {% for country in countries %}
@@ -20,7 +20,11 @@
       </select>
     </div>
 
-    {% comment %} city = models.CharField(max_length=140) {% endcomment %}
+    <div class="search-from__city">
+      <label for="city">City</label>
+      <input type="text" name="city">
+    </div>
+    
     {% comment %} address = models.CharField(max_length=140) {% endcomment %}
     {% comment %} price = models.IntegerField() {% endcomment %}
     {% comment %} guests = models.IntegerField() {% endcomment %}
@@ -32,6 +36,7 @@
     {% comment %} facilities {% endcomment %}
     {% comment %} house_rules {% endcomment %}
     {% comment %} instant_book     {% endcomment %}
+    <button>Search</button>
   </form>
 
 

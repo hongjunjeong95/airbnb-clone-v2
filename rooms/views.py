@@ -46,12 +46,21 @@ def RoomDetail(request, pk):
 
 
 def SearchView(request):
-    city = request.GET.get("city")
+    city = request.GET.get("city", "Anywhere")
+    country = request.GET.get("country")
 
-    rooms = room_models.Room.objects.filter(city=city)
+    filter_args = {}
 
+    form = {"countries": countries}
+
+    choices = {"city": city, "s_country": country}
+
+    filter_args["city__startswith"] = city
+    filter_args["country"] = country
+
+    rooms = room_models.Room.objects.filter(**filter_args)
     return render(
         request,
         "pages/root/search.html",
-        context={"rooms": rooms, "countries": countries},
+        context={"rooms": rooms, **form, **choices},
     )
