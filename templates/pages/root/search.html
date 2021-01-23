@@ -58,10 +58,70 @@
         {% endfor %}
       </select>
     </div>
-    {% comment %} amenities {% endcomment %}
+
+    <div class="search-from__amenity">
+      <h3>Amenity</h3>
+      <ul>
+      {% for amenity in amenities %}
+        <li>
+          <label for=amenity_{{amenity.pk}}>{{amenity.name}}</label>
+          <input
+            type="checkbox"
+            name="amenities"
+            value="{{amenity.pk}}"
+            id="amenity_{{amenity.pk}}"
+            {% if amenity.pk|slugify in s_amenities %}
+              checked
+            {% endif %}
+            >
+        </li>
+      {% endfor %}
+      </ul>
+    </div>
+
+    <div class="search-from__facility">
+      <h3>Facility</h3>
+
+      <ul>
+      {% for facility in facilities %}
+        <li>
+          <label for=facility_{{facility.pk}}>{{facility.name}}</label>
+          <input
+            type="checkbox"
+            name="facilities"
+            value="{{facility.pk}}"
+            id="facility_{{facility.pk}}"
+            {% if facility.pk|slugify in s_facilities %}
+              checked
+            {% endif %}
+            >
+        </li>
+      {% endfor %}
+      </ul>
+    </div>
+
+    <div class="search-from__house_rule">
+      <h3>House Rules</h3>
+      <ul>
+      {% for house_rule in house_rules %}
+        <li>
+          <label for=house_rule_{{house_rule.pk}}>{{house_rule.name}}</label>
+          <input
+            type="checkbox"
+            name="house_rules"
+            value="{{house_rule.pk}}"
+            id="house_rule_{{house_rule.pk}}"
+            {% if house_rule.pk|slugify in s_house_rules %}
+              checked
+            {% endif %}
+            >
+        </li>
+      {% endfor %}
+      </ul>
+    </div>
     {% comment %} facilities {% endcomment %}
     {% comment %} house_rules {% endcomment %}
-    {% comment %} instant_book     {% endcomment %}
+    {% comment %} instant_book {% endcomment %}
     <button>Search</button>
   </form>
 

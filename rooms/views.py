@@ -54,9 +54,14 @@ def SearchView(request):
     beds = request.GET.get("beds")
     bathrooms = request.GET.get("bathrooms")
     room_type = request.GET.get("room_type")
-    print(room_type)
+    s_amenities = request.GET.getlist("amenities")
+    s_facilities = request.GET.getlist("facilities")
+    s_house_rules = request.GET.getlist("house_rules")
 
     room_types = room_models.RoomType.objects.all()
+    amenities = room_models.Amenity.objects.all()
+    facilities = room_models.Facility.objects.all()
+    house_rules = room_models.HouseRule.objects.all()
 
     filter_args = {}
 
@@ -69,9 +74,18 @@ def SearchView(request):
         "beds": beds,
         "bathrooms": bathrooms,
         "room_types": room_types,
+        "amenities": amenities,
+        "facilities": facilities,
+        "house_rules": house_rules,
     }
 
-    choices = {"s_country": country, "s_room_type": room_type}
+    choices = {
+        "s_country": country,
+        "s_room_type": room_type,
+        "s_amenities": s_amenities,
+        "s_facilities": s_facilities,
+        "s_house_rules": s_house_rules,
+    }
 
     filter_args["city__startswith"] = city
     filter_args["country"] = country
