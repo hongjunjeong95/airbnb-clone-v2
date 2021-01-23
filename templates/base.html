@@ -7,7 +7,17 @@
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
 </head>
   <body>
-    {% include 'partials/header.html' %}
+    <header>
+        <div>
+          <a href="{% url 'core:home' %}">home</a>
+          {% block search-bar %}
+            <form action="{% url 'core:search' %}">
+              <input type="text" placeholder="Searching By City" name="city">
+            </form>
+          {% endblock search-bar %}
+        </div>
+      {% include 'partials/nav.html' %}
+    </header>
 
     {% block content %}{% endblock content %}
 
