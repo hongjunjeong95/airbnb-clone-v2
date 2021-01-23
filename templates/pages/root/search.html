@@ -50,7 +50,14 @@
       <input type="number" name="bathrooms" min=0 value={{bathrooms}}>
     </div>
     
-    {% comment %} room_type {% endcomment %}
+    <div class="search-from__room_type">
+      <label for="room_type">Room_type</label>
+      <select name="room_type" id="room_type">
+        {% for room_type in room_types %}
+          <option value="{{room_type.pk}}" {% if s_room_type == room_type.pk|slugify %} selected {% endif %}> {{room_type}}</option>
+        {% endfor %}
+      </select>
+    </div>
     {% comment %} amenities {% endcomment %}
     {% comment %} facilities {% endcomment %}
     {% comment %} house_rules {% endcomment %}
