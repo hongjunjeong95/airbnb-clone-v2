@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, reverse
 from django.core.paginator import Paginator, EmptyPage
 from django.utils import timezone
+from django_countries import countries
 from . import models as room_models
 
 
@@ -49,4 +50,8 @@ def SearchView(request):
 
     rooms = room_models.Room.objects.filter(city=city)
 
-    return render(request, "pages/root/search.html", context={"rooms": rooms})
+    return render(
+        request,
+        "pages/root/search.html",
+        context={"rooms": rooms, "countries": countries},
+    )

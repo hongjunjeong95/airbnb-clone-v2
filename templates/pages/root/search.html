@@ -5,13 +5,36 @@
 {% endblock page_title %}
 
 
-{% block search-bar %}
-  
-{% endblock search-bar %}
+{% block search-bar %}{% endblock search-bar %}
   
 
 {% block content %}
   
+  <form method="get" action="{% url 'core:search' %}">
+    <div class="form__country">
+      <label for="country">Country</label>
+      <select name="country" id="country">
+        {% for country in countries %}
+          <option value="{{country.code}}">{{country.name}}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    {% comment %} city = models.CharField(max_length=140) {% endcomment %}
+    {% comment %} address = models.CharField(max_length=140) {% endcomment %}
+    {% comment %} price = models.IntegerField() {% endcomment %}
+    {% comment %} guests = models.IntegerField() {% endcomment %}
+    {% comment %} bedrooms = models.IntegerField() {% endcomment %}
+    {% comment %} beds = models.IntegerField() {% endcomment %}
+    {% comment %} bathrooms = models.IntegerField() {% endcomment %}
+    {% comment %} room_type {% endcomment %}
+    {% comment %} amenities {% endcomment %}
+    {% comment %} facilities {% endcomment %}
+    {% comment %} house_rules {% endcomment %}
+    {% comment %} instant_book     {% endcomment %}
+  </form>
+
+
   {% for room in rooms %}
     <h1>{{room.name}}</h1>
   {% endfor %}
