@@ -48,12 +48,12 @@ def RoomDetail(request, pk):
 def SearchView(request):
     city = request.GET.get("city", "Anywhere")
     country = request.GET.get("country")
-    price = request.GET.get("price")
-    guests = request.GET.get("guests")
-    bedrooms = request.GET.get("bedrooms")
-    beds = request.GET.get("beds")
-    bathrooms = request.GET.get("bathrooms")
-    room_type = request.GET.get("room_type")
+    price = int(request.GET.get("price", 0))
+    guests = int(request.GET.get("guests", 0))
+    bedrooms = int(request.GET.get("bedrooms", 0))
+    beds = int(request.GET.get("beds", 0))
+    bathrooms = int(request.GET.get("bathrooms", 0))
+    room_type = int(request.GET.get("room_type", 0))
     s_amenities = request.GET.getlist("amenities")
     s_facilities = request.GET.getlist("facilities")
     s_house_rules = request.GET.getlist("house_rules")
@@ -87,8 +87,36 @@ def SearchView(request):
         "s_house_rules": s_house_rules,
     }
 
-    filter_args["city__startswith"] = city
+    if city != "Anywhere":
+        filter_args["city__startswith"] = city
+
     filter_args["country"] = country
+
+    if price != 0:
+        filter_args["price__lte"] = price
+    if guests != 0:
+        filter_args["guests__gte"] = guests
+    if bedrooms != 0:
+        filter_args["bedrooms__gte"] = bedrooms
+    if beds != 0:
+        filter_args["beds__gte"] = beds
+    if bathrooms != 0:
+        filter_args["bathrooms__gte"] = bathrooms
+
+    if room_type != 0:
+        filter_args["room_type__pk"] = room_type
+
+    if len(s_amenities) > 0:
+        for s_amenity in s_amenities:
+            filter_args["amenities__pk"] = int(s_amenity)
+
+    if len(s_facilities) > 0:
+        for s_facility in s_facilities:
+            filter_args["facilities__pk"] = int(s_facility)
+
+    if len(s_house_rules) > 0:
+        for s_house_rule in s_house_rules:
+            filter_args["house_rules__pk"] = int(s_house_rule)
 
     rooms = room_models.Room.objects.filter(**filter_args)
     return render(
