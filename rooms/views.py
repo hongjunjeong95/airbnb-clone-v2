@@ -48,12 +48,25 @@ def RoomDetail(request, pk):
 def SearchView(request):
     city = request.GET.get("city", "Anywhere")
     country = request.GET.get("country")
+    price = request.GET.get("price")
+    guests = request.GET.get("guests")
+    bedrooms = request.GET.get("bedrooms")
+    beds = request.GET.get("beds")
+    bathrooms = request.GET.get("bathrooms")
 
     filter_args = {}
 
-    form = {"countries": countries}
+    form = {
+        "city": city,
+        "countries": countries,
+        "price": price,
+        "guests": guests,
+        "bedrooms": bedrooms,
+        "beds": beds,
+        "bathrooms": bathrooms,
+    }
 
-    choices = {"city": city, "s_country": country}
+    choices = {"s_country": country}
 
     filter_args["city__startswith"] = city
     filter_args["country"] = country

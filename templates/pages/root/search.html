@@ -15,22 +15,41 @@
       <label for="country">Country</label>
       <select name="country" id="country">
         {% for country in countries %}
-          <option value="{{country.code}}">{{country.name}}</option>
+          <option value="{{country.code}}" {% if s_country == country.code %} selected {% endif %}>{{country.name}}</option>
         {% endfor %}
       </select>
     </div>
 
     <div class="search-from__city">
       <label for="city">City</label>
-      <input type="text" name="city">
+      <input type="text" name="city" value="{{city}}">
     </div>
     
-    {% comment %} address = models.CharField(max_length=140) {% endcomment %}
-    {% comment %} price = models.IntegerField() {% endcomment %}
-    {% comment %} guests = models.IntegerField() {% endcomment %}
-    {% comment %} bedrooms = models.IntegerField() {% endcomment %}
-    {% comment %} beds = models.IntegerField() {% endcomment %}
-    {% comment %} bathrooms = models.IntegerField() {% endcomment %}
+    <div class="search-from__price">
+      <label for="price">Price</label>
+      <input type="number" name="price" min=0 value={{price}}>
+    </div>
+
+    <div class="search-from__guests">
+      <label for="guests">Guests</label>
+      <input type="number" name="guests" min=0 value={{guests}}>
+    </div>
+
+    <div class="search-from__bedrooms">
+      <label for="bedrooms">bedrooms</label>
+      <input type="number" name="bedrooms" min=0 value={{bedrooms}}>
+    </div>
+
+    <div class="search-from__beds">
+      <label for="beds">beds</label>
+      <input type="number" name="beds" min=0 value={{beds}}>
+    </div>
+
+    <div class="search-from__bathrooms">
+      <label for="bathrooms">bathrooms</label>
+      <input type="number" name="bathrooms" min=0 value={{bathrooms}}>
+    </div>
+    
     {% comment %} room_type {% endcomment %}
     {% comment %} amenities {% endcomment %}
     {% comment %} facilities {% endcomment %}
