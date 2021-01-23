@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+
+{% block page_title %}
+  Sign Up
+{% endblock page_title %}  
+
+
+{% block content %}
+  <form action="{% url 'users:signup' %}" method="post">
+    {% csrf_token %}
+    {{form}}
+    {% comment %} <input type="text" name="first_name" placeholder="Frist Name">
+    <input type="text" name="last_name" placeholder="Last Name">
+    <input type="email" name="email" placeholder="Email">
+    <input type="password" name="password" placeholder="Password">
+    <input type="password" name="password1" placeholder="Verify Password"> {% endcomment %}
+    <button>Submit</button>
+  </form>
+  
+{% endblock content %}
+  
