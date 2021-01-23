@@ -24,7 +24,7 @@ def HomeView(request):
 
     return render(
         request,
-        "pages/rooms/home.html",
+        "pages/root/home.html",
         context={"rooms": rooms, "year": this_year},
     )
 
@@ -42,3 +42,11 @@ def RoomDetail(request, pk):
     except room_models.Room.DoesNotExist:
         print("Model does not exsit")
         return redirect(reverse("core:home"))
+
+
+def SearchView(request):
+    city = request.GET.get("city")
+
+    rooms = room_models.Room.objects.filter(city=city)
+
+    return render(request, "pages/root/search.html", context={"rooms": rooms})
