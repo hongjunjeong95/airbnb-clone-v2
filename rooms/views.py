@@ -118,7 +118,7 @@ def SearchView(request):
         for s_house_rule in s_house_rules:
             filter_args["house_rules__pk"] = int(s_house_rule)
 
-    qs = room_models.Room.objects.filter(**filter_args)
+    qs = room_models.Room.objects.filter(**filter_args).order_by("created")
     paginoatr = Paginator(qs, 10, orphans=5)
     page = request.GET.get("page", 1)
     rooms = paginoatr.get_page(page)
