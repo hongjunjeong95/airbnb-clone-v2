@@ -59,8 +59,6 @@ def SearchView(request):
     s_house_rules = request.GET.getlist("house_rules")
     instant_book = bool(request.GET.get("instant_book"))
 
-    print(instant_book)
-
     room_types = room_models.RoomType.objects.all()
     amenities = room_models.Amenity.objects.all()
     facilities = room_models.Facility.objects.all()

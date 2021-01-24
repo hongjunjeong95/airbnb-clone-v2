@@ -132,5 +132,7 @@
   {% for room in rooms %}
     <h1>{{room.name}}</h1>
   {% endfor %}
+
+  {% include 'mixins/page_number.html' with page=rooms%}
     
 {% endblock content %}
