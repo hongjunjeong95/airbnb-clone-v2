@@ -4,6 +4,7 @@ from django.urls import reverse_lazy
 from django.shortcuts import redirect, reverse
 from . import forms
 
+
 # Sign Up CBV
 class SignUpView(FormView):
     form_class = forms.SignUpForm

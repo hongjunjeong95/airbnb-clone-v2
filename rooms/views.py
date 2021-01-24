@@ -57,6 +57,9 @@ def SearchView(request):
     s_amenities = request.GET.getlist("amenities")
     s_facilities = request.GET.getlist("facilities")
     s_house_rules = request.GET.getlist("house_rules")
+    instant_book = bool(request.GET.get("instant_book"))
+
+    print(instant_book)
 
     room_types = room_models.RoomType.objects.all()
     amenities = room_models.Amenity.objects.all()
@@ -77,6 +80,7 @@ def SearchView(request):
         "amenities": amenities,
         "facilities": facilities,
         "house_rules": house_rules,
+        "instant_book": instant_book,
     }
 
     choices = {
@@ -117,6 +121,9 @@ def SearchView(request):
     if len(s_house_rules) > 0:
         for s_house_rule in s_house_rules:
             filter_args["house_rules__pk"] = int(s_house_rule)
+
+    if instant_book:
+        filter_args["instant_book"] = instant_book
 
     qs = room_models.Room.objects.filter(**filter_args).order_by("created")
     paginoatr = Paginator(qs, 10, orphans=5)

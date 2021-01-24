@@ -10,8 +10,8 @@
 
 {% block content %}
   
-  <form method="get" action="{% url 'core:search' %}" class="search-from">
-    <div class="search-from__country">
+  <form method="get" action="{% url 'core:search' %}" class="search-form">
+    <div class="search-form__country">
       <label for="country">Country</label>
       <select name="country" id="country">
         {% for country in countries %}
@@ -20,37 +20,37 @@
       </select>
     </div>
 
-    <div class="search-from__city">
+    <div class="search-form__city">
       <label for="city">City</label>
       <input type="text" name="city" value="{{city}}">
     </div>
     
-    <div class="search-from__price">
+    <div class="search-form__price">
       <label for="price">Price</label>
       <input type="number" name="price" min=0 value={{price}}>
     </div>
 
-    <div class="search-from__guests">
+    <div class="search-form__guests">
       <label for="guests">Guests</label>
       <input type="number" name="guests" min=0 value={{guests}}>
     </div>
 
-    <div class="search-from__bedrooms">
+    <div class="search-form__bedrooms">
       <label for="bedrooms">bedrooms</label>
       <input type="number" name="bedrooms" min=0 value={{bedrooms}}>
     </div>
 
-    <div class="search-from__beds">
+    <div class="search-form__beds">
       <label for="beds">beds</label>
       <input type="number" name="beds" min=0 value={{beds}}>
     </div>
 
-    <div class="search-from__bathrooms">
+    <div class="search-form__bathrooms">
       <label for="bathrooms">bathrooms</label>
       <input type="number" name="bathrooms" min=0 value={{bathrooms}}>
     </div>
     
-    <div class="search-from__room_type">
+    <div class="search-form__room_type">
       <label for="room_type">Room_type</label>
       <select name="room_type" id="room_type">
         <option value="0" {% if s_room_type == room_type.pk %} selected {% endif %}>Any Kind</option>
@@ -60,7 +60,7 @@
       </select>
     </div>
 
-    <div class="search-from__amenity">
+    <div class="search-form__amenity">
       <h3>Amenity</h3>
       <ul>
       {% for amenity in amenities %}
@@ -80,7 +80,7 @@
       </ul>
     </div>
 
-    <div class="search-from__facility">
+    <div class="search-form__facility">
       <h3>Facility</h3>
 
       <ul>
@@ -101,7 +101,7 @@
       </ul>
     </div>
 
-    <div class="search-from__house_rule">
+    <div class="search-form__house_rule">
       <h3>House Rules</h3>
       <ul>
       {% for house_rule in house_rules %}
@@ -120,9 +120,11 @@
       {% endfor %}
       </ul>
     </div>
-    {% comment %} facilities {% endcomment %}
-    {% comment %} house_rules {% endcomment %}
-    {% comment %} instant_book {% endcomment %}
+    <div class="search-form__instant_book">
+      <label for="instant_book">Instant Book</label>
+      <input type="checkbox", name="instant_book" id="instant_book" {% if instant_book %}checked{% endif %}>
+    </div>
+    
     <button>Search</button>
   </form>
 

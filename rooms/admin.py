@@ -46,15 +46,15 @@ class RoomAdmin(admin.ModelAdmin):
     )
 
     list_filter = (
-        "city",
         "guests",
         "bedrooms",
         "beds",
         "bathrooms",
         "host",
         "room_type",
-        "country",
         "instant_book",
+        "country",
+        "city",
     )
 
     search_fields = ("^city", "name", "host__username")
