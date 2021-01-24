@@ -5,6 +5,10 @@
 {% endblock page_title %}
 
 {% block content %}
-  login
+  <form action="{% url 'users:login' %}" method="post">
+    {% csrf_token %}
+    {{form}}
+    <button>Submit</button>
+  </form>
 {% endblock content %}
   

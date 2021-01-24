@@ -1,15 +1,10 @@
-from django.shortcuts import render
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.views.generic import FormView
 from django.urls import reverse_lazy
+from django.shortcuts import redirect, reverse
 from . import forms
 
-
-def LoginView(request):
-    return render(request, "pages/users/login.html")
-
-
-# CBV
+# Sign Up CBV
 class SignUpView(FormView):
     form_class = forms.SignUpForm
     success_url = reverse_lazy("core:home")
@@ -25,7 +20,7 @@ class SignUpView(FormView):
         return super().form_valid(form)
 
 
-# FBV
+# Sign Up FBV
 # class SignUpView(FormView):
 #     def get(self, request, *args, **kwargs):
 #         return render(request, "pages/users/signup.html")
@@ -51,3 +46,23 @@ class SignUpView(FormView):
 #             if new_user is not None:
 #                 login(request, new_user)
 #             return redirect(reverse("core:home"))
+
+
+class LoginView(FormView):
+    form_class = forms.LoginForm
+    success_url = reverse_lazy("core:home")
+    template_name = "pages/users/login.html"
+
+    def form_valid(self, form):
+        email = form.cleaned_data.get("email")
+        password = form.cleaned_data.get("password")
+        user = authenticate(self.request, username=email, password=password)
+        if user is not None:
+            login(self.request, user)
+            print("login")
+        return super().form_valid(form)
+
+
+def log_out(request):
+    logout(request)
+    return redirect(reverse("core:home"))
