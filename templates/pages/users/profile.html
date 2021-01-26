@@ -51,7 +51,7 @@
       <span>{{user_obj.bio}}</span>
     </div>
     <button>
-      <a href="{% url 'users:update-profile' user.pk %}">Edit Profile</a>
+      <a href="{% url 'users:update-profile' user_obj.pk %}">Edit Profile</a>
     </button>
   </div>
 {% endblock content %}

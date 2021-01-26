@@ -126,7 +126,6 @@ def github_login_callback(request):
             raise GithubException("Can't get name from profile_request")
 
         email = profile_json.get("email", None)
-        print(email)
         if email is None:
             raise GithubException("Can't get email from profile_request")
 
@@ -152,8 +151,8 @@ def github_login_callback(request):
             user.avatar.save(f"{name}-avatar", ContentFile(photo_request.content))
             user.set_unusable_password()
             user.save()
-            login(request, user)
-            return redirect(reverse("core:home"))
+        login(request, user)
+        return redirect(reverse("core:home"))
     except GithubException as error:
         print(error)
         return redirect(reverse("core:home"))
