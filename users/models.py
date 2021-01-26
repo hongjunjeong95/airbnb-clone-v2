@@ -1,5 +1,10 @@
+import uuid
 from django.contrib.auth.models import AbstractUser
+from django.core.mail import send_mail
 from django.db import models
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
+from config import settings
 
 
 class User(AbstractUser):
@@ -30,6 +35,23 @@ class User(AbstractUser):
     currency = models.CharField(max_length=3, choices=CURRENCY_CHOICES)
     birthdate = models.DateField(null=True)
     superhost = models.BooleanField(default=False)
+    email_verified = models.BooleanField(default=False)
+    email_secret = models.CharField(max_length=20, default="", blank=True)
 
     def verify_email(self):
-        pass
+        if self.email_verified is False:
+            secret = uuid.uuid4().hex[:20]
+            self.email_secret = secret
+            html_message = render_to_string(
+                "emails/verify_email.html", {"secret": secret}
+            )
+            send_mail(
+                "Verify Hairbnb Account",
+                strip_tags(html_message),
+                settings.EMAIL_FROM,
+                ["wjdghdwns0@gmail.com"],
+                fail_silently=False,
+                html_message=html_message,
+            )
+            self.save()
+        return

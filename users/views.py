@@ -2,6 +2,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.views.generic import FormView
 from django.urls import reverse_lazy
 from django.shortcuts import redirect, reverse, render
+from django.db.utils import IntegrityError
 from . import forms, models
 
 
@@ -15,10 +16,13 @@ class SignUpView(FormView):
         form.save()  # Save information of a registered user
         email = form.cleaned_data.get("email")
         password = form.cleaned_data.get("password")
-        user = authenticate(self.request, username=email, password=password)
-        if user is not None:
-            login(self.request, user)
-        return super().form_valid(form)
+        try:
+            user = authenticate(self.request, username=email, password=password)
+            user.verify_email()
+            return super().form_valid(form)
+        except IntegrityError:
+            print("IntegrityError has occured")
+            return redirect(reverse("users:signup"))
 
 
 # Sign Up FBV
@@ -58,9 +62,8 @@ class LoginView(FormView):
         email = form.cleaned_data.get("email")
         password = form.cleaned_data.get("password")
         user = authenticate(self.request, username=email, password=password)
-        if user is not None:
+        if user is not None and user.email_verified == True:
             login(self.request, user)
-            print("login")
         return super().form_valid(form)
 
 
@@ -152,3 +155,15 @@ def UpdateProfile(request, pk):
         except models.User.DoesNotExist:
             print("User does not exist")
             return redirect(reverse("core:home"))
+
+
+def complete_verification(request, key):
+    try:
+        user = models.User.objects.get(email_secret=key)
+        user.email_secret = ""
+        user.email_verified = True
+        user.save()
+        login(request, user)
+    except models.User.DoesNotExist:
+        pass
+    return redirect(reverse("core:home"))
