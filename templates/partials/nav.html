@@ -4,6 +4,9 @@
     <li>
       <a href="{% url 'users:logout' %}">Log Out</a>
     </li>
+    <li>
+      <a href="{% url 'users:profile' user.pk %}">Profile</a>
+    </li>
     {% else %}
       <li>
         <a href="{% url 'users:login' %}">Log In</a>

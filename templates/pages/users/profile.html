@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+
+{% block page_title %}
+  {{user.first_name}}'s Profile
+{% endblock page_title %}
+  
+
+{% block content %}
+  <div class="profile">
+    <div class="main__info">
+      <img src="{{user.avatar.url}}" alt="User avatar", title="User Avatar", width='200px'>
+      <span>{{user.first_name}}</span>
+      <span>{{user.last_name}}</span>
+      <span>{{user.email}}</span>
+    </div>
+    <div class="extra__info">
+      <span>{{user.gender}}</span>
+      <span>{{user.language}}</span>
+      <span>{{user.currency}}</span>
+      <span>{{user.birthdate}}</span>
+      <span>{{user.superhost}}</span>
+      <span>{{user.bio}}</span>
+    </div>
+    <button>
+      <a href="#">Edit Profile</a>
+    </button>
+  </div>
+{% endblock content %}
+  

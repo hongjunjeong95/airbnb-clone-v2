@@ -1,8 +1,8 @@
 from django.contrib.auth import authenticate, login, logout
 from django.views.generic import FormView
 from django.urls import reverse_lazy
-from django.shortcuts import redirect, reverse
-from . import forms
+from django.shortcuts import redirect, reverse, render
+from . import forms, models
 
 
 # Sign Up CBV
@@ -67,3 +67,13 @@ class LoginView(FormView):
 def log_out(request):
     logout(request)
     return redirect(reverse("core:home"))
+
+
+def UserDetail(request, pk):
+    try:
+        user = models.User.objects.get(pk=pk)
+        print(user.avatar.url)
+        return render(request, "pages/users/profile.html", context={"user": user})
+    except models.User.DoesNotExist:
+        print("User does not exist")
+        return redirect("core:home")

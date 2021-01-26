@@ -30,3 +30,6 @@ class User(AbstractUser):
     currency = models.CharField(max_length=3, choices=CURRENCY_CHOICES)
     birthdate = models.DateField(null=True)
     superhost = models.BooleanField(default=False)
+
+    def verify_email(self):
+        pass
