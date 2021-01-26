@@ -2,25 +2,30 @@
 
 
 {% block page_title %}
-  {{user.first_name}}'s Profile
+  {{user_obj.first_name}}'s Profile
 {% endblock page_title %}
   
 
 {% block content %}
   <div class="profile">
     <div class="main__info">
-      <img src="{{user.avatar.url}}" alt="User avatar", title="User Avatar", width='200px'>
-      <span>{{user.first_name}}</span>
-      <span>{{user.last_name}}</span>
-      <span>{{user.email}}</span>
+      {% if user_obj.avatar %}
+        <img src="{{user_obj.avatar.url}}" alt="User avatar", title="User Avatar", width='200px'>
+      {% else %}
+        <div>{{user_obj.first_name|first}}</div>
+      {% endif %}
+      
+      <span>{{user_obj.first_name}}</span>
+      <span>{{user_obj.last_name}}</span>
+      <span>{{user_obj.email}}</span>
     </div>
     <div class="extra__info">
-      <span>{{user.gender}}</span>
-      <span>{{user.language}}</span>
-      <span>{{user.currency}}</span>
-      <span>{{user.birthdate}}</span>
-      <span>{{user.superhost}}</span>
-      <span>{{user.bio}}</span>
+      <span>{{user_obj.gender}}</span>
+      <span>{{user_obj.language}}</span>
+      <span>{{user_obj.currency}}</span>
+      <span>{{user_obj.birthdate}}</span>
+      <span>{{user_obj.superhost}}</span>
+      <span>{{user_obj.bio}}</span>
     </div>
     <button>
       <a href="{% url 'users:update-profile' user.pk %}">Edit Profile</a>

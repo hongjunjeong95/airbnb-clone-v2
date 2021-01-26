@@ -71,27 +71,84 @@ def log_out(request):
 
 def UserDetail(request, pk):
     try:
-        user = models.User.objects.get(pk=pk)
-        return render(request, "pages/users/profile.html", context={"user": user})
-    except models.User.DoesNotExist:
-        print("User does not exist")
-        return redirect("core:home")
-
-
-def UpdateProfile(request, pk):
-    try:
-        user = models.User.objects.get(pk=pk)
-        genders = models.User.GENDER_CHOICES
-        languages = models.User.LANGUAGE_CHOICES
-        currencies = models.User.CURRENCY_CHOICES
-
-        choices = {"genders": genders, "languages": languages, "currencies": currencies}
-
+        user_obj = models.User.objects.get(pk=pk)
         return render(
-            request,
-            "pages/users/update_profile.html",
-            context={"user": user, **choices},
+            request, "pages/users/profile.html", context={"user_obj": user_obj}
         )
     except models.User.DoesNotExist:
         print("User does not exist")
-        return redirect("core:home")
+        return redirect(reverse("core:home"))
+
+
+def UpdateProfile(request, pk):
+    if request.method == "GET":
+        try:
+            user = models.User.objects.get(pk=pk)
+            genders = models.User.GENDER_CHOICES
+            languages = models.User.LANGUAGE_CHOICES
+            currencies = models.User.CURRENCY_CHOICES
+
+            choices = {
+                "genders": genders,
+                "languages": languages,
+                "currencies": currencies,
+            }
+
+            return render(
+                request,
+                "pages/users/update_profile.html",
+                context={"user": user, **choices},
+            )
+        except models.User.DoesNotExist:
+            print("User does not exist")
+            return redirect(reverse("core:home"))
+    elif request.method == "POST":
+        try:
+            user = models.User.objects.get(pk=pk)
+
+            avatar = request.POST.get("avatar")
+            if avatar is not None:
+                user.avatar = avatar
+
+            first_name = request.POST.get("first_name")
+            if first_name is not None:
+                user.first_name = first_name
+
+            last_name = request.POST.get("last_name")
+            if last_name is not None:
+                user.last_name = last_name
+
+            email = request.POST.get("email")
+            if email is not None:
+                user.email = email
+
+            gender = request.POST.get("gender")
+            if gender is not None:
+                user.gender = gender
+
+            language = request.POST.get("language")
+            if language is not None:
+                user.language = language
+
+            currency = request.POST.get("currency")
+            if currency is not None:
+                user.currency = currency
+
+            birthdate = request.POST.get("birthdate")
+
+            if birthdate is not None:
+                user.birthdate = birthdate
+
+            superhost = bool(request.POST.get("superhost"))
+            if superhost is not None:
+                user.superhost = superhost
+
+            bio = request.POST.get("bio")
+            if bio is not None:
+                user.bio = bio
+
+            user.save()
+            return redirect(reverse("core:home"))
+        except models.User.DoesNotExist:
+            print("User does not exist")
+            return redirect(reverse("core:home"))

@@ -8,10 +8,18 @@
 
 {% block content %}
   <form method="post">
+    {% csrf_token %}
     <div class="profile">
       <div class="main__info">
         <div class="avatar">
+        
+        {% if user.avatar %}
           <img src="{{user.avatar.url}}" alt="User avatar", title="User Avatar", width='200px'>
+        {% else %}
+          {{user.first_name|first}}
+        {% endif %}
+          
+          
           <label for="avatar">Avatar</label>
           <input type="file" id="avatar" name="avatar">
         </div>
@@ -28,7 +36,7 @@
         <label for="gender">Gender</label>
         <select name="gender" id="gender">
           {% for key, value in genders %}
-            <option value="" {% if value == user.gender %}selected{% endif %}>
+            <option value="{{value}}" {% if value == user.gender %}selected{% endif %}>
               {{value}}
             </option>
           {% endfor %}
@@ -37,7 +45,7 @@
         <label for="language">Language</label>
         <select name="language" id="language">
           {% for key, value in languages %}
-            <option value="" {% if value == user.language %}selected{% endif %}>
+            <option value="{{value}}" {% if value == user.language %}selected{% endif %}>
               {{value}}
             </option>
           {% endfor %}
@@ -46,20 +54,21 @@
         <label for="currency">Currency</label>
         <select name="currency" id="currency">
           {% for key, value in currencies %}
-            <option value="" {% if value == user.currency %}selected{% endif %}>
+            <option value="{{value}}" {% if value == user.currency %}selected{% endif %}>
               {{value}}
             </option>
           {% endfor %}
         </select>
 
         <label for="birthdate">Birthdate</label>
-        <input type="date" id="birthdate" placeholder="Birthdate" value="{{user.birthdate}}">
+        <input type="date" id="birthdate" name="birthdate" placeholder="Birthdate" value="{{user.birthdate|date:'Y-m-d'}}">
+        
 
         <label for="superhost">Superhost</label>
-        <input type="checkbox" id="superhost" placeholder="Superhost" value="{{user.superhost}}">
-        
+        <input type="checkbox" id="superhost" name="superhost"  placeholder="Superhost" {% if user.superhost %}checked{% endif %}>
+
         <label for="bio">Bio</label>
-        <textarea id="bio">{{user.bio}}
+        <textarea id="bio" name="bio">{{user.bio}}
         </textarea>
       </div>
       <button>Edit Profile</button>

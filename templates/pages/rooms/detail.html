@@ -105,7 +105,14 @@
     
     {% for review in room.reviews.all %}
       <div class="profile">
-        <img src="{{review.user.avatar.url}}" alt="" class="avatar" width="100px">
+      
+        {% if review.user.avatar %}
+          <img src="{{review.user.avatar.url}}" alt="" class="avatar" width="100px">
+        {% else %}
+          <div>{{review.user.first_name|first}}</div>
+        {% endif %}
+        
+        
         <div>
           {{review.user}}
           {{review.created}}
@@ -121,7 +128,9 @@
       <div class="host-info__profile">
         <img src="{{room.get_first_photo}}" width="50px" alt="" class="profile__room-avatar">
         <div>
-          <h3>Host : {{room.host.first_name}}</h3>
+          <h3>
+            <a href="{% url 'users:profile' room.host.pk%}">Host : {{room.host.first_name}}</a>
+          </h3>
           <span>Member Since: {{joined_month}}, {{room.host.date_joined.year}}</span>
         </div>
       </div>
