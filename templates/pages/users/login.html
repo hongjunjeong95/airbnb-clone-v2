@@ -8,6 +8,7 @@
   <form action="{% url 'users:login' %}" method="post">
     {% csrf_token %}
     {{form}}
+    {% include 'mixins/social_login.html' %}
     <button>Submit</button>
   </form>
 {% endblock content %}
