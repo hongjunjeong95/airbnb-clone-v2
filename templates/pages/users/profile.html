@@ -16,15 +16,38 @@
       {% endif %}
       
       <span>{{user_obj.first_name}}</span>
-      <span>{{user_obj.last_name}}</span>
-      <span>{{user_obj.email}}</span>
+      
+      {% if user_obj.last_name %}
+        <span>{{user_obj.last_name}}</span>
+      {% endif %}
+        
+      {% if user_obj.email %}
+        <span>{{user_obj.email}}</span>        
+      {% endif %}
+        
     </div>
     <div class="extra__info">
-      <span>{{user_obj.gender}}</span>
-      <span>{{user_obj.language}}</span>
-      <span>{{user_obj.currency}}</span>
-      <span>{{user_obj.birthdate}}</span>
-      <span>{{user_obj.superhost}}</span>
+      
+      {% if user_obj.gender %}
+        <span>{{user_obj.gender}}</span>
+      {% endif %}
+        
+      {% if user_obj.language %}
+        <span>{{user_obj.language}}</span>
+      {% endif %}
+        
+      {% if user_obj.currency %}
+        <span>{{user_obj.currency}}</span>
+      {% endif %}
+        
+      {% if user_obj.birthdate %}
+        <span>{{user_obj.birthdate}}</span>          
+      {% endif %}
+
+      {% if user_obj.superhost %}
+        <span>Superhost</span>
+      {% endif %}
+
       <span>{{user_obj.bio}}</span>
     </div>
     <button>

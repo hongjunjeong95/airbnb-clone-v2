@@ -141,7 +141,7 @@ def github_login_callback(request):
         except models.User.DoesNotExist:
             user = models.User.objects.create(
                 username=email,
-                first_name=username,
+                first_name=name,
                 email=email,
                 bio=bio,
                 login_method=models.User.LOGIN_GITHUB,
