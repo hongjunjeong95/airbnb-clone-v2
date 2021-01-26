@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+
+{% block page_title %}
+  Edit {{user.first_name}}'s Profile
+{% endblock page_title %}
+  
+
+{% block content %}
+  <form method="post">
+    <div class="profile">
+      <div class="main__info">
+        <div class="avatar">
+          <img src="{{user.avatar.url}}" alt="User avatar", title="User Avatar", width='200px'>
+          <label for="avatar">Avatar</label>
+          <input type="file" id="avatar" name="avatar">
+        </div>
+        <label for="first_name">First Name</label>
+        <input type="text" id="first_name" placeholder="First Name" value="{{user.first_name}}" name="first_name">
+
+        <label for="last_name">Last Name</label>
+        <input type="text" id="last_name" placeholder="Last Name" value="{{user.last_name}}" name="last_name">
+
+        <label for="email">Email</label>
+        <input type="text" id="email" placeholder="Email" value="{{user.email}}" name="email">
+      </div>
+      <div class="extra__info">
+        <label for="gender">Gender</label>
+        <select name="gender" id="gender">
+          {% for key, value in genders %}
+            <option value="" {% if value == user.gender %}selected{% endif %}>
+              {{value}}
+            </option>
+          {% endfor %}
+        </select>
+
+        <label for="language">Language</label>
+        <select name="language" id="language">
+          {% for key, value in languages %}
+            <option value="" {% if value == user.language %}selected{% endif %}>
+              {{value}}
+            </option>
+          {% endfor %}
+        </select>
+        
+        <label for="currency">Currency</label>
+        <select name="currency" id="currency">
+          {% for key, value in currencies %}
+            <option value="" {% if value == user.currency %}selected{% endif %}>
+              {{value}}
+            </option>
+          {% endfor %}
+        </select>
+
+        <label for="birthdate">Birthdate</label>
+        <input type="date" id="birthdate" placeholder="Birthdate" value="{{user.birthdate}}">
+
+        <label for="superhost">Superhost</label>
+        <input type="checkbox" id="superhost" placeholder="Superhost" value="{{user.superhost}}">
+        
+        <label for="bio">Bio</label>
+        <textarea id="bio">{{user.bio}}
+        </textarea>
+      </div>
+      <button>Edit Profile</button>
+    </div>
+  </form>
+  <button>
+    <a href="{% url 'users:profile' user.pk %}">Back</a>
+  </button>
+{% endblock content %}
+  

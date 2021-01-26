@@ -6,21 +6,21 @@ class User(AbstractUser):
 
     """ Custom User Model """
 
-    GENDER_MALE = "male"
-    GENDER_FEMALE = "female"
-    GENDER_OTHER = "other"
+    GENDER_MALE = "Male"
+    GENDER_FEMALE = "Female"
+    GENDER_OTHER = "Other"
     GENDER_CHOICES = (
         (GENDER_MALE, "Male"),
         (GENDER_FEMALE, "Female"),
         (GENDER_OTHER, "Other"),
     )
 
-    LANGUAGE_KOREAN = "kr"
-    LANGUAGE_ENGLISH = "en"
+    LANGUAGE_KOREAN = "KR"
+    LANGUAGE_ENGLISH = "EN"
     LANGUAGE_CHOICES = ((LANGUAGE_KOREAN, "Korean"), (LANGUAGE_ENGLISH, "English"))
 
-    CURRENCY_KRW = "krw"
-    CURRENCY_USD = "usd"
+    CURRENCY_KRW = "KRW"
+    CURRENCY_USD = "USD"
     CURRENCY_CHOICES = ((CURRENCY_KRW, "KRW"), (CURRENCY_USD, "USD"))
 
     avatar = models.ImageField()

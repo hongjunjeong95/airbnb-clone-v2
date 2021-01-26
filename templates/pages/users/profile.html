@@ -23,7 +23,7 @@
       <span>{{user.bio}}</span>
     </div>
     <button>
-      <a href="#">Edit Profile</a>
+      <a href="{% url 'users:update-profile' user.pk %}">Edit Profile</a>
     </button>
   </div>
 {% endblock content %}

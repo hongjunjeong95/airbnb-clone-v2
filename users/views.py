@@ -72,8 +72,26 @@ def log_out(request):
 def UserDetail(request, pk):
     try:
         user = models.User.objects.get(pk=pk)
-        print(user.avatar.url)
         return render(request, "pages/users/profile.html", context={"user": user})
+    except models.User.DoesNotExist:
+        print("User does not exist")
+        return redirect("core:home")
+
+
+def UpdateProfile(request, pk):
+    try:
+        user = models.User.objects.get(pk=pk)
+        genders = models.User.GENDER_CHOICES
+        languages = models.User.LANGUAGE_CHOICES
+        currencies = models.User.CURRENCY_CHOICES
+
+        choices = {"genders": genders, "languages": languages, "currencies": currencies}
+
+        return render(
+            request,
+            "pages/users/update_profile.html",
+            context={"user": user, **choices},
+        )
     except models.User.DoesNotExist:
         print("User does not exist")
         return redirect("core:home")
