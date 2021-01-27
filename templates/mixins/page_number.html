@@ -1,9 +1,23 @@
 {% if page.has_previous %}
-  <a href="?page={{page.previous_page_number}}">Prev</a>
+  {% if page_sector|add:-4 <= 1 %}
+    <a href="?page=1">Prev</a>
+  {% else %}
+    <a href="?page={{page_sector|add:-4}}">Prev</a>
+  {% endif %}
 {% endif %}
 
-Page {{page.number}} of {{page.paginator.num_pages}}
+{% for number in '12345'|make_list %}
+  {% if page_sector|add:number <= page.paginator.num_pages %}
+    <a href="?page={{page_sector|add:number}}">{{page_sector|add:number}}</a>
+  {% endif %}
+{% endfor %} 
+
+of {{page.paginator.num_pages}}
 
 {% if page.has_next %}
-  <a href="?page={{page.next_page_number}}">Next</a>
+  {% if page_sector|add:6 >= page.paginator.num_pages %}
+    <a href="?page={{page.paginator.num_pages}}">Next</a>
+  {% else %}
+    <a href="?page={{page_sector|add:6}}">Next</a>
+  {% endif %}
 {% endif %}

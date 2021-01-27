@@ -11,9 +11,11 @@ def HomeView(request):
         rooms_list = room_models.Room.objects.all()
 
         # Get paginator
-        page = request.GET.get("page", 1)
+        page = int(request.GET.get("page", 1))
+        page_sector = (page - 1) // 5
+        page_sector = page_sector * 5
         paginator = Paginator(rooms_list, 12, orphans=6)
-        rooms = paginator.get_page(int(page))
+        rooms = paginator.get_page(page)
 
         # Get this year
         now = timezone.now()
@@ -26,7 +28,7 @@ def HomeView(request):
     return render(
         request,
         "pages/root/home.html",
-        context={"rooms": rooms, "year": this_year},
+        context={"rooms": rooms, "year": this_year, "page_sector": page_sector},
     )
 
 
