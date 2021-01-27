@@ -50,9 +50,13 @@
 
       <span>{{user_obj.bio}}</span>
     </div>
-    <button>
-      <a href="{% url 'users:update-profile' user_obj.pk %}">Edit Profile</a>
-    </button>
+    
+    {% if user_obj.pk == user.pk %}
+      <button>
+        <a href="{% url 'users:update-profile' user_obj.pk %}">Edit Profile</a>
+      </button>
+    {% endif %}
+      
   </div>
   <div class="room-list">
     
