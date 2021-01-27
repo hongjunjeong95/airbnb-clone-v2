@@ -33,7 +33,11 @@
         <input type="text" id="last_name" placeholder="Last Name" value="{{user.last_name}}" name="last_name">
 
         <label for="email">Email</label>
-        <input type="text" id="email" placeholder="Email" value="{{user.email}}" name="email">
+        {% if user.login_method == "email" %}
+          <input type="text" id="email" placeholder="Email" value="{{user.email}}" name="email">
+        {% else %}
+          <span>{{user.email}}</span>
+        {% endif %}
       </div>
       <div class="extra__info">
         <label for="gender">Gender</label>
