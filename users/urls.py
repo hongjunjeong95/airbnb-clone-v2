@@ -20,8 +20,11 @@ urlpatterns = [
         name="kakao-callback",
     ),
     path("logout/", user_views.log_out, name="logout"),
-    path("<int:pk>/profile/", user_views.UserDetail, name="profile"),
-    path("<int:pk>/update-profile/", user_views.UpdateProfile, name="update-profile"),
+    path("<int:pk>/profile/", user_views.userDetail, name="profile"),
+    path("<int:pk>/update-profile/", user_views.updateProfile, name="update-profile"),
+    path(
+        "<int:pk>/change-password/", user_views.change_password, name="change-password"
+    ),
     path(
         "verify/<str:key>/",
         user_views.complete_verification,

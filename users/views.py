@@ -27,7 +27,10 @@ class SignUpView(FormView):
             messages.success(self.request, f"{user.first_name} signed up")
             return super().form_valid(form)
         except IntegrityError:
-            print("IntegrityError has occured")
+            messages.error(
+                request,
+                "IntegrityError has occured. That is the user already exists in db",
+            )
             return redirect(reverse("users:signup"))
 
 
@@ -158,7 +161,7 @@ def github_login_callback(request):
         login(request, user)
         return redirect(reverse("core:home"))
     except GithubException as error:
-        print(error)
+        messages.error(request, error)
         return redirect(reverse("core:home"))
 
 
@@ -232,7 +235,7 @@ def kakao_login_callback(request):
         login(request, user)
         return redirect(reverse("core:home"))
     except KakaoException as error:
-        print(error)
+        messages.error(request, error)
         return redirect(reverse("core:home"))
 
 
@@ -242,18 +245,18 @@ def log_out(request):
     return redirect(reverse("core:home"))
 
 
-def UserDetail(request, pk):
+def userDetail(request, pk):
     try:
         user_obj = models.User.objects.get(pk=pk)
         return render(
             request, "pages/users/profile.html", context={"user_obj": user_obj}
         )
     except models.User.DoesNotExist:
-        print("User does not exist")
+        messages.error(request, "User does not exist")
         return redirect(reverse("core:home"))
 
 
-def UpdateProfile(request, pk):
+def updateProfile(request, pk):
     if request.method == "GET":
         try:
             user = models.User.objects.get(pk=pk)
@@ -275,7 +278,7 @@ def UpdateProfile(request, pk):
                 context={"user": user, **choices},
             )
         except models.User.DoesNotExist:
-            print("User does not exist")
+            messages.error(request, "User does not exist")
             return redirect(reverse("core:home"))
     elif request.method == "POST":
         try:
@@ -326,7 +329,7 @@ def UpdateProfile(request, pk):
             messages.success(request, f"{user.email} profile update succeded")
             return redirect(reverse("users:profile", kwargs={"pk": pk}))
         except models.User.DoesNotExist:
-            print("User does not exist")
+            messages.error(request, "User does not exist")
             return redirect(reverse("core:home"))
 
 
@@ -339,5 +342,44 @@ def complete_verification(request, key):
         login(request, user)
         messages.success(request, f"{user.email} verification is completed")
     except models.User.DoesNotExist:
-        pass
+        messages.error(request, "User does not exist")
     return redirect(reverse("core:home"))
+
+
+class ChangePasswordException(Exception):
+    pass
+
+
+def change_password(request, pk):
+    if request.method == "GET":
+        try:
+            user = models.User.objects.get(pk=pk)
+
+            return render(
+                request,
+                "pages/users/change_password.html",
+                context={"user": user},
+            )
+        except models.User.DoesNotExist:
+            print("User does not exist")
+            return redirect(reverse("core:home"))
+    elif request.method == "POST":
+        try:
+            user = models.User.objects.get(pk=pk)
+            old_password = request.POST.get("current_password")
+            new_password = request.POST.get("new_password")
+            new_password1 = request.POST.get("verify_password")
+
+            user = authenticate(request, username=user.email, password=old_password)
+            if user is None:
+                raise ChangePasswordException("Current password is wrong!")
+
+            if new_password != new_password1:
+                raise ChangePasswordException("New password doesn't match")
+            user.set_password(new_password)
+            user.save()
+            messages.success(request, f"{user.email}'password changed successfully")
+            return redirect(reverse("users:profile", kwargs={"pk": pk}))
+        except ChangePasswordException as error:
+            messages.error(request, error)
+            return redirect(reverse("core:home"))
