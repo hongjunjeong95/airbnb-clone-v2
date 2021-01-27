@@ -54,5 +54,12 @@
       <a href="{% url 'users:update-profile' user_obj.pk %}">Edit Profile</a>
     </button>
   </div>
+  <div class="room-list">
+    
+    {% for room in user_obj.rooms.all %}
+      {% include 'mixins/room_card.html' %}
+    {% endfor %}
+      
+  </div>
 {% endblock content %}
   

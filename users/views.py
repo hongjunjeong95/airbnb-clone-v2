@@ -239,6 +239,8 @@ def log_out(request):
 def UserDetail(request, pk):
     try:
         user_obj = models.User.objects.get(pk=pk)
+        rooms_list = user_obj.rooms.all()
+        print(rooms_list)
         return render(
             request, "pages/users/profile.html", context={"user_obj": user_obj}
         )

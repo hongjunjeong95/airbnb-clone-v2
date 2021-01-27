@@ -7,26 +7,7 @@
 {% block content %}
   <ul>
     {% for room in rooms %}
-      <li>
-        <a href="{% url 'rooms:detail' room.pk %}">
-          <div class="house-image">
-            {% if room.host.superhost %}
-              <span>Superhost</span>
-            {% endif %}
-            <img width='50px' src="{{room.get_first_photo}}" alt="">
-            <i class="far fa-heart"></i>
-          </div>
-          <div class="house-info">
-            <div class="house__score">
-              <i class="fas fa-star"></i>
-              <span class="review-points">{{room.get_review_points}}</span>
-            </div>
-            <div class="house__description">
-              {{room.country}} &bull; {{room.address}}
-            </div>
-          </div>
-        </a>
-      </li>
+      {% include 'mixins/room_card.html' with room=room %}
     {% endfor %}
   </ul>
   {% include 'mixins/page_number.html' with page=rooms %}
