@@ -13,15 +13,18 @@
       <div class="main__info">
         <div class="avatar">
         
-        {% if user.avatar %}
-          <img src="{{user.avatar.url}}" alt="User avatar", title="User Avatar", width='200px'>
-        {% else %}
-          {{user.first_name|first}}
-        {% endif %}
+          {% if user.avatar %}
+            <img src="{{user.avatar.url}}" alt="User avatar", title="User Avatar", width='200px'>
+          {% else %}
+            {{user.first_name|first}}
+          {% endif %}
           
           
-          <label for="avatar">Avatar</label>
-          <input type="file" id="avatar" name="avatar">
+          {% if user.login_method == "email" %}
+            <label for="avatar">Avatar</label>
+            <input type="file" id="avatar" name="avatar">
+          {% endif %}
+
         </div>
         <label for="first_name">First Name</label>
         <input type="text" id="first_name" placeholder="First Name" value="{{user.first_name}}" name="first_name">
@@ -61,7 +64,7 @@
         </select>
 
         <label for="birthdate">Birthdate</label>
-        <input type="date" id="birthdate" name="birthdate" placeholder="Birthdate" value="{{user.birthdate|date:'Y-m-d'}}">
+        <input type="date" id="birthdate" name="birthdate" placeholder="Birthdate" value="{{user.birthdate|date:'Y-m-d'}}" required>
 
         <label for="bio">Bio</label>
         <textarea id="bio" name="bio">{{user.bio}}

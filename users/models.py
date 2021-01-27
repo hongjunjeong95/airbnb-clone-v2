@@ -4,6 +4,7 @@ from django.core.mail import send_mail
 from django.db import models
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
+from django.shortcuts import reverse
 from config import settings
 
 
@@ -68,3 +69,6 @@ class User(AbstractUser):
             )
             self.save()
         return
+
+    def get_absolute_url(self):
+        return reverse("users:profile", kwargs={"pk": self.pk})

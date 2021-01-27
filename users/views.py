@@ -254,11 +254,13 @@ def UpdateProfile(request, pk):
             genders = models.User.GENDER_CHOICES
             languages = models.User.LANGUAGE_CHOICES
             currencies = models.User.CURRENCY_CHOICES
+            login_methods = models.User.LOGIN_CHOICES
 
             choices = {
                 "genders": genders,
                 "languages": languages,
                 "currencies": currencies,
+                "login_methods": login_methods,
             }
 
             return render(
@@ -315,7 +317,7 @@ def UpdateProfile(request, pk):
                 user.bio = bio
 
             user.save()
-            return redirect(reverse("core:home"))
+            return redirect(reverse("users:profile", kwargs={"pk": pk}))
         except models.User.DoesNotExist:
             print("User does not exist")
             return redirect(reverse("core:home"))
