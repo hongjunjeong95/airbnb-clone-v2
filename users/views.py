@@ -2,11 +2,12 @@ import os
 import requests
 
 from django.contrib.auth import authenticate, login, logout
+from django.contrib import messages
+from django.core.files.base import ContentFile
 from django.views.generic import FormView
 from django.urls import reverse_lazy
 from django.shortcuts import redirect, reverse, render
 from django.db.utils import IntegrityError
-from django.core.files.base import ContentFile
 from . import forms, models
 
 
@@ -17,12 +18,13 @@ class SignUpView(FormView):
     template_name = "pages/users/signup.html"
 
     def form_valid(self, form):
-        form.save()  # Save information of a registered user
-        email = form.cleaned_data.get("email")
-        password = form.cleaned_data.get("password")
         try:
+            form.save()  # Save information of a registered user
+            email = form.cleaned_data.get("email")
+            password = form.cleaned_data.get("password")
             user = authenticate(self.request, username=email, password=password)
             user.verify_email()
+            messages.success(self.request, f"{user.first_name} signed up")
             return super().form_valid(form)
         except IntegrityError:
             print("IntegrityError has occured")
@@ -66,7 +68,8 @@ class LoginView(FormView):
         email = form.cleaned_data.get("email")
         password = form.cleaned_data.get("password")
         user = authenticate(self.request, username=email, password=password)
-        if user is not None and user.email_verified == True:
+        if user is not None and user.email_verified is True:
+            messages.success(self.request, f"{user.first_name} logged in")
             login(self.request, user)
         return super().form_valid(form)
 
@@ -151,6 +154,7 @@ def github_login_callback(request):
             user.avatar.save(f"{name}-avatar", ContentFile(photo_request.content))
             user.set_unusable_password()
             user.save()
+        messages.success(request, f"{user.email} signed up and logged in with Github")
         login(request, user)
         return redirect(reverse("core:home"))
     except GithubException as error:
@@ -224,6 +228,7 @@ def kakao_login_callback(request):
                 )
             user.set_unusable_password()
             user.save()
+        messages.success(request, f"{user.email} signed up and logged in with Kakao")
         login(request, user)
         return redirect(reverse("core:home"))
     except KakaoException as error:
@@ -232,6 +237,7 @@ def kakao_login_callback(request):
 
 
 def log_out(request):
+    messages.info(request, f"See you later {request.user.first_name}")
     logout(request)
     return redirect(reverse("core:home"))
 
@@ -239,8 +245,6 @@ def log_out(request):
 def UserDetail(request, pk):
     try:
         user_obj = models.User.objects.get(pk=pk)
-        rooms_list = user_obj.rooms.all()
-        print(rooms_list)
         return render(
             request, "pages/users/profile.html", context={"user_obj": user_obj}
         )
@@ -319,6 +323,7 @@ def UpdateProfile(request, pk):
                 user.bio = bio
 
             user.save()
+            messages.success(request, f"{user.email} profile update succeded")
             return redirect(reverse("users:profile", kwargs={"pk": pk}))
         except models.User.DoesNotExist:
             print("User does not exist")
@@ -332,6 +337,7 @@ def complete_verification(request, key):
         user.email_verified = True
         user.save()
         login(request, user)
+        messages.success(request, f"{user.email} verification is completed")
     except models.User.DoesNotExist:
         pass
     return redirect(reverse("core:home"))
