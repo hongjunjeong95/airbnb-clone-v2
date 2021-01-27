@@ -8,11 +8,19 @@ from django.views.generic import FormView
 from django.urls import reverse_lazy
 from django.shortcuts import redirect, reverse, render
 from django.db.utils import IntegrityError
-from . import forms, models
+from . import forms, models, mixins
+from .exception import (
+    GithubException,
+    KakaoException,
+    LoggedInOnlyView,
+    LoggedOutOnlyView,
+    ChangePasswordException,
+    VerifyUser,
+)
 
 
 # Sign Up CBV
-class SignUpView(FormView):
+class SignUpView(mixins.LoggedOutOnlyView, FormView):
     form_class = forms.SignUpForm
     success_url = reverse_lazy("core:home")
     template_name = "pages/users/signup.html"
@@ -28,7 +36,7 @@ class SignUpView(FormView):
             return super().form_valid(form)
         except IntegrityError:
             messages.error(
-                request,
+                self.request,
                 "IntegrityError has occured. That is the user already exists in db",
             )
             return redirect(reverse("users:signup"))
@@ -62,7 +70,7 @@ class SignUpView(FormView):
 #             return redirect(reverse("core:home"))
 
 
-class LoginView(FormView):
+class LoginView(mixins.LoggedOutOnlyView, FormView):
     form_class = forms.LoginForm
     success_url = reverse_lazy("core:home")
     template_name = "pages/users/login.html"
@@ -78,20 +86,24 @@ class LoginView(FormView):
 
 
 def github_login(request):
-    client_id = os.environ.get("GH_ID")
-    redirect_uri = "http://127.0.0.1:8000/users/login/github/callback/"
-    scope = "read:user"
-    return redirect(
-        f"https://github.com/login/oauth/authorize?client_id={client_id}&redirect_uri={redirect_uri}&scope={scope}"
-    )
-
-
-class GithubException(Exception):
-    pass
+    try:
+        if request.user.is_authenticated:
+            raise LoggedOutOnlyView("User already logged in")
+        client_id = os.environ.get("GH_ID")
+        redirect_uri = "http://127.0.0.1:8000/users/login/github/callback/"
+        scope = "read:user"
+        return redirect(
+            f"https://github.com/login/oauth/authorize?client_id={client_id}&redirect_uri={redirect_uri}&scope={scope}"
+        )
+    except LoggedOutOnlyView as error:
+        messages.error(request, error)
+        return redirect("core:home")
 
 
 def github_login_callback(request):
     try:
+        if request.user.is_authenticated:
+            raise LoggedOutOnlyView("User already logged in")
         code = request.GET.get("code", None)
         if code is None:
             raise GithubException("Can't get code")
@@ -157,28 +169,38 @@ def github_login_callback(request):
             user.avatar.save(f"{name}-avatar", ContentFile(photo_request.content))
             user.set_unusable_password()
             user.save()
-        messages.success(request, f"{user.email} signed up and logged in with Github")
+        messages.success(request, f"{user.email} logged in with Github")
         login(request, user)
         return redirect(reverse("core:home"))
     except GithubException as error:
         messages.error(request, error)
         return redirect(reverse("core:home"))
+    except LoggedOutOnlyView as error:
+        messages.error(request, error)
+        return redirect(reverse("core:home"))
 
 
 def kakao_login(request):
-    client_id = os.environ.get("KAKAO_ID")
-    redirect_uri = "http://127.0.0.1:8000/users/login/kakao/callback/"
-    return redirect(
-        f"https://kauth.kakao.com/oauth/authorize?client_id={client_id}&redirect_uri={redirect_uri}&response_type=code"
-    )
-
-
-class KakaoException(Exception):
-    pass
+    try:
+        if request.user.is_authenticated:
+            raise LoggedOutOnlyView("User already logged in")
+        client_id = os.environ.get("KAKAO_ID")
+        redirect_uri = "http://127.0.0.1:8000/users/login/kakao/callback/"
+        return redirect(
+            f"https://kauth.kakao.com/oauth/authorize?client_id={client_id}&redirect_uri={redirect_uri}&response_type=code"
+        )
+    except KakaoException as error:
+        messages.error(request, error)
+        return redirect("core:home")
+    except LoggedOutOnlyView as error:
+        messages.error(request, error)
+        return redirect("core:home")
 
 
 def kakao_login_callback(request):
     try:
+        if request.user.is_authenticated:
+            raise LoggedOutOnlyView("User already logged in")
         code = request.GET.get("code", None)
         if code is None:
             KakaoException("Can't get code")
@@ -237,16 +259,27 @@ def kakao_login_callback(request):
     except KakaoException as error:
         messages.error(request, error)
         return redirect(reverse("core:home"))
+    except LoggedOutOnlyView as error:
+        messages.error(request, error)
+        return redirect(reverse("core:home"))
 
 
 def log_out(request):
-    messages.info(request, f"See you later {request.user.first_name}")
-    logout(request)
-    return redirect(reverse("core:home"))
+    try:
+        if not request.user.is_authenticated:
+            raise LoggedInOnlyView("Please login first")
+        messages.info(request, f"See you later {request.user.first_name}")
+        logout(request)
+        return redirect(reverse("core:home"))
+    except LoggedInOnlyView as error:
+        messages.error(request, error)
+        return redirect("users:login")
 
 
 def userDetail(request, pk):
     try:
+        if not request.user.is_authenticated:
+            raise LoggedInOnlyView("Please login first")
         user_obj = models.User.objects.get(pk=pk)
         return render(
             request, "pages/users/profile.html", context={"user_obj": user_obj}
@@ -254,11 +287,20 @@ def userDetail(request, pk):
     except models.User.DoesNotExist:
         messages.error(request, "User does not exist")
         return redirect(reverse("core:home"))
+    except LoggedInOnlyView as error:
+        messages.error(request, error)
+        return redirect("users:login")
 
 
 def updateProfile(request, pk):
     if request.method == "GET":
         try:
+            if not request.user.is_authenticated:
+                raise LoggedInOnlyView("Please login first")
+
+            if request.user.pk != pk:
+                raise VerifyUser("Page Not found")
+
             user = models.User.objects.get(pk=pk)
             genders = models.User.GENDER_CHOICES
             languages = models.User.LANGUAGE_CHOICES
@@ -280,8 +322,19 @@ def updateProfile(request, pk):
         except models.User.DoesNotExist:
             messages.error(request, "User does not exist")
             return redirect(reverse("core:home"))
+        except LoggedInOnlyView as error:
+            messages.error(request, error)
+            return redirect("users:login")
+        except VerifyUser as error:
+            messages.error(request, error)
+            return redirect("core:home")
     elif request.method == "POST":
         try:
+            if not request.user.is_authenticated:
+                raise LoggedInOnlyView("Please login first")
+            if request.user.pk != pk:
+                raise VerifyUser("Page Not found")
+
             user = models.User.objects.get(pk=pk)
 
             avatar = request.POST.get("avatar")
@@ -331,10 +384,18 @@ def updateProfile(request, pk):
         except models.User.DoesNotExist:
             messages.error(request, "User does not exist")
             return redirect(reverse("core:home"))
+        except LoggedInOnlyView as error:
+            messages.error(request, error)
+            return redirect("users:login")
+        except VerifyUser as error:
+            messages.error(request, error)
+            return redirect("core:home")
 
 
 def complete_verification(request, key):
     try:
+        if request.user.is_authenticated:
+            raise LoggedOutOnlyView("Please login first")
         user = models.User.objects.get(email_secret=key)
         user.email_secret = ""
         user.email_verified = True
@@ -343,16 +404,19 @@ def complete_verification(request, key):
         messages.success(request, f"{user.email} verification is completed")
     except models.User.DoesNotExist:
         messages.error(request, "User does not exist")
+    except LoggedOutOnlyView as error:
+        messages.error(request, error)
+        return redirect("core:home")
     return redirect(reverse("core:home"))
-
-
-class ChangePasswordException(Exception):
-    pass
 
 
 def change_password(request, pk):
     if request.method == "GET":
         try:
+            if not request.user.is_authenticated:
+                raise LoggedInOnlyView
+            if request.user.pk != pk:
+                raise VerifyUser("Page Not found")
             user = models.User.objects.get(pk=pk)
 
             return render(
@@ -363,8 +427,18 @@ def change_password(request, pk):
         except models.User.DoesNotExist:
             print("User does not exist")
             return redirect(reverse("core:home"))
+        except LoggedInOnlyView as error:
+            messages.error(request, error)
+            return redirect("users:login")
+        except VerifyUser as error:
+            messages.error(request, error)
+            return redirect("core:home")
     elif request.method == "POST":
         try:
+            if not request.user.is_authenticated:
+                raise LoggedInOnlyView
+            if request.user.pk != pk:
+                raise VerifyUser("Page Not found")
             user = models.User.objects.get(pk=pk)
             old_password = request.POST.get("current_password")
             new_password = request.POST.get("new_password")
@@ -383,3 +457,9 @@ def change_password(request, pk):
         except ChangePasswordException as error:
             messages.error(request, error)
             return redirect(reverse("core:home"))
+        except LoggedInOnlyView as error:
+            messages.error(request, error)
+            return redirect("users:login")
+        except VerifyUser as error:
+            messages.error(request, error)
+            return redirect("core:home")
