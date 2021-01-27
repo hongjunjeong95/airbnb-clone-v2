@@ -13,6 +13,12 @@ urlpatterns = [
         user_views.github_login_callback,
         name="github-callback",
     ),
+    path("login/kakao/", user_views.kakao_login, name="kakao-login"),
+    path(
+        "login/kakao/callback/",
+        user_views.kakao_login_callback,
+        name="kakao-callback",
+    ),
     path("logout/", user_views.log_out, name="logout"),
     path("<int:pk>/profile/", user_views.UserDetail, name="profile"),
     path("<int:pk>/update-profile/", user_views.UpdateProfile, name="update-profile"),
