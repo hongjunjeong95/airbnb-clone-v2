@@ -62,10 +62,6 @@
 
         <label for="birthdate">Birthdate</label>
         <input type="date" id="birthdate" name="birthdate" placeholder="Birthdate" value="{{user.birthdate|date:'Y-m-d'}}">
-        
-
-        <label for="superhost">Superhost</label>
-        <input type="checkbox" id="superhost" name="superhost"  placeholder="Superhost" {% if user.superhost %}checked{% endif %}>
 
         <label for="bio">Bio</label>
         <textarea id="bio" name="bio">{{user.bio}}
