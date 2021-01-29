@@ -2,7 +2,7 @@
 @tailwind components;
 
 .nav_link {
-  @apply font-semibold text-gray-700  hover:border-gray-600 border-b-2 border-white py-8 px-4;
+  @apply font-semibold text-gray-700  hover:border-gray-600 border-b-2 border-transparent py-7 px-4;
 }
 
 @tailwind utilities;

@@ -8,9 +8,9 @@
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
   <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
-  <body>
+  <body class="mt-28">
     {% include 'partials/messages.html' %}
-    <header class='flex justify-between items-center px-6 border-b mb-9'>
+    <header class='flex justify-between items-center px-6 border-b-2 mb-9 fixed w-full h-20 bg-white inset-0'>
         <div class="flex">
           <a href="{% url 'core:home' %}" class="mr-4 flex items-center">
             <img src="/static/logo.png" alt="logo" class="w-8 mr-2">
