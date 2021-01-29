@@ -1,0 +1,33 @@
+{
+  "name": "airbnb-clone-v2",
+  "version": "1.0.0",
+  "description": "",
+  "main": "gulpfile.babel.js",
+  "dependencies": {
+    "@babel/core": "^7.12.10",
+    "@babel/preset-env": "^7.12.11",
+    "@babel/register": "^7.12.10",
+    "autoprefixer": "^10.2.3",
+    "gulp": "^4.0.2",
+    "gulp-autoprefixer": "^7.0.1",
+    "gulp-csso": "^4.0.1",
+    "gulp-postcss": "^9.0.0",
+    "gulp-sass": "^4.1.0",
+    "node-sass": "^5.0.0",
+    "tailwindcss": "^2.0.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "css": "gulp css"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zpskek/airbnb-clone-v2.git"
+  },
+  "author": "Hong Jun",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zpskek/airbnb-clone-v2/issues"
+  },
+  "homepage": "https://github.com/zpskek/airbnb-clone-v2#readme"
+}

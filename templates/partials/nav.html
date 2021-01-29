@@ -1,17 +1,16 @@
-<ul>
-  
+<ul class="flex">
   {% if user.is_authenticated %}
-    <li>
+    <li class="nav_link">
       <a href="{% url 'users:logout' %}">Log Out</a>
     </li>
-    <li>
+    <li class="nav_link">
       <a href="{% url 'users:profile' user.pk %}">Profile</a>
     </li>
     {% else %}
-      <li>
+      <li class="nav_link">
         <a href="{% url 'users:login' %}">Log In</a>
       </li>
-      <li>
+      <li class="nav_link">
         <a href="{% url 'users:signup' %}">Sign Up</a>
       </li>
   {% endif %}
