@@ -1,18 +1,20 @@
-<li>
+<li class="h-3/4 w-full">
   <a href="{% url 'rooms:detail' room.pk %}">
-    <div class="house-image">
-      {% if room.host.superhost %}
-        <span>Superhost</span>
-      {% endif %}
-      <img width='50px' src="{{room.get_first_photo}}" alt="">
-      <i class="far fa-heart"></i>
+    <div class="rounded-lg bg-cover bg-center h-full mb-2" style="background-image:url('{{room.get_first_photo}}')">
+      <div class="flex items-center {% if room.host.superhost %}justify-between{% else %}justify-end{% endif %}">
+        {% if room.host.superhost %}
+          <span class="bg-white p-2 ml-2  mt-2 rounded-lg font-semibold justify-start">Superhost</span>
+        {% endif %}
+        <i class="far fa-heart mr-2 mt-2 text-2xl text-white justify-end text-center"></i>
+      </div>
     </div>
     <div class="house-info">
-      <div class="house__score">
-        <i class="fas fa-star"></i>
+      <div class="mb-1">
+        <i class="fas fa-star text-red-500"></i>
         <span class="review-points">{{room.get_review_points}}</span>
+        <span class="text-gray-400">({{room.reviews.count}})</span>
       </div>
-      <div class="house__description">
+      <div class="truncate">
         {{room.country}} &bull; {{room.address}}
       </div>
     </div>

@@ -5,7 +5,7 @@
 {% endblock page_title %}
 
 {% block content %}
-  <ul>
+  <ul class="grid grid-cols-4 gap-4 gap-y-6 container px-6 m-auto h-screen">
     {% for room in rooms %}
       {% include 'mixins/room_card.html' with room=room %}
     {% endfor %}
