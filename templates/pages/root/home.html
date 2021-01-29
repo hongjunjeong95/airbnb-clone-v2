@@ -10,5 +10,7 @@
       {% include 'mixins/room_card.html' with room=room %}
     {% endfor %}
   </ul>
-  {% include 'mixins/page_number.html' with page=rooms %}
+  <div class="flex justify-center mt-20 itmes-center">
+    {% include 'mixins/page_number.html' with page=rooms %}
+  </div>
 {% endblock content %}

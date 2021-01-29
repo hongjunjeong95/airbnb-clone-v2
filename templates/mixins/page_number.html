@@ -1,23 +1,21 @@
 {% if page.has_previous %}
   {% if page_sector|add:-4 <= 1 %}
-    <a href="?page=1">Prev</a>
+    <a href="?page=1" class="mr-3 text-lg font-semibold">Prev</a>
   {% else %}
-    <a href="?page={{page_sector|add:-4}}">Prev</a>
+    <a href="?page={{page_sector|add:-4}}" class="mr-3 text-lg font-semibold">Prev</a>
   {% endif %}
 {% endif %}
 
 {% for number in '12345'|make_list %}
   {% if page_sector|add:number <= page.paginator.num_pages %}
-    <a href="?page={{page_sector|add:number}}">{{page_sector|add:number}}</a>
+    <a href="?page={{page_sector|add:number}}" class="mr-2 p-1 text-lg rounded {% if page_sector|add:number == page.number %} bg-green-400 text-white {% else %}text-gray-700 bg-gray-200{% endif %} hover:bg-green-200 hover:text-white">{{page_sector|add:number}}</a>
   {% endif %}
 {% endfor %} 
 
-of {{page.paginator.num_pages}}
-
 {% if page.has_next %}
   {% if page_sector|add:6 >= page.paginator.num_pages %}
-    <a href="?page={{page.paginator.num_pages}}">Next</a>
+    <a href="?page={{page.paginator.num_pages}}" class="ml-1 text-lg font-semibold">Next</a>
   {% else %}
-    <a href="?page={{page_sector|add:6}}">Next</a>
+    <a href="?page={{page_sector|add:6}}" class="ml-1 text-lg font-semibold">Next</a>
   {% endif %}
 {% endif %}
