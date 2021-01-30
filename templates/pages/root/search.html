@@ -9,124 +9,127 @@
   
 
 {% block content %}
-  
-  <form method="get" action="{% url 'core:search' %}" class="search-form">
-    <div class="search-form__country">
-      <label for="country">Country</label>
-      <select name="country" id="country">
-        {% for country in countries %}
-          <option value="{{country.code}}" {% if s_country == country.code %} selected {% endif %}>{{country.name}}</option>
-        {% endfor %}
-      </select>
-    </div>
+  <div class="flex flex-col items-center justify-center">
+    <div class="shadow-2xl p-6 rounded-lg">
+      <form method="get" action="{% url 'core:search' %}" class="search-form form">
+        {% csrf_token %}
+        <div class="select rounded-tr-lg rounded-tl-lg">
+          <label for="country">Country</label>
+          <select name="country" id="country">
+            {% for country in countries %}
+              <option value="{{country.code}}" {% if s_country == country.code %} selected {% endif %}>{{country.name}}</option>
+            {% endfor %}
+          </select>
+        </div>
 
-    <div class="search-form__city">
-      <label for="city">City</label>
-      <input type="text" name="city" value="{{city}}">
-    </div>
-    
-    <div class="search-form__price">
-      <label for="price">Price</label>
-      <input type="number" name="price" min=0 value={{price}}>
-    </div>
+        <div class="number_input">
+          <label for="city">City:</label>
+          <input type="text" name="city" palceholder="City" value="{{city}}">
+        </div>
+        
+        <div class="number_input">
+          <label for="price">Price</label>
+          <input type="number" name="price" min=0 value={{price}}>
+        </div>
 
-    <div class="search-form__guests">
-      <label for="guests">Guests</label>
-      <input type="number" name="guests" min=0 value={{guests}}>
-    </div>
+        <div class="number_input">
+          <label for="guests">Guests</label>
+          <input type="number" name="guests" min=0 value={{guests}}>
+        </div>
 
-    <div class="search-form__bedrooms">
-      <label for="bedrooms">bedrooms</label>
-      <input type="number" name="bedrooms" min=0 value={{bedrooms}}>
-    </div>
+        <div class="number_input">
+          <label for="bedrooms">bedrooms</label>
+          <input type="number" name="bedrooms" min=0 value={{bedrooms}}>
+        </div>
 
-    <div class="search-form__beds">
-      <label for="beds">beds</label>
-      <input type="number" name="beds" min=0 value={{beds}}>
-    </div>
+        <div class="number_input">
+          <label for="beds">beds</label>
+          <input type="number" name="beds" min=0 value={{beds}}>
+        </div>
 
-    <div class="search-form__bathrooms">
-      <label for="bathrooms">bathrooms</label>
-      <input type="number" name="bathrooms" min=0 value={{bathrooms}}>
-    </div>
-    
-    <div class="search-form__room_type">
-      <label for="room_type">Room_type</label>
-      <select name="room_type" id="room_type">
-        <option value="0" {% if s_room_type == room_type.pk %} selected {% endif %}>Any Kind</option>
-        {% for room_type in room_types %}
-          <option value="{{room_type.pk}}" {% if s_room_type == room_type.pk|slugify %} selected {% endif %}> {{room_type}}</option>
-        {% endfor %}
-      </select>
-    </div>
+        <div class="number_input">
+          <label for="bathrooms">bathrooms</label>
+          <input type="number" name="bathrooms" min=0 value={{bathrooms}}>
+        </div>
+        
+        <div class="select">
+          <label for="room_type" class="text-lg font-bold">Room Type</label>
+          <select name="room_type" id="room_type">
+            <option value="0" {% if s_room_type == room_type.pk %} selected {% endif %}>Any Kind</option>
+            {% for room_type in room_types %}
+              <option value="{{room_type.pk}}" {% if s_room_type == room_type.pk|slugify %} selected {% endif %}> {{room_type}}</option>
+            {% endfor %}
+          </select>
+        </div>
 
-    <div class="search-form__amenity">
-      <h3>Amenity</h3>
-      <ul>
-      {% for amenity in amenities %}
-        <li>
-          <label for=amenity_{{amenity.pk}}>{{amenity.name}}</label>
-          <input
-            type="checkbox"
-            name="amenities"
-            value="{{amenity.pk}}"
-            id="amenity_{{amenity.pk}}"
-            {% if amenity.pk|slugify in s_amenities %}
-              checked
-            {% endif %}
-            >
-        </li>
-      {% endfor %}
-      </ul>
-    </div>
+        <div class="checkbox">
+          <h3>Amenity</h3>
+          <ul>
+          {% for amenity in amenities %}
+            <li>
+              <label for=amenity_{{amenity.pk}}>{{amenity.name}}</label>
+              <input
+                type="checkbox"
+                name="amenities"
+                value="{{amenity.pk}}"
+                id="amenity_{{amenity.pk}}"
+                {% if amenity.pk|slugify in s_amenities %}
+                  checked
+                {% endif %}
+                >
+            </li>
+          {% endfor %}
+          </ul>
+        </div>
 
-    <div class="search-form__facility">
-      <h3>Facility</h3>
+        <div class="checkbox">
+          <h3>Facility</h3>
 
-      <ul>
-      {% for facility in facilities %}
-        <li>
-          <label for=facility_{{facility.pk}}>{{facility.name}}</label>
-          <input
-            type="checkbox"
-            name="facilities"
-            value="{{facility.pk}}"
-            id="facility_{{facility.pk}}"
-            {% if facility.pk|slugify in s_facilities %}
-              checked
-            {% endif %}
-            >
-        </li>
-      {% endfor %}
-      </ul>
-    </div>
+          <ul>
+          {% for facility in facilities %}
+            <li>
+              <label for=facility_{{facility.pk}}>{{facility.name}}</label>
+              <input
+                type="checkbox"
+                name="facilities"
+                value="{{facility.pk}}"
+                id="facility_{{facility.pk}}"
+                {% if facility.pk|slugify in s_facilities %}
+                  checked
+                {% endif %}
+                >
+            </li>
+          {% endfor %}
+          </ul>
+        </div>
 
-    <div class="search-form__house_rule">
-      <h3>House Rules</h3>
-      <ul>
-      {% for house_rule in house_rules %}
-        <li>
-          <label for=house_rule_{{house_rule.pk}}>{{house_rule.name}}</label>
-          <input
-            type="checkbox"
-            name="house_rules"
-            value="{{house_rule.pk}}"
-            id="house_rule_{{house_rule.pk}}"
-            {% if house_rule.pk|slugify in s_house_rules %}
-              checked
-            {% endif %}
-            >
-        </li>
-      {% endfor %}
-      </ul>
+        <div class="checkbox">
+          <h3>House Rules</h3>
+          <ul>
+          {% for house_rule in house_rules %}
+            <li>
+              <label for=house_rule_{{house_rule.pk}}>{{house_rule.name}}</label>
+              <input
+                type="checkbox"
+                name="house_rules"
+                value="{{house_rule.pk}}"
+                id="house_rule_{{house_rule.pk}}"
+                {% if house_rule.pk|slugify in s_house_rules %}
+                  checked
+                {% endif %}
+                >
+            </li>
+          {% endfor %}
+          </ul>
+        </div>
+        <div class="checkbox rounded-bl-lg rounded-br-lg">
+          <label for="instant_book" class="text-lg font-bold mr-2">Instant Book</label>
+          <input type="checkbox", name="instant_book" id="instant_book" {% if instant_book %}checked{% endif %}>
+        </div>
+        <button class="button">Search</button>
+      </form>
     </div>
-    <div class="search-form__instant_book">
-      <label for="instant_book">Instant Book</label>
-      <input type="checkbox", name="instant_book" id="instant_book" {% if instant_book %}checked{% endif %}>
-    </div>
-    
-    <button>Search</button>
-  </form>
+  </div>
 
 
   {% for room in rooms %}

@@ -13,23 +13,50 @@
     textarea {
       @apply w-full outline-none;
     }
+    label {
+      @apply mr-2;
+    }
+  }
+  .number_input {
+    @apply border p-3 border-gray-400 flex justify-between;
+    label {
+      @apply text-lg font-bold;
+    }
+    input {
+      @apply w-2/3 border border-gray-400 p-1 rounded-md;
+    }
   }
   .select {
     @apply flex justify-between items-center border p-3 w-full border-gray-400;
     label {
-      @apply mr-2;
+      @apply mr-2 text-lg font-bold;
     }
     select {
-      @apply w-3/4 border border-gray-400 p-1 rounded-md;
+      @apply w-2/3 border border-gray-400 p-1 rounded-md;
     }
   }
   .birthdate {
     @apply flex justify-between items-center border p-3 w-full border-gray-400;
     label {
-      @apply mr-2;
+      @apply mr-2 text-lg font-bold;
     }
     input {
-      @apply w-3/4 border border-gray-400 p-1 rounded-md;
+      @apply w-2/3 border border-gray-400 p-1 rounded-md;
+    }
+  }
+  .checkbox {
+    @apply border p-3 w-full border-gray-400;
+    h3 {
+      @apply mb-2 text-lg font-bold;
+    }
+    ul {
+      @apply grid grid-cols-2 gap-x-4;
+      li {
+        @apply flex justify-between items-center;
+        label {
+          @apply mr-4;
+        }
+      }
     }
   }
   .button {
@@ -37,6 +64,9 @@
   }
   div:not(:nth-child(2)) {
     @apply border-t-0;
+  }
+  .search_input {
+    @apply flex justify-between;
   }
 }
 

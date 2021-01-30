@@ -18,7 +18,7 @@
   },
   "devDependencies": {},
   "scripts": {
-    "watch": "gulp dev",
+    "dev": "gulp dev",
     "css": "gulp css"
   },
   "repository": {
