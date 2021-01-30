@@ -18,12 +18,15 @@ class SignUpForm(forms.ModelForm):
         }
         widgets = {
             "first_name": forms.TextInput(
-                attrs={"placeholder": "First name", "required": True}
+                attrs={"placeholder": "First name", "required": True, "class": "w-full"}
             ),
             "last_name": forms.TextInput(
-                attrs={"placeholder": "Last name", "required": True}
+                attrs={"placeholder": "Last name", "required": True, "class": "w-full"}
             ),
-            "email": forms.EmailInput(attrs={"placeholder": "email"}),
+            "email": forms.EmailInput(
+                attrs={"placeholder": "Email", "required": True, "class": "w-full"}
+            ),
+            "bio": forms.Textarea(attrs={"placeholder": "Bio", "class": "resize-none"}),
         }
 
     def __init__(self, *args, **kwargs):
