@@ -1,22 +1,26 @@
-<li class="h-3/4 w-full">
-  <a href="{% url 'rooms:detail' room.pk %}">
-    <div class="rounded-lg bg-cover bg-center h-full mb-2" style="background-image:url('{{room.get_first_photo}}')">
-      <div class="flex items-center {% if room.host.superhost %}justify-between{% else %}justify-end{% endif %}">
-        {% if room.host.superhost %}
-          <span class="bg-white p-2 ml-2  mt-2 rounded-lg font-semibold justify-start">Superhost</span>
-        {% endif %}
-        <i class="far fa-heart mr-2 mt-2 text-2xl text-white justify-end text-center"></i>
-      </div>
-    </div>
-    <div class="house-info">
-      <div class="mb-1">
-        <i class="fas fa-star text-red-500"></i>
-        <span class="review-points">{{room.get_review_points}}</span>
-        <span class="text-gray-400">({{room.reviews.count}})</span>
-      </div>
-      <div class="truncate">
-        {{room.country}} &bull; {{room.address}}
-      </div>
-    </div>
-  </a>
-</li>
+<ul class="grid grid-cols-4 grid-rows-2px auto-rows-400px mx-auto gap-4 gap-y-6 container px-6">
+  {% for room in rooms %}
+    <li class="w-full">
+      <a href="{% url 'rooms:detail' room.pk %}">
+        <div class="rounded-lg bg-cover bg-center h-3/4 mb-2" style="background-image:url('{{room.get_first_photo}}')">
+          <div class="flex items-center {% if room.host.superhost %}justify-between{% else %}justify-end{% endif %}">
+            {% if room.host.superhost %}
+              <span class="bg-white p-2 ml-2  mt-2 rounded-lg font-semibold justify-start">Superhost</span>
+            {% endif %}
+            <i class="far fa-heart mr-2 mt-2 text-2xl text-white justify-end text-center"></i>
+          </div>
+        </div>
+        <div class="h-1/4">
+          <div class="mb-1">
+            <i class="fas fa-star text-red-500"></i>
+            <span class="review-points">{{room.get_review_points}}</span>
+            <span class="text-gray-400">({{room.reviews.count}})</span>
+          </div>
+          <div class="truncate">
+            {{room.country}} &bull; {{room.address}}
+          </div>
+        </div>
+      </a>
+    </li>
+  {% endfor %}
+</ul>

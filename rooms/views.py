@@ -126,7 +126,7 @@ def SearchView(request):
         filter_args["instant_book"] = instant_book
 
     qs = room_models.Room.objects.filter(**filter_args).order_by("created")
-    paginoatr = Paginator(qs, 10, orphans=5)
+    paginoatr = Paginator(qs, 12, orphans=6)
     page = request.GET.get("page", 1)
     rooms = paginoatr.get_page(page)
     return render(

@@ -5,11 +5,7 @@
 {% endblock page_title %}
 
 {% block content %}
-  <ul class="grid grid-cols-4 gap-4 gap-y-6 container px-6 m-auto h-screen">
-    {% for room in rooms %}
-      {% include 'mixins/room_card.html' with room=room %}
-    {% endfor %}
-  </ul>
+  {% include 'mixins/room_card.html' with rooms=rooms %}
   <div class="flex justify-center mt-20 itmes-center">
     {% include 'mixins/page_number.html' with page=rooms %}
   </div>

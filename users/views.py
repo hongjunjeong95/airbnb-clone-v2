@@ -8,6 +8,7 @@ from django.views.generic import FormView
 from django.urls import reverse_lazy
 from django.shortcuts import redirect, reverse, render
 from django.db.utils import IntegrityError
+from django.core.paginator import Paginator
 from . import forms, models, mixins
 from .exception import (
     GithubException,
@@ -281,8 +282,17 @@ def userDetail(request, pk):
         if not request.user.is_authenticated:
             raise LoggedInOnlyView("Please login first")
         user_obj = models.User.objects.get(pk=pk)
+        page = int(request.GET.get("page", 1))
+        page_sector = (page - 1) // 5
+        page_sector = page_sector * 5
+        qs = user_obj.rooms.all()
+        paginator = Paginator(qs, 12, orphans=6)
+        rooms = paginator.get_page(page)
+
         return render(
-            request, "pages/users/profile.html", context={"user_obj": user_obj}
+            request,
+            "pages/users/profile.html",
+            context={"user_obj": user_obj, "rooms": rooms, "page_sector": page_sector},
         )
     except models.User.DoesNotExist:
         messages.error(request, "User does not exist")

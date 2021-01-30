@@ -7,7 +7,7 @@
   
 
 {% block content %}
-  <div class="flex justify-center items-center">
+  <div class="flex justify-center items-center mb-20">
     <div class="profile">
       <div class="profile__info">
         {% if user_obj.avatar %}
@@ -81,14 +81,11 @@
         </button>
       {% endif %}
     </div>
+  </div>
+  
+  {% include 'mixins/room_card.html' with rooms=rooms %}
 
-    <div class="room-list">
-      
-      {% for room in user_obj.rooms.all %}
-        {% include 'mixins/room_card.html' %}
-      {% endfor %}
-        
-    </div>
+  <div class="flex justify-center mt-20 itmes-center">
+    {% include 'mixins/page_number.html' with page=rooms %}
   </div>
 {% endblock content %}
-  

@@ -6,6 +6,12 @@ module.exports = {
       height: {
         18: "4.5rem",
       },
+      gridAutoRows: {
+        "400px": "minmax(0, 400px)",
+      },
+      gridTemplateRows: {
+        "2px": "repeat(2, 400px)",
+      },
     },
   },
   variants: {
