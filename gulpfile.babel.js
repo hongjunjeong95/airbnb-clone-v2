@@ -27,4 +27,4 @@ const watch = () => {
   gulp.watch(path.scss.watch, css);
 };
 
-export const dev = gulp.series([css, watch]);
+export const watch = gulp.series([css, watch]);
