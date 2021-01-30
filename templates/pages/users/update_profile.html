@@ -7,79 +7,94 @@
   
 
 {% block content %}
-  <form method="post">
-    {% csrf_token %}
-    <div class="profile">
-      <div class="main__info">
-        <div class="avatar">
-        
+  <div class="background">
+    <div class="wrap">
+      <div class="flex flex-col items-center justify-center">
           {% if user.avatar %}
-            <img src="{{user.avatar.url}}" alt="User avatar", title="User Avatar", width='200px'>
-          {% else %}
-            {{user.first_name|first}}
-          {% endif %}
-          
-          
-          {% if user.login_method == "email" %}
-            <label for="avatar">Avatar</label>
-            <input type="file" id="avatar" name="avatar">
-          {% endif %}
-
-        </div>
-        <label for="first_name">First Name</label>
-        <input type="text" id="first_name" placeholder="First Name" value="{{user.first_name}}" name="first_name">
-
-        <label for="last_name">Last Name</label>
-        <input type="text" id="last_name" placeholder="Last Name" value="{{user.last_name}}" name="last_name">
-
-        <label for="email">Email</label>
-        {% if user.login_method == "email" %}
-          <input type="text" id="email" placeholder="Email" value="{{user.email}}" name="email">
+          <img class="img" src="{{user.avatar.url}}" alt="User avatar", title="User Avatar", width='200px'>
         {% else %}
-          <span>{{user.email}}</span>
+          <div class="img">{{user.first_name|first|upper}}</div>
         {% endif %}
       </div>
-      <div class="extra__info">
-        <label for="gender">Gender</label>
-        <select name="gender" id="gender">
-          {% for key, value in genders %}
-            <option value="{{value}}" {% if value == user.gender %}selected{% endif %}>
-              {{value}}
-            </option>
-          {% endfor %}
-        </select>
+      <form method="post" class="form">
+        {% csrf_token %}
+        {% if user.login_method == "email" %}
+        <div class="form_input rounded-tl-lg rounded-tr-lg">
+          <label for="avatar">Avatar</label>
+          <input type="file" id="avatar" name="avatar">
+        </div>
+        {% endif %}
+        <div class="form_input">
+          <label for="first_name">First Name</label>
+          <input type="text" id="first_name" placeholder="First Name" value="{{user.first_name}}" name="first_name">
+        </div>
 
-        <label for="language">Language</label>
-        <select name="language" id="language">
-          {% for key, value in languages %}
-            <option value="{{value}}" {% if value == user.language %}selected{% endif %}>
-              {{value}}
-            </option>
-          {% endfor %}
-        </select>
+        <div class="form_input">
+          <label for="last_name">Last Name</label>
+          <input type="text" id="last_name" placeholder="Last Name" value="{{user.last_name}}" name="last_name">
+        </div>
+
+        <div class="form_input">
+          <label for="email">Email</label>
+          {% if user.login_method == "email" %}
+            <input type="text" id="email" placeholder="Email" value="{{user.email}}" name="email">
+          {% else %}
+            <span>{{user.email}}</span>
+          {% endif %}
+        </div>
+        <div class="select">
+          <label for="gender">Gender</label>
+          <select name="gender" id="gender">
+            {% for key, value in genders %}
+              <option value="{{value}}" {% if value == user.gender %}selected{% endif %}>
+                {{value}}
+              </option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="select">
+          <label for="language">Language</label>
+          <select name="language" id="language">
+            {% for key, value in languages %}
+              <option value="{{value}}" {% if value == user.language %}selected{% endif %}>
+                {{value}}
+              </option>
+            {% endfor %}
+          </select>
+        </div>
         
-        <label for="currency">Currency</label>
-        <select name="currency" id="currency">
-          {% for key, value in currencies %}
-            <option value="{{value}}" {% if value == user.currency %}selected{% endif %}>
-              {{value}}
-            </option>
-          {% endfor %}
-        </select>
+        <div class="select">
+          <label for="currency">Currency</label>
+          <select name="currency" id="currency">
+            {% for key, value in currencies %}
+              <option value="{{value}}" {% if value == user.currency %}selected{% endif %}>
+                {{value}}
+              </option>
+            {% endfor %}
+          </select>
+        </div>
 
-        <label for="birthdate">Birthdate</label>
-        <input type="date" id="birthdate" name="birthdate" placeholder="Birthdate" value="{{user.birthdate|date:'Y-m-d'}}" required>
+        <div class="birthdate">
+          <label for="birthdate">Birthdate</label>
+          <input type="date" id="birthdate" name="birthdate" placeholder="Birthdate" value="{{user.birthdate|date:'Y-m-d'}}" required>
+        </div>
 
-        <label for="bio">Bio</label>
-        <textarea id="bio" name="bio">{{user.bio}}
-        </textarea>
-      </div>
-      <button>Edit Profile</button>
+        <div class="form_input rounded-br-lg rounded-bl-lg">
+          <label for="bio">Bio</label>
+          <textarea id="bio" name="bio">{{user.bio}}</textarea>
+        </div>
+        <button class="button">Edit Profile</button>
+        
+      </form>
+      <button class="button outline-none border-none">
+        <a href="{% url 'users:change-password' user.pk %}">Change Password</a>
+      </button>
+      <button class="button bg-green-400">
+        <a href="{% url 'users:profile' user.pk %}">Back</a>
+      </button>
     </div>
-  </form>
-  <a href="{% url 'users:change-password' user.pk %}">Change Password</a>
-  <button>
-    <a href="{% url 'users:profile' user.pk %}">Back</a>
-  </button>
+  </div>
+
 {% endblock content %}
   

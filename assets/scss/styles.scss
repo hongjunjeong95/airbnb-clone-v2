@@ -8,71 +8,80 @@
   }
 }
 
-.form {
-  @apply flex flex-col;
-  .form_input {
-    @apply border p-3 w-full border-gray-400;
-    input:not([type="file"]):not([type="date"]),
-    textarea {
-      @apply w-full outline-none;
-    }
-    label {
-      @apply mr-2;
-    }
-  }
-  .number_input {
-    @apply border p-3 border-gray-400 flex justify-between;
-    label {
-      @apply text-lg font-bold;
-    }
-    input {
-      @apply w-2/3 border border-gray-400 p-1 rounded-md;
-    }
-  }
-  .select {
-    @apply flex justify-between items-center border p-3 w-full border-gray-400;
-    label {
-      @apply mr-2 text-lg font-bold;
-    }
-    select {
-      @apply w-2/3 border border-gray-400 p-1 rounded-md;
-    }
-  }
-  .birthdate {
-    @apply flex justify-between items-center border p-3 w-full border-gray-400;
-    label {
-      @apply mr-2 text-lg font-bold;
-    }
-    input {
-      @apply w-2/3 border border-gray-400 p-1 rounded-md;
-    }
-  }
-  .checkbox {
-    @apply border p-3 w-full border-gray-400;
-    h3 {
-      @apply mb-2 text-lg font-bold;
-    }
-    ul {
-      @apply grid grid-cols-2 gap-x-4;
-      li {
-        @apply flex justify-between items-center;
+.background {
+  @apply flex flex-col items-center justify-center;
+  .wrap {
+    @apply shadow-2xl p-6 rounded-lg;
+    .form {
+      @apply flex flex-col;
+      .form_input {
+        @apply border p-3 w-full border-gray-400;
+        input:not([type="file"]):not([type="date"]),
+        textarea {
+          @apply w-full outline-none resize-none;
+        }
         label {
-          @apply mr-4;
+          @apply mr-2;
         }
       }
-    }
-  }
+      .number_input {
+        @apply border p-3 border-gray-400 flex justify-between;
+        label {
+          @apply text-lg font-bold;
+        }
+        input {
+          @apply w-2/3 border border-gray-400 p-1 rounded-md;
+        }
+      }
+      .select {
+        @apply flex justify-between items-center border p-3 w-full border-gray-400;
+        label {
+          @apply mr-2 text-lg font-bold;
+        }
+        select {
+          @apply w-2/3 border border-gray-400 p-1 rounded-md;
+        }
+      }
+      .birthdate {
+        @apply flex justify-between items-center border p-3 w-full border-gray-400;
+        label {
+          @apply mr-2 text-lg font-bold;
+        }
+        input {
+          @apply w-2/3 border border-gray-400 p-1 rounded-md;
+        }
+      }
+      .checkbox {
+        @apply border p-3 w-full border-gray-400;
+        h3 {
+          @apply mb-2 text-lg font-bold;
+        }
+        ul {
+          @apply grid grid-cols-2 gap-x-4;
+          li {
+            @apply flex justify-between items-center;
+            label {
+              @apply mr-4;
+            }
+          }
+        }
+      }
 
-  div:not(:nth-child(2)) {
-    @apply border-t-0;
-  }
-  .search_input {
-    @apply flex justify-between;
+      div:not(:nth-child(2)) {
+        @apply border-t-0;
+      }
+      .search_input {
+        @apply flex justify-between;
+      }
+    }
   }
 }
 
 .button {
   @apply mt-3 bg-red-500 text-white rounded-lg px-1 py-2 text-base font-bold tracking-wider w-full outline-none;
+  a {
+    @apply block;
+  }
 }
 
 .social-login {
@@ -82,12 +91,9 @@
 }
 
 .profile {
-  @apply flex flex-col justify-center items-center  rounded-lg w-1/3 p-4 shadow-xl;
+  @apply flex flex-col justify-center items-center rounded-lg w-1/3 p-4 shadow-xl;
   .profile__info {
     @apply flex flex-col justify-center items-center w-full;
-    .img {
-      @apply mb-4 rounded-full w-20 h-20 flex items-center justify-center text-white text-4xl font-bold bg-gray-600 mb-3;
-    }
     .info {
       @apply flex justify-between w-3/4 mb-1;
       h4 {
@@ -98,6 +104,10 @@
       }
     }
   }
+}
+
+.img {
+  @apply mb-4 rounded-full w-20 h-20 flex items-center justify-center text-white text-4xl font-bold bg-gray-600 mb-3;
 }
 
 @tailwind utilities;

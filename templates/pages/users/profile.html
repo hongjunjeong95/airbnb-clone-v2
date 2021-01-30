@@ -80,7 +80,7 @@
       
       {% if user_obj.pk == user.pk %}
         <button class="button my-6 w-3/4">
-          <a href="{% url 'users:update-profile' user_obj.pk %}" class="block">Edit Profile</a>
+          <a href="{% url 'users:update-profile' user_obj.pk %}">Edit Profile</a>
         </button>
       {% endif %}
     </div>

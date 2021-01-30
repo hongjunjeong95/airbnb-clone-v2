@@ -9,9 +9,9 @@
   
 
 {% block content %}
-  <div class="flex flex-col items-center justify-center">
-    <div class="shadow-2xl p-6 rounded-lg">
-      <form method="get" action="{% url 'core:search' %}" class="search-form form">
+  <div class="background">
+    <div class="wrap">
+      <form method="get" action="{% url 'core:search' %}" class="form">
         {% csrf_token %}
         <div class="select rounded-tr-lg rounded-tl-lg">
           <label for="country">Country</label>
