@@ -2,10 +2,14 @@ module.exports = {
   purge: [],
   darkMode: false, // or 'media' or 'class'
   theme: {
-    extend: {},
+    extend: {
+      height: {
+        18: "4.5rem",
+      },
+    },
   },
   variants: {
     extend: {},
   },
-  plugins: [],
+  plugins: [require("@tailwindcss/line-clamp")],
 };

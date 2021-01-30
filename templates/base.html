@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
   <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
-  <body class="mt-28">
+  <body class="text-gray-800 font-light mt-36 ">
     {% include 'partials/messages.html' %}
     <header class='flex justify-between items-center px-6 border-b-2 mb-9 fixed w-full h-20 bg-white inset-0'>
         <div class="flex">
@@ -27,7 +27,8 @@
 
     {% block content %}{% endblock content %}
 
-    {% include 'partials/footer.html' %}
-
+    
+      {% include 'partials/footer.html' %}
+    
   </body>
 </html>

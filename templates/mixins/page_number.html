@@ -8,7 +8,7 @@
 
 {% for number in '12345'|make_list %}
   {% if page_sector|add:number <= page.paginator.num_pages %}
-    <a href="?page={{page_sector|add:number}}" class="mr-2 p-1 text-lg rounded {% if page_sector|add:number == page.number %} bg-green-400 text-white {% else %}text-gray-700 bg-gray-200{% endif %} hover:bg-green-200 hover:text-white">{{page_sector|add:number}}</a>
+    <a href="?page={{page_sector|add:number}}" class="mr-2 py-1 px-2 text-lg rounded {% if page_sector|add:number == page.number %} bg-green-400 text-white {% else %}text-gray-700 bg-gray-200{% endif %} hover:bg-green-200 hover:text-white">{{page_sector|add:number}}</a>
   {% endif %}
 {% endfor %} 
 

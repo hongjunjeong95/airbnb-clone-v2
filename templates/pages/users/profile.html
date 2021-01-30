@@ -7,63 +7,88 @@
   
 
 {% block content %}
-  <div class="profile">
-    <div class="main__info">
-      {% if user_obj.avatar %}
-        <img src="{{user_obj.avatar.url}}" alt="User avatar", title="User Avatar", width='200px'>
-      {% else %}
-        <div>{{user_obj.first_name|first}}</div>
-      {% endif %}
-      
-      <span>{{user_obj.first_name}}</span>
-      
-      {% if user_obj.last_name %}
-        <span>{{user_obj.last_name}}</span>
-      {% endif %}
+  <div class="flex justify-center items-center">
+    <div class="profile">
+      <div class="profile__info">
+        {% if user_obj.avatar %}
+          <img src="{{user_obj.avatar.url}}" class="img w-20 mb-4" alt="User avatar" title="User Avatar">
+        {% else %}
+          <div class="img">{{user_obj.first_name|first|upper}}</div>
+        {% endif %}
+        <div class="info">
+          <h4>First name</h4>
+          <span>{{user_obj.first_name|capfirst}}</span>
+        </div>
         
-      {% if user_obj.email %}
-        <span>{{user_obj.email}}</span>        
+        {% if user_obj.last_name %}
+        <div class="info">
+          <h4>Last name</h4>
+          <span>{{user_obj.last_name|capfirst}}</span>
+        </div>
+        {% endif %}
+          
+        {% if user_obj.email %}
+        <div class="info">
+          <h4>Email</h4>
+          <span>{{user_obj.email}}</span>
+        </div>        
+        {% endif %}
+          
+      </div>
+      <div class="profile__info">
+        {% if user_obj.gender %}
+        <div class="info">
+          <h4>Gender</h4>
+          <span>{{user_obj.gender}}</span>
+        </div>
+        {% endif %}
+          
+        {% if user_obj.language %}
+        <div class="info">
+          <h4>Language</h4>
+          <span>{{user_obj.language}}</span>
+        </div>
+        {% endif %}
+          
+        {% if user_obj.currency %}
+        <div class="info">
+          <h4>Currency</h4>
+          <span>{{user_obj.currency}}</span>
+        </div>
+        {% endif %}
+          
+        {% if user_obj.birthdate %}
+        <div class="info">
+          <h4>Birthdate</h4>
+          <span>{{user_obj.birthdate}}</span>          
+        </div>
+        {% endif %}
+
+        {% if user_obj.superhost %}
+        <div class="info">
+          <h4>Superhost</h4>
+        </div>
+        {% endif %}
+        <div class="info flex-col mt-3">
+          <h4>Bio</h4>
+          <div class="text-justify line-clamp-6 w-full">&emsp;{{user_obj.bio}}</div>
+        </div>
+      </div>
+      
+      {% if user_obj.pk == user.pk %}
+        <button class="button my-6 w-3/4">
+          <a href="{% url 'users:update-profile' user_obj.pk %}" class="block">Edit Profile</a>
+        </button>
       {% endif %}
+    </div>
+
+    <div class="room-list">
+      
+      {% for room in user_obj.rooms.all %}
+        {% include 'mixins/room_card.html' %}
+      {% endfor %}
         
     </div>
-    <div class="extra__info">
-      
-      {% if user_obj.gender %}
-        <span>{{user_obj.gender}}</span>
-      {% endif %}
-        
-      {% if user_obj.language %}
-        <span>{{user_obj.language}}</span>
-      {% endif %}
-        
-      {% if user_obj.currency %}
-        <span>{{user_obj.currency}}</span>
-      {% endif %}
-        
-      {% if user_obj.birthdate %}
-        <span>{{user_obj.birthdate}}</span>          
-      {% endif %}
-
-      {% if user_obj.superhost %}
-        <span>Superhost</span>
-      {% endif %}
-
-      <span>{{user_obj.bio}}</span>
-    </div>
-    
-    {% if user_obj.pk == user.pk %}
-      <button>
-        <a href="{% url 'users:update-profile' user_obj.pk %}">Edit Profile</a>
-      </button>
-    {% endif %}
-      
-  </div>
-  <div class="room-list">
-    
-    {% for room in user_obj.rooms.all %}
-      {% include 'mixins/room_card.html' %}
-    {% endfor %}
-      
   </div>
 {% endblock content %}
   
