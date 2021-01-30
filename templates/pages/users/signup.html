@@ -9,46 +9,43 @@
 {% block content %}
   <div class="flex flex-col items-center justify-center">
     <div class="shadow-2xl p-6 rounded-lg">
-      <div class="">
-        <form action="{% url 'users:signup' %}" method="post" class="form">
-          {% csrf_token %}
-          <div class="form_input rounded-tl-lg rounded-tr-xl">
-            {{form.first_name}}
-          </div>
-          <div class="form_input border-t-0">
-            {{form.last_name}}
-          </div>
-          <div class="form_input border-t-0">
-            {{form.email}}
-          </div>
-          <div class="form_input border-t-0">
-            <label for="{{form.avatar.id_for_label}}">Avatar</label>
-            {{form.avatar}}
-          </div>
-          <div class="form_input">
-            {{form.bio}}
-          </div>
-          <div class="select">
-            <label for="{{form.gender.id_for_label}}">Gender:</label>
-            {{form.gender}}
-          </div>
-          <div class="select">
-            <label for="{{form.language.id_for_label}}">Language:</label>
-            {{form.language}}
-          </div>
-          <div class="select">
-            <label for="{{form.currency.id_for_label}}">Currency:</label>
-            {{form.currency}}
-          </div>        
-          <div class="birthdate rounded-br-xl rounded-bl-xl">
-            <label for="birthdate">Birthdate:</label>
-            <input type="date" id="birthdate" name="birthdate">
-          </div>
-            
-          <button class="button mt-3 bg-red-500 text-white">Submit</button>
-        </form>
-        {% include 'mixins/social_login.html' %}
-      </div>
+      <form action="{% url 'users:signup' %}" method="post" class="form">
+        {% csrf_token %}
+        <div class="form_input rounded-tl-lg rounded-tr-lg">
+          {{form.first_name}}
+        </div>
+        <div class="form_input border-t-0">
+          {{form.last_name}}
+        </div>
+        <div class="form_input border-t-0">
+          {{form.email}}
+        </div>
+        <div class="form_input border-t-0">
+          <label for="{{form.avatar.id_for_label}}">Avatar</label>
+          {{form.avatar}}
+        </div>
+        <div class="form_input">
+          {{form.bio}}
+        </div>
+        <div class="select">
+          <label for="{{form.gender.id_for_label}}">Gender:</label>
+          {{form.gender}}
+        </div>
+        <div class="select">
+          <label for="{{form.language.id_for_label}}">Language:</label>
+          {{form.language}}
+        </div>
+        <div class="select">
+          <label for="{{form.currency.id_for_label}}">Currency:</label>
+          {{form.currency}}
+        </div>        
+        <div class="birthdate rounded-br-xl rounded-bl-lg">
+          <label for="birthdate">Birthdate:</label>
+          <input type="date" id="birthdate" name="birthdate">
+        </div>
+        <button class="button">Submit</button>
+      </form>
+      {% include 'mixins/social_login.html' %}
     </div>
   </div>
 {% endblock content %}

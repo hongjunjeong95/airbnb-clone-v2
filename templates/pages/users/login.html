@@ -5,11 +5,20 @@
 {% endblock page_title %}
 
 {% block content %}
-  <form action="{% url 'users:login' %}" method="post">
-    {% csrf_token %}
-    {{form}}
-    {% include 'mixins/social_login.html' %}
-    <button>Submit</button>
-  </form>
+  <div class="flex flex-col items-center justify-center">
+    <div class="shadow-2xl p-6 rounded-lg">
+      <form action="{% url 'users:login' %}" method="post" class="form">
+        {% csrf_token %}
+        <div class="form_input rounded-tl-lg rounded-tr-lg">
+          {{form.email}}
+        </div>
+        <div class="form_input rounded-bl-lg rounded-br-lg">
+          {{form.password}}
+        </div>
+        <button class="button mt-3 bg-red-500 text-white">Submit</button>
+      </form>
+      {% include 'mixins/social_login.html' %}
+    </div>
+  </div>
 {% endblock content %}
   
