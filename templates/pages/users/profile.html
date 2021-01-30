@@ -69,10 +69,13 @@
           <h4>Superhost</h4>
         </div>
         {% endif %}
-        <div class="info flex-col mt-3">
-          <h4>Bio</h4>
-          <div class="text-justify line-clamp-6 w-full">&emsp;{{user_obj.bio}}</div>
-        </div>
+        
+        {% if user_obj.bio %}
+          <div class="info flex-col mt-3">
+            <h4>Bio</h4>
+            <div class="text-justify line-clamp-6 w-full">&emsp;{{user_obj.bio}}</div>
+          </div>
+        {% endif %}
       </div>
       
       {% if user_obj.pk == user.pk %}
