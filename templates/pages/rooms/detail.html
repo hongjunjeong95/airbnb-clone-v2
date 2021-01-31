@@ -36,9 +36,9 @@
           {% endfor %}
         </div>
       </div>
-      <main class="w-3/5">
-        <div class="main__left">
-          <div class="flex justify-between">
+      <main class="romm_detail">
+        <div class="w-3/5">
+          <div class="section pb-0 flex justify-between">
             <div class="space__left">
               <h2 class="text-2xl font-bold">{{room.room_type}} hosted by {{room.host.first_name}}</h2>
               <div class="space__info">
@@ -53,25 +53,37 @@
               {% include 'mixins/avatar.html' with user=room.host %}
             </div>
           </div>
-          <div class="description">
-            <span class="content">{{room.description}}</span>
-            <button class="connect_host">Connect host</button>
+          <div class="section flex flex-col">
+            <span class="content">&emsp;{{room.description}}</span>
+            <button class="button">Contect host</button>
           </div>
-          <div class="amenities">
+          <div class="section">
             <h4>Amenity</h4>
-            {% for amenity in room.amenities.all %}
-              <li>{{amenity}}</li>
-            {% endfor %}
+            <ul>
+              {% for amenity in room.amenities.all %}
+                <li>{{amenity}}</li>
+              {% endfor %}
+            </ul>
           </div>
-          <div class="facilities">
+          <div class="section">
             <h4>Facility</h4>
-            {% for facility in room.facilities.all %}
-              <li>{{facility}}</li>
-            {% endfor %}
+            <ul>
+              {% for facility in room.facilities.all %}
+                <li>{{facility}}</li>
+              {% endfor %}
+            </ul>
+          </div>
+          <div class="section">
+            <h4>House Rules</h4>
+            <ul>
+              {% for house_rule in room.house_rules.all %}
+                <li>{{house_rule}}</li>
+              {% endfor %}
+            </ul>
           </div>
         </div>
         <div class="main__right">
-          <div class="calendar"></div>
+          <div class="calendar">Calendar</div>
         </div>
       </main>
       <div class="reviews">
