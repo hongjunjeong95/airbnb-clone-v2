@@ -107,7 +107,7 @@
 }
 
 .img {
-  @apply mb-4 rounded-full w-20 h-20 flex items-center justify-center text-white text-4xl font-bold bg-gray-600 mb-3;
+  @apply rounded-full w-20 h-20 flex items-center justify-center text-white text-4xl font-bold bg-gray-600;
 }
 
 @keyframes messageFadeIn {
@@ -156,6 +156,18 @@
       @apply grid grid-cols-2 gap-1;
       li {
         @apply text-base font-medium border border-gray-300 p-2 rounded-lg;
+      }
+    }
+  }
+}
+
+.room_reviews {
+  .review_points {
+    @apply grid grid-cols-2 gap-x-52 gap-y-3 mb-10;
+    div {
+      @apply flex justify-between;
+      .point {
+        @apply font-bold text-sm;
       }
     }
   }

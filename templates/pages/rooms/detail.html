@@ -55,7 +55,7 @@
           </div>
           <div class="section flex flex-col">
             <span class="content">&emsp;{{room.description}}</span>
-            <button class="button">Contect host</button>
+            <button class="button">Contact host</button>
           </div>
           <div class="section">
             <h4>Amenity</h4>
@@ -86,58 +86,58 @@
           <div class="calendar">Calendar</div>
         </div>
       </main>
-      <div class="reviews">
-        <div class="reviews__rating">
-          <i class="fas fa-star"></i>
+      <div class="clalender border-b border-gray-300 mb-6 pb-6 px-6">Calendar</div>
+      <div class="room_reviews">
+        <div class="text-lg font-bold mb-8">
+          <i class="fas fa-star text-red-500"></i>
           <span>{{room.get_review_points}} points</span>
-          <span>({{room.reviews.count}})</span>
+          <span>({{room.reviews.count}} review{{room.reviews.count|pluralize}})</span>
         </div>
-        <div class="reviews__points">
+        <div class="review_points">
           <div>
-            <span>accuracy</span>
-            <span class="bar">{{room.calculate_accuracy}}</span>
+            <span>Accuracy</span>
+            <span class="point">{{room.calculate_accuracy}}</span>
           </div>
           <div>
-            <span>communication</span>
-            <span class="bar">{{room.calculate_communication}}</span>
+            <span>Communication</span>
+            <span class="point">{{room.calculate_communication}}</span>
           </div>
           <div>
-            <span>cleanliness</span>
-            <span class="bar">{{room.calculate_cleanliness}}</span>
+            <span>Cleanliness</span>
+            <span class="point">{{room.calculate_cleanliness}}</span>
           </div>
           <div>
-            <span>location</span>
-            <span class="bar">{{room.calculate_location}}</span>
+            <span>Location</span>
+            <span class="point">{{room.calculate_location}}</span>
           </div>
           <div>
-            <span>check_in</span>
-            <span class="bar">{{room.calculate_check_in}}</span>
+            <span>Check In</span>
+            <span class="point">{{room.calculate_check_in}}</span>
           </div>
           <div>
-            <span>value</span>
-            <span class="bar">{{room.calculate_value}}</span>
+            <span>Value</span>
+            <span class="point">{{room.calculate_value}}</span>
           </div>
         </div>
         
-        {% for review in room.reviews.all %}
-          <div class="profile">
-          
-            {% if review.user.avatar %}
-              <img src="{{review.user.avatar.url}}" alt="" class="avatar" width="100px">
-            {% else %}
-              <div>{{review.user.first_name|first}}</div>
-            {% endif %}
-            
-            
+        <div class="grid grid-cols-2 gap-x-52 gap-y-3 mb-10">
+          {% for review in room.reviews.all %}
             <div>
-              {{review.user}}
-              {{review.created}}
+              <div class="flex items-center mb-4">
+                {% if review.user.avatar %}
+                  <img src="{{review.user.avatar.url}}" class="img w-16 h-16 mr-4" alt="User avatar" title="User Avatar">
+                {% else %}
+                  <div class="img w-16 h-16 mr-4">{{review.user.first_name|first|upper}}</div>
+                {% endif %}
+                <div class="flex flex-col">
+                  <span class="font-bold">{{review.user|capfirst}}</span>
+                  <span class="text-sm text-gray-400">{{review.created}}</span>
+                </div>
+              </div>
+              <p class="mb-4 font-normal">{{review.review}}</p>
             </div>
-          </div>
-          <div class="content">
-            {{review.review}}
-          </div>
-        {% endfor %}
+          {% endfor %}
+        </div>
       </div>
       <div class="host-info">
         <div class="host-info__left">
