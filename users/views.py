@@ -17,6 +17,7 @@ from .exception import (
     LoggedOutOnlyView,
     ChangePasswordException,
     VerifyUser,
+    EmailLoggedInOnly,
 )
 
 
@@ -424,9 +425,11 @@ def change_password(request, pk):
     if request.method == "GET":
         try:
             if not request.user.is_authenticated:
-                raise LoggedInOnlyView
+                raise LoggedInOnlyView("Please login first")
+            if request.user.login_method != "email":
+                raise EmailLoggedInOnly("Page not found 404")
             if request.user.pk != pk:
-                raise VerifyUser("Page Not found")
+                raise VerifyUser("Page Not found 404")
             user = models.User.objects.get(pk=pk)
 
             return render(
@@ -443,10 +446,15 @@ def change_password(request, pk):
         except VerifyUser as error:
             messages.error(request, error)
             return redirect("core:home")
+        except EmailLoggedInOnly as error:
+            messages.error(request, error)
+            return redirect("core:home")
     elif request.method == "POST":
         try:
             if not request.user.is_authenticated:
                 raise LoggedInOnlyView
+            if request.user.login_method != "email":
+                raise EmailLoggedInOnly("Page not found 404")
             if request.user.pk != pk:
                 raise VerifyUser("Page Not found")
             user = models.User.objects.get(pk=pk)
@@ -471,5 +479,8 @@ def change_password(request, pk):
             messages.error(request, error)
             return redirect("users:login")
         except VerifyUser as error:
+            messages.error(request, error)
+            return redirect("core:home")
+        except EmailLoggedInOnly as error:
             messages.error(request, error)
             return redirect("core:home")

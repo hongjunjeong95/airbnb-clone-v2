@@ -13,6 +13,17 @@
         <div class="mb-4">
           {% include 'mixins/avatar.html' with user=user %}
         </div>
+        {% if user.login_method == "github" %}
+          <div class="flex items-center mb-4">
+            <h3 class="font-bold text-base mr-2">Github Email:</h3>
+            <span>{{user.email}}</span>
+          </div>
+        {% elif user.login_method == "kakao" %}
+          <div class="flex items-center mb-4">
+            <h3 class="font-bold text-base mr-2">Kakao Email:</h3>
+            <span>{{user.email}}</span>
+          </div>
+        {% endif %}
       </div>
       <form method="post" class="form">
         {% csrf_token %}
@@ -26,14 +37,12 @@
           <input type="text" id="last_name" placeholder="Last Name" value="{{user.last_name}}" name="last_name">
         </div>
 
-        <div class="form_input">
-          <label for="email">Email</label>
           {% if user.login_method == "email" %}
-            <input type="text" id="email" placeholder="Email" value="{{user.email}}" name="email">
-          {% else %}
-            <span>{{user.email}}</span>
+            <div class="form_input">
+              <label for="email">Email</label>
+              <input type="text" id="email" placeholder="Email" value="{{user.email}}" name="email">
+            </div>
           {% endif %}
-        </div>
 
         {% if user.login_method == "email" %}
           <div class="form_input">
@@ -84,11 +93,12 @@
           <textarea id="bio" placeholder="Bio" name="bio">{{user.bio}}</textarea>
         </div>
         <button class="button">Edit Profile</button>
-        
       </form>
-      <button class="button outline-none border-none">
-        <a href="{% url 'users:change-password' user.pk %}">Change Password</a>
-      </button>
+      {% if user.login_method == 'email' %}
+        <button class="button outline-none border-none">
+          <a href="{% url 'users:change-password' user.pk %}">Change Password</a>
+        </button>
+      {% endif %}
       <button class="button bg-green-400">
         <a href="{% url 'users:profile' user.pk %}">Back</a>
       </button>

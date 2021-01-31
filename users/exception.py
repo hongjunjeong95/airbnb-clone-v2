@@ -20,3 +20,6 @@ class ChangePasswordException(Exception):
 
 class VerifyUser(Exception):
     pass
+
+class EmailLoggedInOnly(Exception):
+    pass
