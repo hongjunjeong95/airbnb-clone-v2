@@ -1,0 +1,5 @@
+{% if user.avatar %}
+  <img src="{{user.avatar.url}}" class="img w-20 mb-4" alt="User avatar" title="User Avatar">
+{% else %}
+  <div class="img">{{user.first_name|first|upper}}</div>
+{% endif %}

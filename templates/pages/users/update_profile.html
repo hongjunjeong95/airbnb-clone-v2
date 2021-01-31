@@ -10,11 +10,7 @@
   <div class="background">
     <div class="wrap">
       <div class="flex flex-col items-center justify-center">
-          {% if user.avatar %}
-          <img class="img" src="{{user.avatar.url}}" alt="User avatar", title="User Avatar", width='200px'>
-        {% else %}
-          <div class="img">{{user.first_name|first|upper}}</div>
-        {% endif %}
+        {% include 'mixins/avatar.html' with user=user %}
       </div>
       <form method="post" class="form">
         {% csrf_token %}

@@ -27,7 +27,7 @@
           <span>{{room.country.name}}</span>
         </div>
       </div>
-      <div class="grid grid-cols-2 grid-rows-2-200px  gap-2">
+      <div class="grid grid-cols-2 grid-rows-2-200px gap-2 mb-12">
         <img src="{{room.get_first_photo}}" class="row-span-full rounded-tl-lg rounded-bl-lg h-full w-full bg-cover bg-center" alt="Room Photo">
         <div class="grid grid-cols-2 grid-rows-2-200px gap-2">
           {% for index, photo in room.get_four_photo %}
@@ -36,21 +36,21 @@
           {% endfor %}
         </div>
       </div>
-      <main>
+      <main class="w-3/5">
         <div class="main__left">
-          <div class="space">
+          <div class="flex justify-between">
             <div class="space__left">
-              <h2 class="space__name">{{room.room_type}} hosted by {{room.host.first_name}}</h2>
+              <h2 class="text-2xl font-bold">{{room.room_type}} hosted by {{room.host.first_name}}</h2>
               <div class="space__info">
                 <span>Maximum</span>
-                <span>{{room.guests}} guests</span>
-                <span>{{room.beds}} beds</span>
-                <span>{{room.bedrooms}} bedrooms</span>
+                <span>{{room.guests}} guests &centerdot;</span>
+                <span>{{room.beds}} beds &centerdot;</span>
+                <span>{{room.bedrooms}} bedrooms &centerdot;</span>
                 <span>{{room.bathrooms}} bathrooms</span>
               </div>
             </div>
             <div class="space__right">
-              <img src="{{room.get_first_photo}}" width="200px" alt="">
+              {% include 'mixins/avatar.html' with user=room.host %}
             </div>
           </div>
           <div class="description">

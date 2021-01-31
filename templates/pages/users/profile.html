@@ -4,17 +4,12 @@
 {% block page_title %}
   {{user_obj.first_name}}'s Profile
 {% endblock page_title %}
-  
 
 {% block content %}
   <div class="flex justify-center items-center mb-20">
     <div class="profile">
       <div class="profile__info">
-        {% if user_obj.avatar %}
-          <img src="{{user_obj.avatar.url}}" class="img w-20 mb-4" alt="User avatar" title="User Avatar">
-        {% else %}
-          <div class="img">{{user_obj.first_name|first|upper}}</div>
-        {% endif %}
+        {% include 'mixins/avatar.html' with user=user_obj %}
         <div class="info">
           <h4>First name</h4>
           <span>{{user_obj.first_name|capfirst}}</span>
