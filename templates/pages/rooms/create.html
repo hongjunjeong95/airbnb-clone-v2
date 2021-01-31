@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block page_title %}
-  Search
+  Create {{user.first_name}}'s Room
 {% endblock page_title %}
 
 
@@ -11,54 +11,60 @@
 {% block content %}
   <div class="background">
     <div class="wrap">
-      <form method="get" action="{% url 'core:search' %}" class="form">
+      <form method="post" class="form">
         {% csrf_token %}
-        <div class="select rounded-tr-lg rounded-tl-lg">
-        <label for="country">Country</label>
-          <select name="country" class="w-2/3" id="country">
+        <div class="form_input rounded-tr-lg rounded-tl-lg">
+          <input type="text" name="name" placeholder="Name">
+        </div>
+        <div class="select">
+          <label for="country">Country</label>
+          <select name="country" id="country">
             {% for country in countries %}
-              <option value="{{country.code}}" {% if s_country == country.code %} selected {% endif %}>{{country.name}}</option>
+              <option value="{{country.name}}">{{country.name}}</option>
             {% endfor %}
           </select>
         </div>
-        <div class="number_input">
-        <label for="city">City:</label>
-          <input type="text" class="w-2/3" name="city" placeholder="City" value="{{city}}">
+
+        <div class="form_input">
+          <input type="text" name="city" class="w-full" placeholder="City">
         </div>
         
-        <div class="number_input">
-        <label for="price">Price</label>
-          <input type="number" class="w-2/3" name="price" placeholder="Price" min=0 value={{price}}>
+        <div class="form_input">
+          <input type="text" name="address" class="w-full" placeholder="Address">
         </div>
 
         <div class="number_input">
-        <label for="guests">Guests</label>
-          <input type="number" class="w-2/3" name="guests" min=0 placeholder="Guests" value={{guests}}>
+          <input type="number" name="price" class="w-full" placeholder="Price" min=0>
         </div>
 
         <div class="number_input">
-        <label for="bedrooms">bedrooms</label>
-          <input type="number" class="w-2/3" name="bedrooms" min=0 placeholder="Bedrooms" value={{bedrooms}}>
+          <input type="number" name="guests"class="w-full" placeholder="Guests" min=0>
         </div>
 
         <div class="number_input">
-        <label for="beds">beds</label>
-          <input type="number" class="w-2/3" name="beds" min=0 placeholder="Beds" value={{beds}}>
+          <input type="number" name="bedrooms" class="w-full" placeholder="Bedrooms" min=0>
         </div>
 
         <div class="number_input">
-        <label for="bathrooms">bathrooms</label>
-          <input type="number" class="w-2/3" name="bathrooms" min=0 placeholder="Bathrooms" value={{bathrooms}}>
+          <input type="number" name="beds" class="w-full" placeholder="Beds" min=0>
+        </div>
+
+        <div class="number_input">
+          <input type="number" name="bathrooms" min=0 class="w-full" placeholder="Bathrooms">
         </div>
         
         <div class="select">
-        <label for="room_type" class="text-lg font-bold">Room Type</label>
-          <select name="room_type" class="w-2/3" id="room_type">
-            <option value="0" {% if s_room_type == room_type.pk %} selected {% endif %}>Any Kind</option>
+          <label for="room_type" class="text-lg font-bold">Room Type</label>
+          <select name="room_type" id="room_type">
+            <option value="0">Any Kind</option>
             {% for room_type in room_types %}
-              <option value="{{room_type.pk}}" {% if s_room_type == room_type.pk|slugify %} selected {% endif %}> {{room_type}}</option>
+              <option value="{{room_type.pk}}" name="{{room_type.pk}}"> {{room_type}}</option>
             {% endfor %}
           </select>
+        </div>
+
+        <div class="form_input">
+          <textarea name="description" placeholder="Description"></textarea>
         </div>
 
         <div class="checkbox">
@@ -72,9 +78,6 @@
                 name="amenities"
                 value="{{amenity.pk}}"
                 id="amenity_{{amenity.pk}}"
-                {% if amenity.pk|slugify in s_amenities %}
-                  checked
-                {% endif %}
                 >
             </li>
           {% endfor %}
@@ -93,9 +96,6 @@
                 name="facilities"
                 value="{{facility.pk}}"
                 id="facility_{{facility.pk}}"
-                {% if facility.pk|slugify in s_facilities %}
-                  checked
-                {% endif %}
                 >
             </li>
           {% endfor %}
@@ -113,9 +113,6 @@
                 name="house_rules"
                 value="{{house_rule.pk}}"
                 id="house_rule_{{house_rule.pk}}"
-                {% if house_rule.pk|slugify in s_house_rules %}
-                  checked
-                {% endif %}
                 >
             </li>
           {% endfor %}
@@ -123,18 +120,16 @@
         </div>
         <div class="checkbox rounded-bl-lg rounded-br-lg">
           <label for="instant_book" class="text-lg font-bold mr-2">Instant Book</label>
-          <input type="checkbox", name="instant_book" id="instant_book" {% if instant_book %}checked{% endif %}>
+          <input type="checkbox", name="instant_book" id="instant_book">
         </div>
-        <button class="button">Search</button>
+        <button class="button">Create</button>
       </form>
     </div>
   </div>
 
 
   {% for room in rooms %}
-    <h1>
-      <a href="{% url 'rooms:detail' room.pk %}">{{room.name}}</a>
-    </h1>
+    <h1>{{room.name}}</h1>
   {% endfor %}
 
   {% include 'mixins/page_number.html' with page=rooms%}

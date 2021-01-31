@@ -5,7 +5,7 @@ from django_countries import countries
 from . import models as room_models
 
 
-def HomeView(request):
+def homeView(request):
     try:
         # Get list of rooms
         rooms_list = room_models.Room.objects.all()
@@ -32,22 +32,7 @@ def HomeView(request):
     )
 
 
-def RoomDetail(request, pk):
-    try:
-        room = room_models.Room.objects.get(pk=pk)
-        month = room.host.date_joined.strftime("%b")
-
-        return render(
-            request,
-            "pages/rooms/detail.html",
-            context={"room": room, "joined_month": month},
-        )
-    except room_models.Room.DoesNotExist:
-        print("Model does not exsit")
-        return redirect(reverse("core:home"))
-
-
-def SearchView(request):
+def searchView(request):
     city = request.GET.get("city", "Anywhere")
     country = request.GET.get("country")
     price = int(request.GET.get("price", 0))
@@ -134,3 +119,72 @@ def SearchView(request):
         "pages/root/search.html",
         context={"rooms": rooms, **form, **choices},
     )
+
+
+def roomDetail(request, pk):
+    try:
+        room = room_models.Room.objects.get(pk=pk)
+        month = room.host.date_joined.strftime("%b")
+
+        return render(
+            request,
+            "pages/rooms/detail.html",
+            context={"room": room, "joined_month": month},
+        )
+    except room_models.Room.DoesNotExist:
+        print("Model does not exsit")
+        return redirect(reverse("core:home"))
+
+
+def roomCreate(request):
+    if request.method == "GET":
+        room_types = room_models.RoomType.objects.all()
+        amenities = room_models.Amenity.objects.all()
+        facilities = room_models.Facility.objects.all()
+        house_rules = room_models.HouseRule.objects.all()
+
+        form = {
+            "countries": countries,
+            "room_types": room_types,
+            "amenities": amenities,
+            "facilities": facilities,
+            "house_rules": house_rules,
+        }
+        return render(request, "pages/rooms/create.html", context={**form})
+    elif request.method == "POST":
+        host = request.user
+        name = request.POST.get("name")
+        city = request.POST.get("city")
+        address = request.POST.get("address")
+        country = request.POST.get("country")
+        price = int(request.POST.get("price", 0))
+        guests = int(request.POST.get("guests", 0))
+        bedrooms = int(request.POST.get("bedrooms", 0))
+        beds = int(request.POST.get("beds", 0))
+        bathrooms = int(request.POST.get("bathrooms", 0))
+        room_type = int(request.POST.get("room_type"))
+        description = request.POST.get("description")
+        amenities = request.POST.getlist("amenities")
+        facilities = request.POST.getlist("facilities")
+        house_rules = request.POST.getlist("house_rules")
+        instant_book = bool(request.POST.get("instant_book"))
+        room = room_models.Room.objects.create(
+            name=name,
+            country=country,
+            city=city,
+            address=address,
+            price=price,
+            guests=guests,
+            bedrooms=bedrooms,
+            beds=beds,
+            bathrooms=bathrooms,
+            description=description,
+            host=host,
+            room_type_id=room_type,
+            instant_book=instant_book,
+        )
+        room.amenities.set(amenities)
+        room.facilities.set(facilities)
+        room.house_rules.set(house_rules)
+
+        return redirect(reverse("rooms:detail", kwargs={"pk": room.pk}))

@@ -1,5 +1,6 @@
 from django.db import models
 from django_countries.fields import CountryField
+from django.shortcuts import redirect, reverse
 from core import models as core_models
 
 
@@ -74,8 +75,12 @@ class Room(core_models.TimeStampedModel):
         return self.name
 
     def get_first_photo(self):
-        (photo,) = self.photos.all()[:1]
-        return photo.file.url
+        try:
+            (photo,) = self.photos.all()[:1]
+            return photo.file.url
+        except Exception as error:
+            print(error)
+            return None
 
     def get_four_photo(self):
         photos = self.photos.all()[1:5]
@@ -163,3 +168,6 @@ class Room(core_models.TimeStampedModel):
         value = round(all_value_points / len(reviews), 2)
 
         return value
+
+    def get_absolute_url(self):
+        return redirect(reverse("rooms:detail", kwargs={"pk": self.pk}))
