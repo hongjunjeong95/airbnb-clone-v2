@@ -10,7 +10,8 @@ module.exports = {
         "400px": "minmax(0, 400px)",
       },
       gridTemplateRows: {
-        "2px": "repeat(2, 400px)",
+        "2-400px": "repeat(2, 400px)",
+        "2-200px": "repeat(2, 200px)",
       },
     },
   },
