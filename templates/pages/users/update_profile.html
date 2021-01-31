@@ -10,17 +10,13 @@
   <div class="background">
     <div class="wrap">
       <div class="flex flex-col items-center justify-center">
-        {% include 'mixins/avatar.html' with user=user %}
+        <div class="mb-4">
+          {% include 'mixins/avatar.html' with user=user %}
+        </div>
       </div>
       <form method="post" class="form">
         {% csrf_token %}
-        {% if user.login_method == "email" %}
         <div class="form_input rounded-tl-lg rounded-tr-lg">
-          <label for="avatar">Avatar</label>
-          <input type="file" id="avatar" name="avatar">
-        </div>
-        {% endif %}
-        <div class="form_input">
           <label for="first_name">First Name</label>
           <input type="text" id="first_name" placeholder="First Name" value="{{user.first_name}}" name="first_name">
         </div>
@@ -38,6 +34,14 @@
             <span>{{user.email}}</span>
           {% endif %}
         </div>
+
+        {% if user.login_method == "email" %}
+          <div class="form_input">
+            <label for="avatar">Avatar</label>
+            <input type="file" id="avatar" name="avatar">
+          </div>
+        {% endif %}
+
         <div class="select">
           <label for="gender">Gender</label>
           <select name="gender" id="gender">
@@ -77,8 +81,7 @@
         </div>
 
         <div class="form_input rounded-br-lg rounded-bl-lg">
-          <label for="bio">Bio</label>
-          <textarea id="bio" name="bio">{{user.bio}}</textarea>
+          <textarea id="bio" placeholder="Bio" name="bio">{{user.bio}}</textarea>
         </div>
         <button class="button">Edit Profile</button>
         

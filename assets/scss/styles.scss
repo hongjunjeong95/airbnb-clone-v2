@@ -16,6 +16,9 @@
       @apply flex flex-col;
       .form_input {
         @apply border p-3 w-full border-gray-400;
+        label {
+          @apply mr-2 text-lg font-bold;
+        }
         input:not([type="file"]):not([type="date"]),
         textarea {
           @apply w-full outline-none resize-none;

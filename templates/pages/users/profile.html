@@ -9,7 +9,9 @@
   <div class="flex justify-center items-center mb-20">
     <div class="profile">
       <div class="profile__info">
-        {% include 'mixins/avatar.html' with user=user_obj %}
+        <div class="mb-4">
+          {% include 'mixins/avatar.html' with user=user_obj %}
+        </div>
         <div class="info">
           <h4>First name</h4>
           <span>{{user_obj.first_name|capfirst}}</span>
