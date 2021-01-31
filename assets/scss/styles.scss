@@ -162,6 +162,7 @@
 }
 
 .room_reviews {
+  @apply border-b border-gray-300 mb-6 pb-6 px-6;
   .review_points {
     @apply grid grid-cols-2 gap-x-52 gap-y-3 mb-10;
     div {
