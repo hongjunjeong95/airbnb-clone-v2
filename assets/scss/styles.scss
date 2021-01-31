@@ -110,4 +110,39 @@
   @apply mb-4 rounded-full w-20 h-20 flex items-center justify-center text-white text-4xl font-bold bg-gray-600 mb-3;
 }
 
+@keyframes messageFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+  5% {
+    opacity: 1;
+    transform: translateY(50px);
+  }
+  95% {
+    opacity: 1;
+    transform: translateY(50px);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+}
+
+.message {
+  animation: messageFadeIn 2s ease-in-out forwards;
+  &.error {
+    @apply bg-red-600;
+  }
+  &.success {
+    @apply bg-blue-500;
+  }
+  &.info {
+    @apply bg-green-500;
+  }
+  &.warning {
+    @apply bg-yellow-400;
+  }
+}
+
 @tailwind utilities;
