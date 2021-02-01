@@ -5,7 +5,7 @@ from django_countries import countries
 from django.contrib import messages
 from . import models as room_models
 from photos import models as photo_models
-from users.exception import LoggedInOnlyView
+from users.exception import LoggedInOnlyView, EditRoom
 
 
 def homeView(request):
@@ -222,6 +222,9 @@ def editRoom(request, pk):
 
             room = room_models.Room.objects.get(pk=pk)
 
+            if request.user.pk != room.host.pk:
+                raise EditRoom("Page Not Found")
+
             amenities = room_models.Amenity.objects.all()
             facilities = room_models.Facility.objects.all()
             house_rules = room_models.HouseRule.objects.all()
@@ -249,7 +252,13 @@ def editRoom(request, pk):
                 "pages/rooms/edit_room.html",
                 context={"room": room, **form, **choices},
             )
+        except room_models.Room.DoesNotExist:
+            print("Model does not exsit")
+            return redirect(reverse("core:home"))
         except LoggedInOnlyView as error:
+            messages.error(request, error)
+            return redirect(reverse("core:home"))
+        except EditRoom as error:
             messages.error(request, error)
             return redirect(reverse("core:home"))
     elif request.method == "POST":
