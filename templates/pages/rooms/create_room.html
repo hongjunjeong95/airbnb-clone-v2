@@ -128,16 +128,8 @@
           <label for="instant_book" class="text-lg font-bold mr-2">Instant Book</label>
           <input type="checkbox", name="instant_book" id="instant_book">
         </div>
-        <button class="button">Create</button>
+        <button class="form_button">Create</button>
       </form>
     </div>
   </div>
-
-
-  {% for room in rooms %}
-    <h1>{{room.name}}</h1>
-  {% endfor %}
-
-  {% include 'mixins/page_number.html' with page=rooms%}
-    
 {% endblock content %}

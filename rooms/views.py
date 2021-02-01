@@ -209,7 +209,7 @@ def createRoom(request):
             )
 
             messages.success(request, f"Create {room.name} successfully")
-            return redirect(reverse("rooms:detail", kwargs={"pk": room.pk}))
+            return redirect(reverse("rooms:room-detail", kwargs={"pk": room.pk}))
         except LoggedInOnlyView as error:
             messages.error(request, error)
             return redirect(reverse("core:home"))
@@ -219,7 +219,7 @@ def editRoom(request, pk):
     if request.method == "GET":
         try:
             if not request.user.is_authenticated:
-                raise LoggedInOnlyView("Please login first")
+                raise LoggedInOnlyView("Page Not Found")
 
             room = room_models.Room.objects.get(pk=pk)
 
@@ -303,7 +303,7 @@ def editRoom(request, pk):
             room.house_rules.set(house_rules)
 
             messages.success(request, f"Edit {room.name} successfully")
-            return redirect(reverse("rooms:detail", kwargs={"pk": room.pk}))
+            return redirect(reverse("rooms:room-detail", kwargs={"pk": room.pk}))
         except LoggedInOnlyView as error:
             messages.error(request, error)
             return redirect(reverse("core:home"))
@@ -321,3 +321,40 @@ def deleteRoom(request, pk):
     except room_models.Room.DoesNotExist:
         print("Model does not exsit")
         return redirect(reverse("core:home"))
+
+
+def createPhoto(request, pk):
+    if request.method == "GET":
+        try:
+            if not request.user.is_authenticated:
+                raise LoggedInOnlyView("Page Not Found")
+
+            room = room_models.Room.objects.get(pk=pk)
+            room_name = room.name
+
+            if request.user.pk != room.host.pk:
+                raise VerifyUser("Page Not Found")
+
+            return render(
+                request,
+                "pages/rooms/photos/create_photo.html",
+                context={"room_name": room_name},
+            )
+        except LoggedInOnlyView as error:
+            messages.error(request, error)
+            return redirect(reverse("core:home"))
+    elif request.method == "POST":
+        try:
+            caption = request.POST.get("caption")
+            photo = request.POST.get("photo")
+
+            room = room_models.Room.objects.get(pk=pk)
+            photo = photo_models.Photo.objects.create(
+                file=photo, caption=caption, room_id=room.pk
+            )
+
+            messages.success(request, f"Create {caption}-photo successfully")
+            return redirect(reverse("rooms:edit-room", kwargs={"pk": room.pk}))
+        except LoggedInOnlyView as error:
+            messages.error(request, error)
+            return redirect(reverse("core:home"))

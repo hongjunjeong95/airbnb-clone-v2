@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block page_title %}
+  Create {{room_name}}'s Photo
+{% endblock page_title %}
+
+
+{% block search-bar %}{% endblock search-bar %}
+  
+
+{% block content %}
+  <div class="background">
+    <div class="wrap">
+      <h1 class="text-3xl font-bold pb-6 pt-3 text-center">Create Photo</h1>
+      <form method="post" class="form">
+        {% csrf_token %}
+        <div class="form_input rounded-tr-lg rounded-tl-lg">
+          <input type="text" name="caption" placeholder="Caption" required>
+        </div>
+        
+        <div class="border p-3 border-gray-400 flex justify-between rounded-bl-lg rounded-br-lg">
+          <input type="file" name="photo" class="p-1 w-full">
+        </div>
+        <button class="form_button">Create</button>
+      </form>
+    </div>
+  </div>
+{% endblock content %}
