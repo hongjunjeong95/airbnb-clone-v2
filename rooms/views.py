@@ -208,6 +208,7 @@ def createRoom(request):
                 file=photo, caption=caption, room_id=room.pk
             )
 
+            messages.success(request, f"Create {room.name} successfully")
             return redirect(reverse("rooms:detail", kwargs={"pk": room.pk}))
         except LoggedInOnlyView as error:
             messages.error(request, error)
@@ -301,7 +302,19 @@ def editRoom(request, pk):
             room.facilities.set(facilities)
             room.house_rules.set(house_rules)
 
+            messages.success(request, f"Edit {room.name} successfully")
             return redirect(reverse("rooms:detail", kwargs={"pk": room.pk}))
         except LoggedInOnlyView as error:
             messages.error(request, error)
             return redirect(reverse("core:home"))
+
+
+def deleteRoom(request, pk):
+    try:
+        room = room_models.Room.objects.get(pk=pk)
+        room.delete()
+        messages.success(request, f"Delete {room.name} successfully")
+        return redirect(reverse("users:profile", kwargs={"pk": request.user.pk}))
+    except room_models.Room.DoesNotExist:
+        print("Model does not exsit")
+        return redirect(reverse("core:home"))

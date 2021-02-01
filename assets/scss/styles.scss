@@ -81,9 +81,9 @@
 }
 
 .button {
-  @apply mt-3 bg-green-500 text-white rounded-lg px-1 py-2 text-base font-bold tracking-wider w-full outline-none border-none;
+  @apply mt-3 bg-green-500 text-white rounded-lg text-base font-bold tracking-wider w-full outline-none border-none;
   a {
-    @apply block;
+    @apply block px-1 py-2;
   }
 }
 
