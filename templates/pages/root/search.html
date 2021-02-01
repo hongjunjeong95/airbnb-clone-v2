@@ -133,7 +133,7 @@
 
   {% for room in rooms %}
     <h1>
-      <a href="{% url 'rooms:detail' room.pk %}">{{room.name}}</a>
+      <a href="{% url 'rooms:room-detail' room.pk %}">{{room.name}}</a>
     </h1>
   {% endfor %}
 

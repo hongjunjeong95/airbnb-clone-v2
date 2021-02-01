@@ -24,7 +24,3 @@ class VerifyUser(Exception):
 
 class EmailLoggedInOnly(Exception):
     pass
-
-
-class EditRoom(Exception):
-    pass

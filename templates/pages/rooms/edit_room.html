@@ -149,8 +149,11 @@
         </div>
         <button class="button px-1 py-2">Edit</button>
       </form>
+      <button class="button">
+        <a href="{% url 'photos:create' room.pk %}">Add Photos</a>
+      </button>
       <button class="button bg-red-600">
-        <a href="{% url 'rooms:delete' room.pk %}">Delete Room</a>
+        <a href="{% url 'rooms:delete-room' room.pk %}">Delete Room</a>
       </button>
     </div>
   </div>

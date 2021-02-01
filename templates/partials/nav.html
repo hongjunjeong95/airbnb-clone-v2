@@ -1,7 +1,7 @@
 <ul class="flex">
   {% if user.is_authenticated %}
     <li class="nav_link">
-      <a href="{% url 'rooms:create' %}">Create Room</a>
+      <a href="{% url 'rooms:create-room' %}">Create Room</a>
     </li>
     <li class="nav_link">
       <a href="{% url 'users:logout' %}">Log Out</a>

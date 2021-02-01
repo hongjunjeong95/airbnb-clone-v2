@@ -53,7 +53,7 @@
               </div>
               {% if user.pk == room.host.pk %}
                 <button class="button">
-                  <a href="{% url 'rooms:edit' room.pk %}">Edit Room</a>
+                  <a href="{% url 'rooms:edit-room' room.pk %}">Edit Room</a>
                 </button>
               {% endif %}
             </div>

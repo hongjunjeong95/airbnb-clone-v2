@@ -1,7 +1,7 @@
 <ul class="grid grid-cols-4 grid-rows-2-300px auto-rows-300px gap-4 gap-y-6">
   {% for room in rooms %}
     <li class="w-full">
-      <a href="{% url 'rooms:detail' room.pk %}">
+      <a href="{% url 'rooms:room-detail' room.pk %}">
         <div class="rounded-lg bg-cover bg-center h-3/4 mb-2" style="background-image:url('{{room.get_first_photo}}')">
           <div class="flex items-center {% if room.host.superhost %}justify-between{% else %}justify-end{% endif %}">
             {% if room.host.superhost %}
