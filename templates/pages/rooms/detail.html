@@ -30,7 +30,7 @@
       <div class="grid grid-cols-2 grid-rows-2-200px gap-2 mb-12">
         
         {% if room.get_first_photo is not None %}
-          {{room.get_first_photo}}
+          <img src="{{room.get_first_photo}}" class="row-span-full rounded-tl-lg rounded-bl-lg h-full w-full bg-cover bg-center" alt="Room Photo">
         {% endif %}
         <div class="grid grid-cols-2 grid-rows-2-200px gap-2">
           {% for index, photo in room.get_four_photo %}

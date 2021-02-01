@@ -3,6 +3,7 @@ from django.core.paginator import Paginator, EmptyPage
 from django.utils import timezone
 from django_countries import countries
 from . import models as room_models
+from photos import models as photo_models
 
 
 def homeView(request):
@@ -156,21 +157,23 @@ def roomCreate(request):
         name = request.POST.get("name")
         city = request.POST.get("city")
         address = request.POST.get("address")
-        country = request.POST.get("country")
+        country_code = request.POST.get("country")
         price = int(request.POST.get("price", 0))
         guests = int(request.POST.get("guests", 0))
         bedrooms = int(request.POST.get("bedrooms", 0))
         beds = int(request.POST.get("beds", 0))
         bathrooms = int(request.POST.get("bathrooms", 0))
-        room_type = int(request.POST.get("room_type"))
+        room_type = int(request.POST.get("room_type", 0))
         description = request.POST.get("description")
         amenities = request.POST.getlist("amenities")
         facilities = request.POST.getlist("facilities")
         house_rules = request.POST.getlist("house_rules")
+        caption = request.POST.get("caption")
+        photo = request.POST.get("photo")
         instant_book = bool(request.POST.get("instant_book"))
+
         room = room_models.Room.objects.create(
             name=name,
-            country=country,
             city=city,
             address=address,
             price=price,
@@ -183,8 +186,16 @@ def roomCreate(request):
             room_type_id=room_type,
             instant_book=instant_book,
         )
+
+        room.country = country_code
+        room.save()
+
         room.amenities.set(amenities)
         room.facilities.set(facilities)
         room.house_rules.set(house_rules)
+
+        photo = photo_models.Photo.objects.create(
+            file=photo, caption=caption, room_id=room.pk
+        )
 
         return redirect(reverse("rooms:detail", kwargs={"pk": room.pk}))

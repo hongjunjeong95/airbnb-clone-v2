@@ -11,52 +11,52 @@
 {% block content %}
   <div class="background">
     <div class="wrap">
+      <h1 class="text-3xl font-bold pb-6 pt-3 text-center">Create Room</h1>
       <form method="post" class="form">
         {% csrf_token %}
         <div class="form_input rounded-tr-lg rounded-tl-lg">
-          <input type="text" name="name" placeholder="Name">
+          <input type="text" name="name" placeholder="Name" required>
         </div>
         <div class="select">
           <label for="country">Country</label>
-          <select name="country" id="country">
+          <select name="country" id="country" required>
             {% for country in countries %}
-              <option value="{{country.name}}">{{country.name}}</option>
+              <option value="{{country.code}}">{{country.name}}</option>
             {% endfor %}
           </select>
         </div>
 
         <div class="form_input">
-          <input type="text" name="city" class="w-full" placeholder="City">
+          <input type="text" name="city" class="w-full" placeholder="City" required>
         </div>
         
         <div class="form_input">
-          <input type="text" name="address" class="w-full" placeholder="Address">
+          <input type="text" name="address" class="w-full" placeholder="Address" required>
         </div>
 
         <div class="number_input">
-          <input type="number" name="price" class="w-full" placeholder="Price" min=0>
+          <input type="number" name="price" class="w-full" placeholder="Price" min=0 required>
         </div>
 
         <div class="number_input">
-          <input type="number" name="guests"class="w-full" placeholder="Guests" min=0>
+          <input type="number" name="guests"class="w-full" placeholder="Guests" min=0 required>
         </div>
 
         <div class="number_input">
-          <input type="number" name="bedrooms" class="w-full" placeholder="Bedrooms" min=0>
+          <input type="number" name="bedrooms" class="w-full" placeholder="Bedrooms" min=0 required>
         </div>
 
         <div class="number_input">
-          <input type="number" name="beds" class="w-full" placeholder="Beds" min=0>
+          <input type="number" name="beds" class="w-full" placeholder="Beds" min=0 required>
         </div>
 
         <div class="number_input">
-          <input type="number" name="bathrooms" min=0 class="w-full" placeholder="Bathrooms">
+          <input type="number" name="bathrooms" min=0 class="w-full" placeholder="Bathrooms" required>
         </div>
         
         <div class="select">
           <label for="room_type" class="text-lg font-bold">Room Type</label>
-          <select name="room_type" id="room_type">
-            <option value="0">Any Kind</option>
+          <select name="room_type" id="room_type" required>
             {% for room_type in room_types %}
               <option value="{{room_type.pk}}" name="{{room_type.pk}}"> {{room_type}}</option>
             {% endfor %}
@@ -64,7 +64,7 @@
         </div>
 
         <div class="form_input">
-          <textarea name="description" placeholder="Description"></textarea>
+          <textarea name="description" class="h-40" placeholder="Description"></textarea>
         </div>
 
         <div class="checkbox">
@@ -118,6 +118,12 @@
           {% endfor %}
           </ul>
         </div>
+        
+        <div class="border p-3 border-gray-400 flex justify-between">
+          <input type="text" name="caption" class="p-1 w-full" placeholder="Caption">
+          <input type="file" name="photo" class="p-1 w-full">
+        </div>
+        
         <div class="checkbox rounded-bl-lg rounded-br-lg">
           <label for="instant_book" class="text-lg font-bold mr-2">Instant Book</label>
           <input type="checkbox", name="instant_book" id="instant_book">

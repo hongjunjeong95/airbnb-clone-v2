@@ -14,7 +14,7 @@
       <form method="get" action="{% url 'core:search' %}" class="form">
         {% csrf_token %}
         <div class="select rounded-tr-lg rounded-tl-lg">
-        <label for="country">Country</label>
+          <label for="country">Country</label>
           <select name="country" class="w-2/3" id="country">
             {% for country in countries %}
               <option value="{{country.code}}" {% if s_country == country.code %} selected {% endif %}>{{country.name}}</option>
