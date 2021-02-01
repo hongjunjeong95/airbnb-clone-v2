@@ -325,7 +325,6 @@ def deleteRoom(request, pk):
 
 
 def photoDetail(request, pk):
-
     try:
         if not request.user.is_authenticated:
             raise LoggedInOnlyView("Page Not Found")
@@ -434,3 +433,18 @@ def editPhoto(request, room_pk, photo_pk):
         except LoggedInOnlyView as error:
             messages.error(request, error)
             return redirect(reverse("core:home"))
+
+
+def deletePhoto(request, room_pk, photo_pk):
+    try:
+        room = room_models.Room.objects.get(pk=room_pk)
+        if request.user.pk != room.host.pk:
+            raise VerifyUser("Page Not Found")
+
+        photo = room.photos.get(pk=photo_pk)
+        photo.delete()
+        messages.success(request, f"Delete {photo} successfully")
+        return redirect(reverse("rooms:photo-detail", kwargs={"pk": room.pk}))
+    except room_models.Room.DoesNotExist:
+        print("Model does not exsit")
+        return redirect(reverse("core:home"))

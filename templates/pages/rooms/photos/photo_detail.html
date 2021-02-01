@@ -17,14 +17,16 @@
     <ul class="grid grid-cols-2 auto-rows-200px gap-4">
       {% for photo in photos %}
         <li class="flex justify-between items-center border border-gray-500 rounded-lg p-3">
-          <img src="{{photo.file.url}}" alt="" class="w-5/12 h-44 rounded-lg">
+          {% if photo.file %}
+            <img src="{{photo.file.url}}" alt="Photo" class="w-5/12 h-44 rounded-lg">
+          {% endif %}
           <div>
             <h2 class="text-bse font-bold w-56 mb-4 line-clamp-2">{{photo}}</h2>
             <button class="button mt-0 mb-4">
               <a href="{% url 'rooms:edit-photo' room.pk photo.pk %}">Edit Photo</a>
             </button>
             <button class="button mt-0 bg-red-500">
-              <a href="">Delete Photo</a>
+              <a href="{% url 'rooms:delete-photo' room.pk photo.pk %}">Delete Photo</a>
             </button>
           </div>
         </li>

@@ -15,4 +15,9 @@ urlpatterns = [
         views.editPhoto,
         name="edit-photo",
     ),
+    path(
+        "<int:room_pk>/photos/<int:photo_pk>/delete-photo/",
+        views.deletePhoto,
+        name="delete-photo",
+    ),
 ]
