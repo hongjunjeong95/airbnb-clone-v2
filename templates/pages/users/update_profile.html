@@ -95,11 +95,11 @@
         <button class="button">Edit Profile</button>
       </form>
       {% if user.login_method == 'email' %}
-        <button class="button outline-none border-none">
+        <button class="button bg-red-500">
           <a href="{% url 'users:change-password' user.pk %}">Change Password</a>
         </button>
       {% endif %}
-      <button class="button bg-green-400">
+      <button class="button bg-gray-700">
         <a href="{% url 'users:profile' user.pk %}">Back</a>
       </button>
     </div>
