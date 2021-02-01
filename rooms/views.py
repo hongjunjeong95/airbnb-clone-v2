@@ -341,7 +341,6 @@ def photoDetail(request, pk):
         page_sector = page_sector * 5
 
         room = room_models.Room.objects.get(pk=pk)
-        room_name = room.name
         qs = room.photos.all()
         paginator = Paginator(qs, 10, orphans=5)
         photos = paginator.get_page(page)
@@ -351,7 +350,7 @@ def photoDetail(request, pk):
 
         return render(
             request,
-            "pages/rooms/photos/photo-detail.html",
+            "pages/rooms/photos/photo_detail.html",
             context={
                 "photos": photos,
                 "page_sector": page_sector,
@@ -397,6 +396,41 @@ def createPhoto(request, pk):
 
             messages.success(request, f"Create {caption}-photo successfully")
             return redirect(reverse("rooms:edit-room", kwargs={"pk": room.pk}))
+        except LoggedInOnlyView as error:
+            messages.error(request, error)
+            return redirect(reverse("core:home"))
+
+
+def editPhoto(request, room_pk, photo_pk):
+    if request.method == "GET":
+        try:
+            if not request.user.is_authenticated:
+                raise LoggedInOnlyView("Page Not Found")
+
+            room = room_models.Room.objects.get(pk=room_pk)
+            if request.user.pk != room.host.pk:
+                raise VerifyUser("Page Not Found")
+            photo = room.photos.get(pk=photo_pk)
+
+            return render(
+                request,
+                "pages/rooms/photos/edit_photo.html",
+                context={"room": room, "photo": photo},
+            )
+        except LoggedInOnlyView as error:
+            messages.error(request, error)
+            return redirect(reverse("core:home"))
+    elif request.method == "POST":
+        try:
+            caption = request.POST.get("caption")
+
+            room = room_models.Room.objects.get(pk=room_pk)
+            photo = room.photos.get(pk=photo_pk)
+            photo.caption = caption
+            photo.save()
+
+            messages.success(request, f"Edit {caption}-photo successfully")
+            return redirect(reverse("rooms:photo-detail", kwargs={"pk": room.pk}))
         except LoggedInOnlyView as error:
             messages.error(request, error)
             return redirect(reverse("core:home"))

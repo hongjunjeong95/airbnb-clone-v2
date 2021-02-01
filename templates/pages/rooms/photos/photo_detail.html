@@ -20,7 +20,7 @@
           <img src="{{photo.file.url}}" alt="" class="w-5/12 h-44 rounded-lg">
           <div>
             <button class="button mt-0 mb-4">
-              <a href="">Edit Photo</a>
+              <a href="{% url 'rooms:edit-photo' room.pk photo.pk %}">Edit Photo</a>
             </button>
             <button class="button mt-0 bg-red-500">
               <a href="">Delete Photo</a>

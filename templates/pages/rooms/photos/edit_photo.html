@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block page_title %}
+  Edit {{room.name}}'s Photo
+{% endblock page_title %}
+
+
+{% block search-bar %}{% endblock search-bar %}
+
+{% block content %}
+  <div class="background">
+    <div class="wrap">
+      <h1 class="text-3xl font-bold pb-6 pt-3 text-center">Edit Photo('{{photo}}')</h1>
+      <form method="post" class="form">
+        {% csrf_token %}
+        <div class="form_input rounded-lg flex">
+          <label for="caption">Caption:</label>
+          <input type="text" id="caption" name="caption" placeholder="Caption" value="{{photo}}" required>
+        </div>
+        <button class="form_button">Edit</button>
+      </form>
+      <button class="button bg-gray-700">
+        <a href="{% url 'rooms:photo-detail' room.pk %}">Back</a>
+      </button>
+    </div>
+  </div>
+{% endblock content %}
