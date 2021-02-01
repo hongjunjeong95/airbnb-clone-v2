@@ -44,15 +44,20 @@
           <div class="section pb-0 flex justify-between">
             <div class="space__left">
               <h2 class="text-2xl font-bold">{{room.room_type}} hosted by {{room.host.first_name}}</h2>
-              <div class="space__info">
+              <div class="mb-4">
                 <span>Maximum</span>
                 <span>{{room.guests}} guests &centerdot;</span>
                 <span>{{room.beds}} beds &centerdot;</span>
                 <span>{{room.bedrooms}} bedrooms &centerdot;</span>
                 <span>{{room.bathrooms}} bathrooms</span>
               </div>
+              {% if user.is_authenticated %}
+                <button class="button">
+                  <a href="{% url 'rooms:edit' room.pk %}">Edit Room</a>
+                </button>
+              {% endif %}
             </div>
-            <div class="space__right">
+            <div>
               {% include 'mixins/avatar.html' with user=room.host %}
             </div>
           </div>

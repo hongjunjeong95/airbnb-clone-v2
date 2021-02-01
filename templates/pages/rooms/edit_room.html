@@ -1,0 +1,162 @@
+{% extends 'base.html' %}
+
+{% block page_title %}
+  Edit {{room.name}}
+{% endblock page_title %}
+
+
+{% block search-bar %}{% endblock search-bar %}
+  
+
+{% block content %}
+  <div class="background">
+    <div class="wrap">
+      <h1 class="text-3xl font-bold pb-6 pt-3 text-center">Edit Room</h1>
+      <form method="post" class="form">
+        {% csrf_token %}
+        <div class="form_input rounded-tr-lg rounded-tl-lg">
+          <input type="text" name="name" placeholder="Name" value={{room.name}} required>
+        </div>
+        <div class="select">
+          <label for="country">Country</label>
+          <select name="country" id="country" required>
+            {% for country in countries %}
+              <option value="{{country.code}}" 
+                {% if country.code == room.country.code %}
+                  selected
+                {% endif %}
+              >{{country.name}}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="form_input">
+          <input type="text" value={{room.city}} name="city" class="w-full" placeholder="City" required>
+        </div>
+        
+        <div class="form_input">
+          <input type="text" value={{room.address}} name="address" class="w-full" placeholder="Address" required>
+        </div>
+
+        <div class="number_input">
+          <input type="number" value={{room.price}} name="price" class="w-full" placeholder="Price" min=0 required>
+        </div>
+
+        <div class="number_input">
+          <input type="number" value={{room.guests}} name="guests"class="w-full" placeholder="Guests" min=0 required>
+        </div>
+
+        <div class="number_input">
+          <input type="number" value={{room.bedrooms}}  name="bedrooms" class="w-full" placeholder="Bedrooms" min=0 required>
+        </div>
+
+        <div class="number_input">
+          <input type="number"value={{room.beds}}  name="beds" class="w-full" placeholder="Beds" min=0 required>
+        </div>
+
+        <div class="number_input">
+          <input type="number"value={{room.bathrooms}}  name="bathrooms" min=0 class="w-full" placeholder="Bathrooms" required>
+        </div>
+        
+        <div class="select">
+          <label for="room_type" class="text-lg font-bold">Room Type</label>
+          <select name="room_type" id="room_type" required>
+            {% for room_type in room_types %}
+              <option value="{{room_type.pk}}" name="{{room_type.pk}}"
+              {% if room_type.pk == room.room_type.pk %}
+                selected
+              {% endif %}
+                >{{room_type}}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="form_input">
+          <textarea name="description" class="h-40" placeholder="Description">{{room.description}}</textarea>
+        </div>
+
+        <div class="checkbox">
+          <h3>Amenity</h3>
+          <ul>
+          {% for amenity in amenities %}
+            <li>
+              <label for=amenity_{{amenity.pk}}>{{amenity.name}}</label>
+              <input
+                type="checkbox"
+                name="amenities"
+                value="{{amenity.pk}}"
+                id="amenity_{{amenity.pk}}"
+                {% if amenity in s_amenities %}
+                  checked
+                {% endif %}
+                >
+            </li>
+          {% endfor %}
+          </ul>
+        </div>
+
+        <div class="checkbox">
+          <h3>Facility</h3>
+
+          <ul>
+          {% for facility in facilities %}
+            <li>
+              <label for=facility_{{facility.pk}}>{{facility.name}}</label>
+              <input
+                type="checkbox"
+                name="facilities"
+                value="{{facility.pk}}"
+                id="facility_{{facility.pk}}"
+                {% if facility in s_facilities %}
+                  checked
+                {% endif %}
+                >
+            </li>
+          {% endfor %}
+          </ul>
+        </div>
+
+        <div class="checkbox">
+          <h3>House Rules</h3>
+          <ul>
+          {% for house_rule in house_rules %}
+            <li>
+              <label for=house_rule_{{house_rule.pk}}>{{house_rule.name}}</label>
+              <input
+                type="checkbox"
+                name="house_rules"
+                value="{{house_rule.pk}}"
+                id="house_rule_{{house_rule.pk}}"
+                {% if house_rule in s_house_rules %}
+                  checked
+                {% endif %}
+                >
+            </li>
+          {% endfor %}
+          </ul>
+        </div>
+        
+        <div class="checkbox rounded-bl-lg rounded-br-lg">
+          <label for="instant_book" class="text-lg font-bold mr-2">Instant Book</label>
+          <input 
+            type="checkbox"
+            name="instant_book" 
+            id="instant_book"
+            {% if room.instant_book %}
+              checked
+            {% endif %}
+          >
+        </div>
+        <button class="button">Edit</button>
+      </form>
+    </div>
+  </div>
+
+
+  {% for room in rooms %}
+    <h1>{{room.name}}</h1>
+  {% endfor %}
+
+  {% include 'mixins/page_number.html' with page=rooms%}
+    
+{% endblock content %}

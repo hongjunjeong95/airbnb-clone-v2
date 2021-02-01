@@ -139,7 +139,7 @@ def roomDetail(request, pk):
         return redirect(reverse("core:home"))
 
 
-def roomCreate(request):
+def createRoom(request):
     if request.method == "GET":
         try:
             if not request.user.is_authenticated:
@@ -157,7 +157,7 @@ def roomCreate(request):
                 "facilities": facilities,
                 "house_rules": house_rules,
             }
-            return render(request, "pages/rooms/create.html", context={**form})
+            return render(request, "pages/rooms/create_room.html", context={**form})
         except LoggedInOnlyView as error:
             messages.error(request, error)
             return redirect(reverse("core:home"))
@@ -207,6 +207,90 @@ def roomCreate(request):
             photo = photo_models.Photo.objects.create(
                 file=photo, caption=caption, room_id=room.pk
             )
+
+            return redirect(reverse("rooms:detail", kwargs={"pk": room.pk}))
+        except LoggedInOnlyView as error:
+            messages.error(request, error)
+            return redirect(reverse("core:home"))
+
+
+def editRoom(request, pk):
+    if request.method == "GET":
+        try:
+            if not request.user.is_authenticated:
+                raise LoggedInOnlyView("Please login first")
+
+            room = room_models.Room.objects.get(pk=pk)
+
+            amenities = room_models.Amenity.objects.all()
+            facilities = room_models.Facility.objects.all()
+            house_rules = room_models.HouseRule.objects.all()
+            room_types = room_models.RoomType.objects.all()
+
+            s_amenities = room.amenities.all()
+            s_facilities = room.facilities.all()
+            s_house_rules = room.house_rules.all()
+
+            form = {
+                "countries": countries,
+                "room_types": room_types,
+                "amenities": amenities,
+                "facilities": facilities,
+                "house_rules": house_rules,
+            }
+
+            choices = {
+                "s_amenities": s_amenities,
+                "s_facilities": s_facilities,
+                "s_house_rules": s_house_rules,
+            }
+            return render(
+                request,
+                "pages/rooms/edit_room.html",
+                context={"room": room, **form, **choices},
+            )
+        except LoggedInOnlyView as error:
+            messages.error(request, error)
+            return redirect(reverse("core:home"))
+    elif request.method == "POST":
+        try:
+            name = request.POST.get("name")
+            city = request.POST.get("city")
+            address = request.POST.get("address")
+            country_code = request.POST.get("country")
+            price = int(request.POST.get("price", 0))
+            guests = int(request.POST.get("guests", 0))
+            bedrooms = int(request.POST.get("bedrooms", 0))
+            beds = int(request.POST.get("beds", 0))
+            bathrooms = int(request.POST.get("bathrooms", 0))
+            room_type = int(request.POST.get("room_type", 0))
+            description = request.POST.get("description")
+            amenities = request.POST.getlist("amenities")
+            facilities = request.POST.getlist("facilities")
+            house_rules = request.POST.getlist("house_rules")
+            instant_book = bool(request.POST.get("instant_book"))
+
+            room = room_models.Room.objects.get(pk=pk)
+            s_room_type = room_models.RoomType.objects.get(pk=room_type)
+
+            room.name = name
+            room.city = city
+            room.address = address
+            room.price = price
+            room.guests = guests
+            room.bedrooms = bedrooms
+            room.beds = beds
+            room.bathrooms = bathrooms
+            room.room_type = s_room_type
+            room.description = description
+            room.instant_book = instant_book
+
+            room.country = country_code
+            room.save()
+
+            room.amenities.set(amenities)
+            room.facilities.set(facilities)
+            room.house_rules.set(house_rules)
 
             return redirect(reverse("rooms:detail", kwargs={"pk": room.pk}))
         except LoggedInOnlyView as error:
