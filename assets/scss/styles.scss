@@ -89,7 +89,10 @@
 
 .social-login {
   .button {
-    @apply rounded-lg px-1 py-2 text-base font-bold tracking-wider w-full outline-none;
+    @apply rounded-lg text-base font-bold tracking-wider w-full outline-none;
+    a {
+      @apply block px-1 py-2;
+    }
   }
 }
 
