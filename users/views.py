@@ -280,8 +280,6 @@ def log_out(request):
 
 def userDetail(request, pk):
     try:
-        if not request.user.is_authenticated:
-            raise LoggedInOnlyView("Please login first")
         user_obj = models.User.objects.get(pk=pk)
         page = int(request.GET.get("page", 1))
         page_sector = (page - 1) // 5
@@ -298,9 +296,6 @@ def userDetail(request, pk):
     except models.User.DoesNotExist:
         messages.error(request, "User does not exist")
         return redirect(reverse("core:home"))
-    except LoggedInOnlyView as error:
-        messages.error(request, error)
-        return redirect("users:login")
 
 
 def updateProfile(request, pk):
@@ -406,7 +401,7 @@ def updateProfile(request, pk):
 def complete_verification(request, key):
     try:
         if request.user.is_authenticated:
-            raise LoggedOutOnlyView("Please login first")
+            raise LoggedOutOnlyView("Please verify email first")
         user = models.User.objects.get(email_secret=key)
         user.email_secret = ""
         user.email_verified = True
