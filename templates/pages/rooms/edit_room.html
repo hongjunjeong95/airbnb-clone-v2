@@ -136,7 +136,7 @@
           </ul>
         </div>
         
-        <div class="checkbox rounded-bl-lg rounded-br-lg">
+        <div class="checkbox rounded-bl-lg rounded-br-lg mb-4">
           <label for="instant_book" class="text-lg font-bold mr-2">Instant Book</label>
           <input 
             type="checkbox"
@@ -150,19 +150,15 @@
         <button class="form_button">Edit</button>
       </form>
       <button class="button">
-        <a href="{% url 'rooms:create-photo' room.pk %}">Add Photos</a>
+        <a href="{% url 'rooms:photo-detail' room.pk %}">Photo Settings</a>
       </button>
       <button class="button bg-red-600">
         <a href="{% url 'rooms:delete-room' room.pk %}">Delete Room</a>
       </button>
+      <button class="button bg-gray-700">
+        <a href="{% url 'rooms:room-detail' room.pk %}">Back</a>
+      </button>
     </div>
   </div>
-
-
-  {% for room in rooms %}
-    <h1>{{room.name}}</h1>
-  {% endfor %}
-
-  {% include 'mixins/page_number.html' with page=rooms%}
     
 {% endblock content %}

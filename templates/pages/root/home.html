@@ -5,12 +5,12 @@
 {% endblock page_title %}
 
 {% block content %}
-<div class="flex flex-col items-center justify-items-center">
-  <div class="w-10/12">
-      {% include 'mixins/room_card.html' with rooms=rooms %}
-      <div class="flex justify-center mt-20 itmes-center">
-      {% include 'mixins/page_number.html' with page=rooms %}
+  <div class="flex flex-col items-center justify-items-center">
+    <div class="w-10/12">
+        {% include 'mixins/room_card.html' with rooms=rooms %}
+        <div class="flex justify-center mt-20 itmes-center">
+        {% include 'mixins/page_number.html' with page=rooms %}
+      </div>
     </div>
   </div>
-</div>
-{% endblock content %}
+  {% endblock content %}

@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block page_title %}
-  Create {{room_name}}'s Photo
+  Create {{room.name}}'s Photo
 {% endblock page_title %}
 
 
@@ -23,6 +23,9 @@
         </div>
         <button class="form_button">Create</button>
       </form>
+      <button class="button bg-gray-700">
+        <a href="{% url 'rooms:room-detail' room.pk %}">Back</a>
+      </button>
     </div>
   </div>
 {% endblock content %}

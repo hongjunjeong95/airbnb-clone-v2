@@ -3,6 +3,7 @@ from django.core.paginator import Paginator, EmptyPage
 from django.utils import timezone
 from django_countries import countries
 from django.contrib import messages
+
 from . import models as room_models
 from photos import models as photo_models
 from users.exception import LoggedInOnlyView, VerifyUser
@@ -323,6 +324,48 @@ def deleteRoom(request, pk):
         return redirect(reverse("core:home"))
 
 
+def photoDetail(request, pk):
+
+    try:
+        if not request.user.is_authenticated:
+            raise LoggedInOnlyView("Page Not Found")
+
+        page = request.GET.get("page", 1)
+
+        if page == "":
+            page = 1
+        else:
+            page = int(page)
+
+        page_sector = (page - 1) // 5
+        page_sector = page_sector * 5
+
+        room = room_models.Room.objects.get(pk=pk)
+        room_name = room.name
+        qs = room.photos.all()
+        paginator = Paginator(qs, 10, orphans=5)
+        photos = paginator.get_page(page)
+
+        if request.user.pk != room.host.pk:
+            raise VerifyUser("Page Not Found")
+
+        return render(
+            request,
+            "pages/rooms/photos/photo-detail.html",
+            context={
+                "photos": photos,
+                "page_sector": page_sector,
+                "room": room,
+            },
+        )
+    except room_models.Room.DoesNotExist:
+        print("Model does not exsit")
+        return redirect(reverse("rooms:room-detail", kwargs={"pk": room.pk}))
+    except VerifyUser as error:
+        messages.error(request, error)
+        return redirect(reverse("core:home"))
+
+
 def createPhoto(request, pk):
     if request.method == "GET":
         try:
@@ -330,7 +373,6 @@ def createPhoto(request, pk):
                 raise LoggedInOnlyView("Page Not Found")
 
             room = room_models.Room.objects.get(pk=pk)
-            room_name = room.name
 
             if request.user.pk != room.host.pk:
                 raise VerifyUser("Page Not Found")
@@ -338,7 +380,7 @@ def createPhoto(request, pk):
             return render(
                 request,
                 "pages/rooms/photos/create_photo.html",
-                context={"room_name": room_name},
+                context={"room": room},
             )
         except LoggedInOnlyView as error:
             messages.error(request, error)

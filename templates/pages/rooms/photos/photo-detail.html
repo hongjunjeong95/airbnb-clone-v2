@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block page_title %}
+  Photos Settings
+{% endblock page_title %}
+
+{% block content %}
+
+<div class="flex flex-col items-center justify-items-center">
+  <div class="w-10/12">
+    <div class="flex justify-between mb-8 mx-4">
+      <h1 class="font-bold text-4xl ">{{room.name}}</h1>
+      <button class="button mt-0 w-1/6">
+        <a href="{% url 'rooms:create-photo' room.pk %}">Create Photo</a>
+      </button>
+    </div>
+    <ul class="grid grid-cols-2 auto-rows-200px gap-4">
+      {% for photo in photos %}
+        <li class="flex justify-between items-center border border-gray-500 rounded-lg p-3">
+          <img src="{{photo.file.url}}" alt="" class="w-5/12 h-44 rounded-lg">
+          <div>
+            <button class="button mt-0 mb-4">
+              <a href="">Edit Photo</a>
+            </button>
+            <button class="button mt-0 bg-red-500">
+              <a href="">Delete Photo</a>
+            </button>
+          </div>
+        </li>
+      {% endfor %}
+    </ul>
+    <div class="flex justify-center mt-6 itmes-center">
+      <button class="button bg-gray-700 w-1/6">
+        <a href="{% url 'rooms:edit-room' room.pk %}">Back</a>
+      </button>
+    </div>
+    <div class="flex justify-center mt-20 itmes-center">
+      {% include 'mixins/page_number.html' with page=photos %}
+    </div>
+  </div>
+</div>
+{% endblock content %}
