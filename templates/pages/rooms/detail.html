@@ -90,47 +90,11 @@
           </div>
         </div>
         <div class="ml-10 w-1/4">
-          {% for cal in room.get_calendar %}
-            <div class="mb-10 rounded-lg shadow-lg p-5">
-              <h3 class="font-bold text-lg flex justify-center mb-4">{{cal.get_month}} / {{cal.year}}</h3>
-              <div class="cal-grid gap-x-1 mb-4">
-                {% for day in cal.day_names %}
-                  <span class="font-medium">{{day}}</span>
-                {% endfor %}
-              </div>
-              <div class="cal-grid gap-1">
-                {% for day in cal.get_days %}
-                  {% if day == 0 %}
-                    <span class=""></span>
-                  {% else %}
-                    <span class="py-1 px-2 w-8 text-center text-base rounded bg-green-400 text-white cursor-pointer hover:bg-green-200 hover:text-white">{{day}}</span>   
-                  {% endif %}
-                {% endfor %}
-              </div>
-            </div>
-          {% endfor %}
+          {% include 'mixins/calendar.html' %}
         </div>
       </main>
       <div class="w-3/5 grid grid-cols-2 gap-10 mr-40 border-b border-gray-300 mb-6 pb-6">
-        {% for cal in room.get_calendar %}
-          <div class="mb-10 rounded-lg shadow-lg p-5 w-10/12">
-            <h3 class="font-bold text-lg flex justify-center mb-4">{{cal.get_month}} / {{cal.year}}</h3>
-            <div class="cal-grid gap-x-1 mb-4">
-              {% for day in cal.day_names %}
-                <span class="font-medium">{{day}}</span>
-              {% endfor %}
-            </div>
-            <div class="cal-grid gap-1">
-              {% for day in cal.get_days %}
-                {% if day == 0 %}
-                  <span class=""></span>
-                {% else %}
-                  <span class="py-1 px-2 w-8 text-center text-base rounded bg-green-400 text-white cursor-pointer hover:bg-green-200 hover:text-white">{{day}}</span>   
-                {% endif %}
-              {% endfor %}
-            </div>
-          </div>
-        {% endfor %}
+        {% include 'mixins/calendar.html' with w='w-10/12' %}
       </div>
       <div class="room_reviews">
         <div class="text-lg font-bold mb-8">

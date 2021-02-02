@@ -1,0 +1,21 @@
+{% for cal in room.get_calendar %}
+    <div class="{{w|default:'w-full'}} mb-10 rounded-lg shadow-lg p-5">
+        <h3 class="font-bold text-lg flex justify-center mb-4">{{cal.get_month}} / {{cal.year}}</h3>
+        <div class="cal-grid gap-x-1 mb-4">
+        {% for day in cal.day_names %}
+            <span class="font-medium">{{day}}</span>
+        {% endfor %}
+        </div>
+        <div class="cal-grid gap-1">
+        {% for day in cal.get_days %}
+            {% if day.day == 0 %}
+                <span class=""></span>
+            {% elif day.past %}
+                <span class="py-1 px-2 w-8 text-center text-base rounded bg-gray-200 text-white cursor-pointer line-through">{{day.day}}</span>   
+            {% else %}
+                <span class="py-1 px-2 w-8 text-center text-base rounded bg-gray-400 text-white cursor-pointer hover:bg-red-400">{{day.day}}</span>   
+            {% endif %}
+        {% endfor %}
+        </div>
+    </div>
+{% endfor %}
