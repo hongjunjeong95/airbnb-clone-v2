@@ -1,3 +1,5 @@
+{% load is_booked %}
+
 {% for cal in room.get_calendar %}
     <div class="{{w|default:'w-full'}} mb-10 rounded-lg shadow-lg p-5">
         <h3 class="font-bold text-lg flex justify-center mb-4">{{cal.get_month}} / {{cal.year}}</h3>
@@ -8,10 +10,13 @@
         </div>
         <div class="cal-grid gap-1">
         {% for day in cal.get_days %}
+            {% is_booked room day as is_booked_bool%}
             {% if day.day == 0 %}
                 <span></span>
             {% else %}
                 {% if day.past %}
+                    <span class="py-1 px-2 w-8 text-center text-base rounded bg-gray-200 text-white cursor-pointer line-through">{{day.day}}</span>   
+                {% elif is_booked_bool %}
                     <span class="py-1 px-2 w-8 text-center text-base rounded bg-gray-200 text-white cursor-pointer line-through">{{day.day}}</span>   
                 {% else %}
                     <a href="{% url 'reservations:create' room.pk day.year day.month day.day %}" class="py-1 px-2 w-8 text-center text-base rounded bg-gray-400 text-white cursor-pointer hover:bg-red-400">{{day.day}}</a>

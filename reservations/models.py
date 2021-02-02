@@ -9,9 +9,6 @@ class BookedDay(core_models.TimeStampedModel):
     reservation = models.ForeignKey(
         "Reservation", related_name="bookedDays", on_delete=models.CASCADE
     )
-    room = models.ForeignKey(
-        "rooms.Room", related_name="bookdedDays", on_delete=models.CASCADE
-    )
 
     class Meta:
         verbose_name = "Booked Day"
@@ -55,13 +52,15 @@ class Reservation(core_models.TimeStampedModel):
             difference = end - start
 
             # Check if reserved room exsists
-            booked_room_existed = BookedDay.objects.filter(room=self.room).exists()
+            booked_room_existed = BookedDay.objects.filter(
+                reservation__room=self.room
+            ).exists()
 
             if booked_room_existed:
 
                 # Check if reserved days with that room
                 bookedDays = (
-                    BookedDay.objects.filter(room=self.room)
+                    BookedDay.objects.filter(reservation__room=self.room)
                     .filter(day__range=(start, end))
                     .exists()
                 )
@@ -69,15 +68,13 @@ class Reservation(core_models.TimeStampedModel):
                     super().save(*args, **kwargs)
                     for i in range(difference.days + 1):
                         day = start + datetime.timedelta(days=i)
-                        BookedDay.objects.create(
-                            day=day, room=self.room, reservation=self
-                        )
+                        BookedDay.objects.create(day=day, reservation=self)
                     return
             else:
                 super().save(*args, **kwargs)
                 for i in range(difference.days + 1):
                     day = start + datetime.timedelta(days=i)
-                    BookedDay.objects.create(day=day, room=self.room, reservation=self)
+                    BookedDay.objects.create(day=day, reservation=self)
                 return
 
     def in_progress(self):

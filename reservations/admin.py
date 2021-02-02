@@ -8,7 +8,6 @@ class BookedDay(admin.ModelAdmin):
 
     list_display = (
         "__str__",
-        "room",
         "reservation",
     )
 
