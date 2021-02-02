@@ -479,3 +479,11 @@ def change_password(request, pk):
         except EmailLoggedInOnly as error:
             messages.error(request, error)
             return redirect("core:home")
+
+
+def switch_hosting(request):
+    try:
+        del request.session["is_hosting"]
+    except KeyError:
+        request.session["is_hosting"] = True
+    return redirect(reverse("core:home"))

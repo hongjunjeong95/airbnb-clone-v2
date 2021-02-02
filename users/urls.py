@@ -30,4 +30,5 @@ urlpatterns = [
         user_views.complete_verification,
         name="complete-verification",
     ),
+    path("switch-hosting", user_views.switch_hosting, name="switch-hosting"),
 ]

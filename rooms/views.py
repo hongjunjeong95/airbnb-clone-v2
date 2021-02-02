@@ -6,7 +6,7 @@ from django.contrib import messages
 
 from . import models as room_models
 from photos import models as photo_models
-from users.exception import LoggedInOnlyView, VerifyUser
+from users.exception import LoggedInOnlyView, VerifyUser, HostOnly
 
 
 def homeView(request):
@@ -145,6 +145,8 @@ def createRoom(request):
         try:
             if not request.user.is_authenticated:
                 raise LoggedInOnlyView("Please login first")
+            if not request.session.get("is_hosting"):
+                raise HostOnly("Page Not Found")
 
             room_types = room_models.RoomType.objects.all()
             amenities = room_models.Amenity.objects.all()
@@ -162,8 +164,14 @@ def createRoom(request):
         except LoggedInOnlyView as error:
             messages.error(request, error)
             return redirect(reverse("core:home"))
+        except HostOnly as error:
+            messages.error(request, error)
+            return redirect(reverse("core:home"))
     elif request.method == "POST":
         try:
+            if not request.session.get("is_hosting"):
+                raise HostOnly("Page Not Found")
+
             host = request.user
             name = request.POST.get("name")
             city = request.POST.get("city")
@@ -214,6 +222,9 @@ def createRoom(request):
         except LoggedInOnlyView as error:
             messages.error(request, error)
             return redirect(reverse("core:home"))
+        except HostOnly as error:
+            messages.error(request, error)
+            return redirect(reverse("core:home"))
 
 
 def editRoom(request, pk):
@@ -221,7 +232,8 @@ def editRoom(request, pk):
         try:
             if not request.user.is_authenticated:
                 raise LoggedInOnlyView("Page Not Found")
-
+            if not request.session.get("is_hosting"):
+                raise HostOnly("Page Not Found")
             room = room_models.Room.objects.get(pk=pk)
 
             if request.user.pk != room.host.pk:
@@ -263,8 +275,13 @@ def editRoom(request, pk):
         except VerifyUser as error:
             messages.error(request, error)
             return redirect(reverse("core:home"))
+        except HostOnly as error:
+            messages.error(request, error)
+            return redirect(reverse("core:home"))
     elif request.method == "POST":
         try:
+            if not request.session.get("is_hosting"):
+                raise HostOnly("Page Not Found")
             name = request.POST.get("name")
             city = request.POST.get("city")
             address = request.POST.get("address")
@@ -308,10 +325,15 @@ def editRoom(request, pk):
         except LoggedInOnlyView as error:
             messages.error(request, error)
             return redirect(reverse("core:home"))
+        except HostOnly as error:
+            messages.error(request, error)
+            return redirect(reverse("core:home"))
 
 
 def deleteRoom(request, pk):
     try:
+        if not request.session.get("is_hosting"):
+            raise HostOnly("Page Not Found")
         room = room_models.Room.objects.get(pk=pk)
 
         if request.user.pk != room.host.pk:
@@ -322,10 +344,15 @@ def deleteRoom(request, pk):
     except room_models.Room.DoesNotExist:
         print("Model does not exsit")
         return redirect(reverse("core:home"))
+    except HostOnly as error:
+        messages.error(request, error)
+        return redirect(reverse("core:home"))
 
 
 def photoDetail(request, pk):
     try:
+        if not request.session.get("is_hosting"):
+            raise HostOnly("Page Not Found")
         if not request.user.is_authenticated:
             raise LoggedInOnlyView("Page Not Found")
 
@@ -362,11 +389,16 @@ def photoDetail(request, pk):
     except VerifyUser as error:
         messages.error(request, error)
         return redirect(reverse("core:home"))
+    except HostOnly as error:
+        messages.error(request, error)
+        return redirect(reverse("core:home"))
 
 
 def createPhoto(request, pk):
     if request.method == "GET":
         try:
+            if not request.session.get("is_hosting"):
+                raise HostOnly("Page Not Found")
             if not request.user.is_authenticated:
                 raise LoggedInOnlyView("Page Not Found")
 
@@ -383,8 +415,13 @@ def createPhoto(request, pk):
         except LoggedInOnlyView as error:
             messages.error(request, error)
             return redirect(reverse("core:home"))
+        except HostOnly as error:
+            messages.error(request, error)
+            return redirect(reverse("core:home"))
     elif request.method == "POST":
         try:
+            if not request.session.get("is_hosting"):
+                raise HostOnly("Page Not Found")
             caption = request.POST.get("caption")
             photo = request.POST.get("photo")
 
@@ -398,11 +435,16 @@ def createPhoto(request, pk):
         except LoggedInOnlyView as error:
             messages.error(request, error)
             return redirect(reverse("core:home"))
+        except HostOnly as error:
+            messages.error(request, error)
+            return redirect(reverse("core:home"))
 
 
 def editPhoto(request, room_pk, photo_pk):
     if request.method == "GET":
         try:
+            if not request.session.get("is_hosting"):
+                raise HostOnly("Page Not Found")
             if not request.user.is_authenticated:
                 raise LoggedInOnlyView("Page Not Found")
 
@@ -419,8 +461,13 @@ def editPhoto(request, room_pk, photo_pk):
         except LoggedInOnlyView as error:
             messages.error(request, error)
             return redirect(reverse("core:home"))
+        except HostOnly as error:
+            messages.error(request, error)
+            return redirect(reverse("core:home"))
     elif request.method == "POST":
         try:
+            if not request.session.get("is_hosting"):
+                raise HostOnly("Page Not Found")
             caption = request.POST.get("caption")
 
             room = room_models.Room.objects.get(pk=room_pk)
@@ -433,10 +480,15 @@ def editPhoto(request, room_pk, photo_pk):
         except LoggedInOnlyView as error:
             messages.error(request, error)
             return redirect(reverse("core:home"))
+        except HostOnly as error:
+            messages.error(request, error)
+            return redirect(reverse("core:home"))
 
 
 def deletePhoto(request, room_pk, photo_pk):
     try:
+        if not request.session.get("is_hosting"):
+            raise HostOnly("Page Not Found")
         room = room_models.Room.objects.get(pk=room_pk)
         if request.user.pk != room.host.pk:
             raise VerifyUser("Page Not Found")
@@ -447,4 +499,7 @@ def deletePhoto(request, room_pk, photo_pk):
         return redirect(reverse("rooms:photo-detail", kwargs={"pk": room.pk}))
     except room_models.Room.DoesNotExist:
         print("Model does not exsit")
+        return redirect(reverse("core:home"))
+    except HostOnly as error:
+        messages.error(request, error)
         return redirect(reverse("core:home"))

@@ -51,7 +51,7 @@
                 <span>{{room.bedrooms}} bedrooms &centerdot;</span>
                 <span>{{room.bathrooms}} bathrooms</span>
               </div>
-              {% if user.pk == room.host.pk %}
+              {% if user.pk == room.host.pk and request.session.is_hosting %}
                 <button class="button">
                   <a href="{% url 'rooms:edit-room' room.pk %}">Edit Room</a>
                 </button>
