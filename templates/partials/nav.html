@@ -15,10 +15,10 @@
       </li>
     {% endif %}
     <li class="nav_link">
-      <a href="{% url 'users:logout' %}">Log Out</a>
+      <a href="{% url 'users:profile' user.pk %}">Profile</a>
     </li>
     <li class="nav_link">
-      <a href="{% url 'users:profile' user.pk %}">Profile</a>
+      <a href="{% url 'users:logout' %}">Log Out</a>
     </li>
   {% else %}
     <li class="nav_link">
