@@ -9,11 +9,13 @@
         <div class="cal-grid gap-1">
         {% for day in cal.get_days %}
             {% if day.day == 0 %}
-                <span class=""></span>
-            {% elif day.past %}
-                <span class="py-1 px-2 w-8 text-center text-base rounded bg-gray-200 text-white cursor-pointer line-through">{{day.day}}</span>   
+                <span></span>
             {% else %}
-                <span class="py-1 px-2 w-8 text-center text-base rounded bg-gray-400 text-white cursor-pointer hover:bg-red-400">{{day.day}}</span>   
+                {% if day.past %}
+                    <span class="py-1 px-2 w-8 text-center text-base rounded bg-gray-200 text-white cursor-pointer line-through">{{day.day}}</span>   
+                {% else %}
+                    <a href="{% url 'reservations:create' room.pk day.year day.month day.day %}" class="py-1 px-2 w-8 text-center text-base rounded bg-gray-400 text-white cursor-pointer hover:bg-red-400">{{day.day}}</a>
+                {% endif %}
             {% endif %}
         {% endfor %}
         </div>
