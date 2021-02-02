@@ -17,7 +17,13 @@
                 {% if day.past %}
                     <span class="py-1 px-2 w-8 text-center text-base rounded bg-gray-200 text-white cursor-pointer line-through">{{day.day}}</span>   
                 {% elif is_booked_bool %}
-                    <span class="py-1 px-2 w-8 text-center text-base rounded bg-gray-200 text-white cursor-pointer line-through">{{day.day}}</span>   
+                    {% if day.day in days %}
+                        <span class="py-1 px-2 w-8 text-center text-base rounded bg-green-500 text-white cursor-pointer">{{day.day}}</span>
+                    {% else %}
+                        <span class="py-1 px-2 w-8 text-center text-base rounded bg-gray-200 text-white cursor-pointer line-through">{{day.day}}</span>   
+                    {% endif %}
+                {% elif page == "reservation_page" %}
+                    <span class="py-1 px-2 w-8 text-center text-base rounded bg-gray-400 text-white cursor-pointer hover:bg-red-400">{{day.day}}</span>
                 {% else %}
                     <a href="{% url 'reservations:create' room.pk day.year day.month day.day %}" class="py-1 px-2 w-8 text-center text-base rounded bg-gray-400 text-white cursor-pointer hover:bg-red-400">{{day.day}}</a>
                 {% endif %}

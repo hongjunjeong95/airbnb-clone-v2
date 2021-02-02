@@ -39,5 +39,17 @@ def createReservation(request, room_pk, year, month, day):
 
 def reservationDetail(request, pk):
     reservation = reservation_models.Reservation.objects.get(pk=pk)
+    bookedDays = reservation.bookedDays.all()
+    days = []
+
+    for day in bookedDays:
+        day = str(day)
+        day = int(day.split("-")[2])
+        days.append(day)
+
     room = reservation.room
-    return render(request, "pages/reservations/reservation_detail.html", {"room": room})
+    return render(
+        request,
+        "pages/reservations/reservation_detail.html",
+        context={"room": room, "reservation": reservation, "days": days},
+    )

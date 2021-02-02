@@ -3,7 +3,7 @@
 {% load remainder_op %}
 
 {% block page_title %}
-    {{room.name}}
+    Reservation
 {% endblock page_title %}
 
 {% block content %}
@@ -28,7 +28,7 @@
             </div>
         </div>
         <div class="grid grid-cols-2 grid-rows-2-200px gap-2 mb-12">
-            
+
             {% if room.get_first_photo is not None %}
             <img src="{{room.get_first_photo}}" class="row-span-full rounded-tl-lg rounded-bl-lg h-full w-full bg-cover bg-center" alt="Room Photo">
             {% endif %}
@@ -39,169 +39,14 @@
             {% endfor %}
             </div>
         </div>
-        <main class="romm_detail">
-            <div class="w-3/5">
-            <div class="section pb-0 flex justify-between">
-                <div class="space__left">
-                <h2 class="text-2xl font-bold">{{room.room_type}} hosted by {{room.host.first_name}}</h2>
-                <div class="mb-4">
-                    <span>Maximum</span>
-                    <span>{{room.guests}} guests &centerdot;</span>
-                    <span>{{room.beds}} beds &centerdot;</span>
-                    <span>{{room.bedrooms}} bedrooms &centerdot;</span>
-                    <span>{{room.bathrooms}} bathrooms</span>
-                </div>
-                {% if user.pk == room.host.pk and request.session.is_hosting %}
-                    <button class="button">
-                    <a href="{% url 'rooms:edit-room' room.pk %}">Edit Room</a>
-                    </button>
-                {% endif %}
-                </div>
-                <div>
-                {% include 'mixins/avatar.html' with user=room.host %}
-                </div>
+        <main class="flex flex-col">
+            <div class="mb-10">
+                <h2 class="text-3xl font-bold">{{reservation.status|capfirst}}</h2>
             </div>
-            <div class="section flex flex-col">
-                <p class="content">&emsp;{{room.description}}</p>
-            </div>
-            <div class="section">
-                <h4>Amenity</h4>
-                <ul>
-                {% for amenity in room.amenities.all %}
-                    <li>{{amenity}}</li>
-                {% endfor %}
-                </ul>
-            </div>
-            <div class="section">
-                <h4>Facility</h4>
-                <ul>
-                {% for facility in room.facilities.all %}
-                    <li>{{facility}}</li>
-                {% endfor %}
-                </ul>
-            </div>
-            <div class="section">
-                <h4>House Rules</h4>
-                <ul>
-                {% for house_rule in room.house_rules.all %}
-                    <li>{{house_rule}}</li>
-                {% endfor %}
-                </ul>
-            </div>
-            </div>
-            <div class="ml-10 w-1/4">
-            {% include 'mixins/calendar.html' %}
+            <div class="w-3/5 grid grid-cols-2 gap-10 mr-40 border-b border-gray-300 mb-6 pb-6">
+                {% include 'mixins/calendar.html' with page="reservation_page" reservation="reservation" %}
             </div>
         </main>
-        <div class="w-3/5 grid grid-cols-2 gap-10 mr-40 border-b border-gray-300 mb-6 pb-6">
-            {% include 'mixins/calendar.html' with w='w-10/12' %}
-        </div>
-        <div class="room_reviews">
-            <div class="text-lg font-bold mb-8">
-            <i class="fas fa-star text-red-500"></i>
-            <span>{{room.get_review_points}} points</span>
-            <span>({{room.reviews.count}} review{{room.reviews.count|pluralize}})</span>
-            </div>
-            <div class="review_points">
-            <div>
-                <span>Accuracy</span>
-                <span class="point">{{room.calculate_accuracy}}</span>
-            </div>
-            <div>
-                <span>Communication</span>
-                <span class="point">{{room.calculate_communication}}</span>
-            </div>
-            <div>
-                <span>Cleanliness</span>
-                <span class="point">{{room.calculate_cleanliness}}</span>
-            </div>
-            <div>
-                <span>Location</span>
-                <span class="point">{{room.calculate_location}}</span>
-            </div>
-            <div>
-                <span>Check In</span>
-                <span class="point">{{room.calculate_check_in}}</span>
-            </div>
-            <div>
-                <span>Value</span>
-                <span class="point">{{room.calculate_value}}</span>
-            </div>
-            </div>
-            
-            <div class="grid grid-cols-2 gap-x-52 gap-y-3 mb-10">
-            {% for review in room.reviews.all %}
-                <div>
-                <div class="flex items-center mb-4">
-                    {% if review.user.avatar %}
-                    <a href="{% url 'users:profile' review.user.pk%}">
-                    <img src="{{review.user.avatar.url}}" class="img w-16 h-16 mr-4" alt="User avatar" title="User Avatar">
-                    </a>
-                    {% else %}
-                    <a href="{% url 'users:profile' review.user.pk%}">
-                    <div class="img w-16 h-16 mr-4">{{review.user.first_name|first|upper}}</div>
-                    </a>
-                    {% endif %}
-                    <div class="flex flex-col">
-                    <span class="font-bold">{{review.user|capfirst}}</span>
-                    <span class="text-sm text-gray-400">{{review.created}}</span>
-                    </div>
-                </div>
-                <p class="mb-4 font-normal">{{review.review}}</p>
-                </div>
-            {% endfor %}
-            </div>
-        </div>
-        <div class="px-6">
-            <div class="host-info__left">
-            <div class="flex items-center mb-4">
-                {% if room.host.avatar %}
-                <a href="{% url 'users:profile' room.host.pk%}">
-                <img src="{{room.host.avatar.url}}" class="img w-16 h-16 mr-4" alt="User avatar" title="User Avatar">
-                </a>
-                {% else %}
-                <a href="{% url 'users:profile' room.host.pk%}">
-                <div class="img w-16 h-16 mr-4">{{room.host.first_name|first|upper}}</div>
-                </a>
-                {% endif %}
-                <div class="flex flex-col">
-                <h3 class="font-bold text-2xl">Host : {{room.host.first_name}}</h3>
-                <span class="text-sm text-gray-400">Member Since: {{joined_month}}, {{room.host.date_joined.year}}</span>
-                </div>
-            </div>
-            <div class="grid grid-cols-2 gap-2">
-                <div class="w-10/12">
-                <div class="flex text-base mb-8">
-                    <div class="host-info__reviews mr-4">
-                    <i class="fas fa-star text-red-500 mr-2"></i>
-                    <span>{{room.reviews.count}} review{{room.reviews.count|pluralize}}</span>
-                    </div>
-                    <div class="host-info__superhost">
-                    {% if room.host.superhost %}
-                    <i class="fas fa-medal text-red-500 mr-2"></i>
-                    <span>Superhost</span>
-                    {% endif %}
-                    </div>
-                </div>
-                <p class="mb-4 text-lg">
-                    {{room.description}}
-                </p>
-                {% if room.host.superhost %}
-                    <h3 class="font-bold text-base mb-2">{{room.host.first_name}} is superhost.</h3>
-                    <p>
-                    Superhost is a host who boasts rich experience and
-                    high rating and do their best to make their guests comfortable in their accommodation.
-                    </p>
-                {% endif %}
-                </div>
-                <div class="flex flex-col">
-                <span class="mb-4">Response rate : 100%</span>
-                <span class="mb-6">Response time : In one hour</span>
-                <button class="button px-1 py-2 w-1/2">Contact the host</button>
-                </div>
-            </div>
-            </div>
-        </div>
-        </div>
-    </div>
+
+</div>
 {% endblock content %}
