@@ -40,9 +40,13 @@
             </div>
         </div>
         <main class="flex flex-col">
-            <div class="mb-10">
-                <h2 class="text-3xl font-bold">{{reservation.status|capfirst}}</h2>
+            <div class="flex mb-10 items-center">
+                <span class="text-3xl font-bold mr-10">{{reservation.status|capfirst}}</span>
+                <button class="button w-1/5 bg-red-500">
+                    <a  href="{% url 'reservations:cancel' reservation.pk %}">Cancel</a>
+                </button>
             </div>
+            
             <div class="w-3/5 grid grid-cols-2 gap-10 mr-40 border-b border-gray-300 mb-6 pb-6">
                 {% include 'mixins/calendar.html' with page="reservation_page" reservation="reservation" %}
             </div>

@@ -14,4 +14,9 @@ urlpatterns = [
         reservation_views.reservationDetail,
         name="detail",
     ),
+    path(
+        "<int:pk>/cancel/",
+        reservation_views.cancelReservation,
+        name="cancel",
+    ),
 ]

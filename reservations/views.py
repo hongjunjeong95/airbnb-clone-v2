@@ -53,3 +53,14 @@ def reservationDetail(request, pk):
         "pages/reservations/reservation_detail.html",
         context={"room": room, "reservation": reservation, "days": days},
     )
+
+
+def cancelReservation(request, pk):
+    try:
+        reservation = reservation_models.Reservation.objects.get(pk=pk)
+        room = reservation.room
+        reservation.delete()
+        return redirect(reverse("rooms:room-detail", kwargs={"pk": room.pk}))
+    except reservation_models.Reservation.DoesNotExist:
+        messages.error(request, "Rservation does not exist")
+        return redirect(reverse("core:home"))
