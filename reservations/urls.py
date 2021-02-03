@@ -10,6 +10,11 @@ urlpatterns = [
         name="create",
     ),
     path(
+        "users/<int:user_pk>/",
+        reservation_views.reservationList,
+        name="list",
+    ),
+    path(
         "<int:pk>/",
         reservation_views.reservationDetail,
         name="detail",
@@ -20,18 +25,18 @@ urlpatterns = [
         name="cancel",
     ),
     path(
-        "<int:pk>/reservation/list/",
-        reservation_views.reservationList,
-        name="list",
-    ),
-    path(
-        "<int:user_pk>/reservation/<int:room_pk>/room-list/",
-        reservation_views.reservationRoomList,
-        name="room-list",
-    ),
-    path(
         "<int:pk>/confirm/",
         reservation_views.confirmReservation,
         name="confirm",
+    ),
+    path(
+        "<int:pk>/reservation/list/",
+        reservation_views.reservationHostList,
+        name="host-list",
+    ),
+    path(
+        "<int:user_pk>/reservation/<int:room_pk>/room-list/",
+        reservation_views.reservationHostRoomList,
+        name="host-room-list",
     ),
 ]

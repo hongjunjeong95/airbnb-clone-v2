@@ -3,15 +3,15 @@
 {% load remainder_op %}
 
 {% block page_title %}
-    {{request.user}}'s Reservation List
+    {{request.user}}'s Reservation Host List
 {% endblock page_title %}
 
 {% block content %}
     <div class="flex flex-col items-center justify-items-center">
         <div class="w-10/12">
-            {% include 'partials/reservation_card.html' %}
+            {% include 'mixins/room_card.html' with rooms=rooms url_page='reservations:host-room-list' %}
             <div class="flex justify-center mt-20 itmes-center">
-                {% include 'mixins/page_number.html' with page=reservations %}
+                {% include 'mixins/page_number.html' with page=rooms %}
             </div>
         </div>
     </div>

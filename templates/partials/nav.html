@@ -9,11 +9,13 @@
         {% endif %}
       </a>
     </li>
-    {% if request.session.is_hosting %}
-      <li class="nav_link">
+    <li class="nav_link">
+      {% if request.session.is_hosting %}
         <a href="{% url 'rooms:create-room' %}">Create Room</a>
-      </li>
-    {% endif %}
+      {% else %}
+        <a href="{% url 'reservations:list' user.pk %}">Reserved Rooms</a>
+      {% endif %}
+    </li>
     <li class="nav_link">
       <a href="{% url 'users:profile' user.pk %}">Profile</a>
     </li>
