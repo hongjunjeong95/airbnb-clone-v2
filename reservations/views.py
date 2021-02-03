@@ -121,7 +121,7 @@ def confirmReservation(request, pk):
 
         return redirect(
             reverse(
-                "reservations:room-list",
+                "reservations:host-room-list",
                 kwargs={
                     "user_pk": user_pk,
                     "room_pk": room_pk,
@@ -184,7 +184,7 @@ def reservationHostRoomList(request, user_pk, room_pk):
         reservations = paginator.get_page(page)
         return render(
             request,
-            "pages/reservations/reservation_room_host_list.html",
+            "pages/reservations/reservation_host_room_list.html",
             context={"reservations": reservations, "room_name": room_name},
         )
     except reservation_models.Reservation.DoesNotExist:
