@@ -29,4 +29,9 @@ urlpatterns = [
         reservation_views.reservationRoomList,
         name="room-list",
     ),
+    path(
+        "<int:pk>/confirm/",
+        reservation_views.confirmReservation,
+        name="confirm",
+    ),
 ]

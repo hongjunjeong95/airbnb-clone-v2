@@ -58,7 +58,7 @@ class Reservation(core_models.TimeStampedModel):
 
             if booked_room_existed:
 
-                # Check if reserved days with that room
+                # Check if the days are reserved with that room
                 bookedDays = (
                     BookedDay.objects.filter(reservation__room=self.room)
                     .filter(day__range=(start, end))
@@ -76,6 +76,7 @@ class Reservation(core_models.TimeStampedModel):
                     day = start + datetime.timedelta(days=i)
                     BookedDay.objects.create(day=day, reservation=self)
                 return
+        return super().save(*args, **kwargs)
 
     def in_progress(self):
         now = timezone.now().date()

@@ -30,7 +30,7 @@
                     <td class="text-base font-medium">{{reservation.status|capfirst}}</td>
                     <td class="">
                         <button class="button w-3/4 mt-0 text-xs ">
-                            <a href="#">Confirm</a>
+                            <a href="{% url 'reservations:confirm' reservation.pk %}">Confirm</a>
                         </button>
                     </td>
                     <td>
