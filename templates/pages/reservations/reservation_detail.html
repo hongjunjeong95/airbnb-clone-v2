@@ -9,48 +9,50 @@
 {% block content %}
     <div class="flex flex-col items-center justify-items-center">
         <div class="w-10/12">
-        <h1 class="text-3xl font-bold">{{room.name}}</h1>
-        <div class="flex text-gray-500 mb-5">
-            <div class="rating">
-            <i class="fas fa-star text-red-500"></i>
-            <span class="font-bold">{{room.get_review_points}}</span>
-            <span class=" font-normal">({{room.reviews.count}})</span>
-            <span class="mx-1">&centerdot;</span>
+            <div class="grid grid-cols-2 grid-rows-2-200px gap-2 mb-12">
+                {% if room.get_first_photo is not None %}
+                    <img src="{{room.get_first_photo}}" class="row-span-full rounded-tl-lg rounded-bl-lg h-full w-full bg-cover bg-center" alt="Room Photo">
+                {% endif %}
+                <div class="grid grid-cols-2 grid-rows-2-200px gap-2">
+                    {% for index, photo in room.get_four_photo %}
+                        {% remainder_op index as remainder %}
+                        <img src="{{photo.file.url}}" class="h-full w-full bg-cover bg-center {% if remainder == 1 %}rounded-tr-lg{% elif remainder == 3 %}rounded-br-lg{% endif %}" alt="Room Photo">
+                    {% endfor %}
+                </div>
             </div>
-            {% if room.host.superhost %}
-                <span class="ml-1">Superhost</span>
-                <span class="mx-2">&centerdot;</span>
-            {% endif %}
-            <div class="font-medium">
-            <span class="mr-1">{{room.address}},</span>
-            <span class="mr-1">{{room.city}},</span>
-            <span>{{room.country.name}}</span>
-            </div>
+            <main class="flex flex-col">
+                <div class="flex items-center ">
+                    <h1 class="text-3xl font-bold mb-4">{{room.name}}</h1>
+                    <span class="text-lg font-bold mb-2 ml-4 {% if reservation.status == 'pending' %} text-yellow-500 {% elif reservation.status == 'canceled' %} text-red-600 {% else %} text-green-600 {% endif %}">{{reservation.status|capfirst}}</span>
+                </div>
+                <div class="flex text-gray-500 mb-5">
+                    <div class="rating">
+                        <i class="fas fa-star text-red-500"></i>
+                        <span class="font-bold">{{room.get_review_points}}</span>
+                        <span class=" font-normal">({{room.reviews.count}})</span>
+                        <span class="mx-1">&centerdot;</span>
+                    </div>
+                    {% if room.host.superhost %}
+                        <span class="ml-1">Superhost</span>
+                        <span class="mx-2">&centerdot;</span>
+                    {% endif %}
+                    <div class="font-medium">
+                        <span class="mr-1">{{room.address}},</span>
+                        <span class="mr-1">{{room.city}},</span>
+                        <span>{{room.country.name}}</span>
+                    </div>
+                </div>
+                <div class="flex mb-10 items-center">
+                    
+                    <button class="button w-1/5 bg-red-500">
+                        <a  href="{% url 'reservations:cancel' reservation.pk %}">Cancel Reservation</a>
+                    </button>
+                </div>
+                
+                <div class="w-3/5 grid grid-cols-2 gap-10 mr-40 border-b border-gray-300 mb-6 pb-6">
+                    {% include 'mixins/calendar.html' with page="reservation_page" reservation="reservation" %}
+                </div>
+            </main>
         </div>
-        <div class="grid grid-cols-2 grid-rows-2-200px gap-2 mb-12">
-
-            {% if room.get_first_photo is not None %}
-            <img src="{{room.get_first_photo}}" class="row-span-full rounded-tl-lg rounded-bl-lg h-full w-full bg-cover bg-center" alt="Room Photo">
-            {% endif %}
-            <div class="grid grid-cols-2 grid-rows-2-200px gap-2">
-            {% for index, photo in room.get_four_photo %}
-                {% remainder_op index as remainder %}
-                <img src="{{photo.file.url}}" class="h-full w-full bg-cover bg-center {% if remainder == 1 %}rounded-tr-lg{% elif remainder == 3 %}rounded-br-lg{% endif %}" alt="Room Photo">
-            {% endfor %}
-            </div>
-        </div>
-        <main class="flex flex-col">
-            <div class="flex mb-10 items-center">
-                <span class="text-3xl font-bold mr-10">{{reservation.status|capfirst}}</span>
-                <button class="button w-1/5 bg-red-500">
-                    <a  href="{% url 'reservations:cancel' reservation.pk %}">Cancel</a>
-                </button>
-            </div>
-            
-            <div class="w-3/5 grid grid-cols-2 gap-10 mr-40 border-b border-gray-300 mb-6 pb-6">
-                {% include 'mixins/calendar.html' with page="reservation_page" reservation="reservation" %}
-            </div>
-        </main>
-
-</div>
+    </div>
 {% endblock content %}
