@@ -42,6 +42,8 @@ class CustomUserAdmin(UserAdmin):
                     "currency",
                     "birthdate",
                     "superhost",
+                    "email_verified",
+                    "email_secret",
                 )
             },
         ),

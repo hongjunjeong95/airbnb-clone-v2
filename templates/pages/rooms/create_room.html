@@ -12,7 +12,7 @@
   <div class="background">
     <div class="wrap">
       <h1 class="text-3xl font-bold pb-6 pt-3 text-center">Create Room</h1>
-      <form method="post" class="form">
+      <form method="post" class="form" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="form_input rounded-tr-lg rounded-tl-lg">
           <input type="text" name="name" placeholder="Name" required>

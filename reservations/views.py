@@ -1,6 +1,8 @@
 import datetime
 from django.contrib import messages
 from django.shortcuts import redirect, reverse, render
+from django.core.paginator import Paginator
+
 from users.exception import LoggedInOnlyView
 from . import models as reservation_models
 from rooms import models as room_models
@@ -61,6 +63,26 @@ def cancelReservation(request, pk):
         room = reservation.room
         reservation.delete()
         return redirect(reverse("rooms:room-detail", kwargs={"pk": room.pk}))
+    except reservation_models.Reservation.DoesNotExist:
+        messages.error(request, "Rservation does not exist")
+        return redirect(reverse("core:home"))
+
+
+def reservationRoomList(request, pk):
+    try:
+        page = int(request.GET.get("page", 1))
+        reservations = reservation_models.Reservation.objects.filter(room__host_id=pk)
+        qs = []
+        for reservation in reservations:
+            if reservation.room not in qs:
+                qs.append(reservation.room)
+        paginator = Paginator(qs, 8, orphans=4)
+        rooms = paginator.get_page(page)
+        return render(
+            request,
+            "pages/reservations/reservation_room_list.html",
+            context={"rooms": rooms},
+        )
     except reservation_models.Reservation.DoesNotExist:
         messages.error(request, "Rservation does not exist")
         return redirect(reverse("core:home"))

@@ -39,7 +39,7 @@ class SignUpView(mixins.LoggedOutOnlyView, FormView):
         except IntegrityError:
             messages.error(
                 self.request,
-                "IntegrityError has occured. That is the user already exists in db",
+                "IntegrityError has occured. The user already exists in db",
             )
             return redirect(reverse("users:signup"))
 

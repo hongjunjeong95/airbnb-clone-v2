@@ -6,8 +6,9 @@
 {% endblock page_title %}
 
 {% block content %}
-  <div class="flex justify-center items-center mb-20">
-    <div class="profile">
+  <div class="grid grid-cols-3 items-center px-16 mb-20">
+    <div></div>
+    <div class="profile w-full">
       <div class="profile__info">
         <div class="mb-4">
           {% include 'mixins/avatar.html' with user=user_obj %}
@@ -81,6 +82,12 @@
         </button>
       {% endif %}
     </div>
+    <div class="w-full h-full flex justify-center items-start">
+      <button class="button w-1/2">
+        <a href="{% url 'reservations:room-list' user.pk %}">Reservation List</a>
+      </button>
+    </div>
+    
   </div>
   <div class="flex flex-col items-center justify-items-center">
     <div class="w-10/12">

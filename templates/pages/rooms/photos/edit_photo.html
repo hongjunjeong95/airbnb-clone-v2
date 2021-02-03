@@ -11,7 +11,7 @@
   <div class="background">
     <div class="wrap">
       <h1 class="text-3xl font-bold pb-6 pt-3 text-center">Edit Photo('{{photo}}')</h1>
-      <form method="post" class="form">
+      <form method="post" class="form" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="form_input rounded-lg flex">
           <label for="caption">Caption:</label>

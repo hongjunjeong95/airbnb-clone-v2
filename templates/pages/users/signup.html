@@ -9,7 +9,7 @@
 {% block content %}
   <div class="background">
     <div class="wrap">
-      <form action="{% url 'users:signup' %}" method="post" class="form">
+      <form action="{% url 'users:signup' %}" method="post" class="form" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="form_input rounded-tl-lg rounded-tr-lg">
           {{form.first_name}}
@@ -20,6 +20,14 @@
         <div class="form_input">
           {{form.email}}
         </div>
+        <div class="form_input">
+          {{form.password}}
+        </div>
+        <div class="form_input">
+          {{form.password1}}
+        </div>
+
+
         <div class="form_input">
           <label for="{{form.avatar.id_for_label}}" class="text-lg font-bold">Avatar</label>
           {{form.avatar}}
