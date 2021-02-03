@@ -5,7 +5,9 @@
 {% endblock page_title %}
 
 
-{% block search-bar %}{% endblock search-bar %}
+{% block search-bar %}
+<div></div>
+{% endblock search-bar %}
   
 
 {% block content %}
@@ -16,6 +18,7 @@
         <div class="select rounded-tr-lg rounded-tl-lg">
           <label for="country">Country</label>
           <select name="country" class="w-2/3" id="country">
+            <option>Any Kind</option>
             {% for country in countries %}
               <option value="{{country.code}}" {% if s_country == country.code %} selected {% endif %}>{{country.name}}</option>
             {% endfor %}
@@ -129,14 +132,13 @@
       </form>
     </div>
   </div>
-
-
-  {% for room in rooms %}
-    <h1>
-      <a href="{% url 'rooms:room-detail' room.pk %}">{{room.name}}</a>
-    </h1>
-  {% endfor %}
-
+  <div class="flex flex-col items-center justify-items-center mt-10">
+    <div class="w-10/12">
+        {% include 'mixins/room_card.html' with rooms=rooms %}
+        <div class="flex justify-center mt-20 itmes-center">
+        {% include 'mixins/page_number.html' with page=rooms %}
+      </div>
+    </div>
+  </div>
   {% include 'mixins/page_number.html' with page=rooms%}
-    
 {% endblock content %}
