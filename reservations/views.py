@@ -42,13 +42,13 @@ def createReservation(request, room_pk, year, month, day):
 
 def reservationList(request, user_pk):
     try:
-        reservations = reservation_models.Reservation.objects.filter(guest_id=user_pk)
-        qs = []
-        for reservation in reservations:
+        qs = reservation_models.Reservation.objects.filter(guest_id=user_pk)
+
+        for reservation in qs:
             # Route Protection
             if reservation.guest != request.user:
                 raise Http404()
-            qs.append(reservation.room)
+
         page = request.GET.get("page", 1)
         if page == "":
             page = 1
@@ -56,8 +56,8 @@ def reservationList(request, user_pk):
             page = int(page)
         page_sector = (page - 1) // 5
         page_sector = page_sector * 5
-        paginator = Paginator(reservations, 8, orphans=4)
-        rooms = paginator.get_page(page)
+        paginator = Paginator(qs, 8, orphans=4)
+        reservations = paginator.get_page(page)
         return render(
             request,
             "pages/reservations/reservation_list.html",
