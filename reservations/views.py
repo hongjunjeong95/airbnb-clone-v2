@@ -68,9 +68,18 @@ def cancelReservation(request, pk):
         return redirect(reverse("core:home"))
 
 
-def reservationRoomList(request, pk):
+def reservationList(request, pk):
     try:
-        page = int(request.GET.get("page", 1))
+        page = request.GET.get("page", 1)
+
+        if page == "":
+            page = 1
+        else:
+            page = int(page)
+
+        page_sector = (page - 1) // 5
+        page_sector = page_sector * 5
+
         reservations = reservation_models.Reservation.objects.filter(room__host_id=pk)
         qs = []
         for reservation in reservations:
@@ -80,8 +89,37 @@ def reservationRoomList(request, pk):
         rooms = paginator.get_page(page)
         return render(
             request,
+            "pages/reservations/reservation_list.html",
+            context={"rooms": rooms, "page_sector": page_sector},
+        )
+    except reservation_models.Reservation.DoesNotExist:
+        messages.error(request, "Rservation does not exist")
+        return redirect(reverse("core:home"))
+
+
+def reservationRoomList(request, user_pk, room_pk):
+    try:
+        page = request.GET.get("page", 1)
+
+        if page == "":
+            page = 1
+        else:
+            page = int(page)
+
+        page_sector = (page - 1) // 5
+        page_sector = page_sector * 5
+
+        qs = reservation_models.Reservation.objects.filter(
+            room__host_id=user_pk, room_id=room_pk
+        )
+        room_name = qs[0].room.name
+
+        paginator = Paginator(qs, 8, orphans=4)
+        reservations = paginator.get_page(page)
+        return render(
+            request,
             "pages/reservations/reservation_room_list.html",
-            context={"rooms": rooms},
+            context={"reservations": reservations, "room_name": room_name},
         )
     except reservation_models.Reservation.DoesNotExist:
         messages.error(request, "Rservation does not exist")

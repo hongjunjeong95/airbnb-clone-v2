@@ -7,12 +7,48 @@
 {% endblock page_title %}
 
 {% block content %}
-    <div class="flex flex-col items-center justify-items-center">
-        <div class="w-10/12">
-            {% include 'mixins/room_card.html' with rooms=rooms %}
-            <div class="flex justify-center mt-20 itmes-center">
-                {% include 'mixins/page_number.html' with page=rooms %}
-            </div>
+
+<div class="flex flex-col items-center justify-items-center">
+    <div class="w-10/12">
+        <div class="mb-8 mx-4">
+            <h1 class="font-bold text-4xl ">{{room_name}}</h1>
+        </div>
+        <table class="w-full" border="1" bordercolor="blue" width="300px" height="150px" align = "center">
+            <th >Room Name</th>
+            <th>Guest</th>
+            <th width="180px">Check In</th>
+            <th width="180px">Check Out</th>
+            <th width="180px">Status</th>
+            <th width="180px">Confirm</th>
+            <th width="180px">Cancel</th>
+            {% for reservation in reservations %}
+                <tr align="center">
+                    <td class="text-base font-medium">{{reservation.room.name}}</td>
+                    <td class="text-base font-medium">{{reservation.guest}}</td>
+                    <td class="text-base font-medium">{{reservation.check_in}}</td>
+                    <td class="text-base font-medium">{{reservation.check_out}}</td>
+                    <td class="text-base font-medium">{{reservation.status|capfirst}}</td>
+                    <td class="">
+                        <button class="button w-3/4 mt-0 text-xs ">
+                            <a href="#">Confirm</a>
+                        </button>
+                    </td>
+                    <td>
+                        <button class="button w-3/4 text-xs mt-0  bg-red-500">
+                            <a  href="{% url 'reservations:cancel' reservation.pk %}">Cancel</a>
+                        </button>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+        <div class="flex justify-center mt-6 itmes-center">
+            <button class="button bg-gray-700 w-1/6">
+                <a href="{% url 'reservations:list' user.pk %}">Back</a>
+            </button>
+        </div>
+        <div class="flex justify-center mt-20 itmes-center">
+            {% include 'mixins/page_number.html' with page=reservations %}
         </div>
     </div>
+</div>
 {% endblock content %}

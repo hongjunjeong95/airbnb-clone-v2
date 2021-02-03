@@ -20,7 +20,12 @@ urlpatterns = [
         name="cancel",
     ),
     path(
-        "<int:pk>/reservation/room-list/",
+        "<int:pk>/reservation/list/",
+        reservation_views.reservationList,
+        name="list",
+    ),
+    path(
+        "<int:user_pk>/reservation/<int:room_pk>/room-list/",
         reservation_views.reservationRoomList,
         name="room-list",
     ),
