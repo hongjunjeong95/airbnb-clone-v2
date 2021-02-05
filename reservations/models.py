@@ -1,5 +1,6 @@
 import datetime
 from django.db import models
+from django.db.models import Q
 from django.utils import timezone
 from core import models as core_models
 
@@ -59,11 +60,9 @@ class Reservation(core_models.TimeStampedModel):
             if booked_room_existed:
 
                 # Check if the days are reserved with that room
-                bookedDays = (
-                    BookedDay.objects.filter(reservation__room=self.room)
-                    .filter(day__range=(start, end))
-                    .exists()
-                )
+                bookedDays = BookedDay.objects.filter(
+                    Q(reservation__room=self.room) & Q(day__range=(start, end))
+                ).exists()
                 if not bookedDays:
                     super().save(*args, **kwargs)
                     for i in range(difference.days + 1):
