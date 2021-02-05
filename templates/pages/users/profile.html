@@ -86,9 +86,12 @@
         </button>
       {% endif %}
     </div>
-    <div class="w-full h-full flex justify-center items-start">
+    <div class="w-full h-full flex flex-col justify-start items-center">
       <button class="button w-1/2">
         <a href="{% url 'reservations:host-list' user.pk %}">Reservation Host List</a>
+      </button>
+      <button class="button w-1/2 bg-red-500">
+        <a href="{% url 'lists:favs' %}">My Favorite Home List ({{list_room_count}})</a>
       </button>
     </div>
     

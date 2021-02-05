@@ -1,4 +1,5 @@
-from django.shortcuts import redirect, reverse
+from django.shortcuts import redirect, reverse, render
+from django.core.paginator import Paginator
 from . import models as list_models
 from rooms import models as room_models
 
@@ -18,3 +19,27 @@ def toggleList(request, room_pk):
         elif action == "remove":
             the_list.rooms.remove(room)
     return redirect(reverse("core:home"))
+
+
+def favs(request):
+    try:
+        page = request.GET.get("page", 1)
+
+        if page == "":
+            page = 1
+        else:
+            page = int(page)
+
+        page_sector = ((page - 1) // 5) * 5
+
+        the_list = list_models.List.objects.get(user=request.user)
+        qs = the_list.rooms.all()
+        paginator = Paginator(qs, 12, orphans=6)
+        rooms = paginator.get_page(page)
+        return render(
+            request,
+            "pages/lists/list_detail.html",
+            context={"rooms": rooms, "page_sector": page_sector},
+        )
+    except list_models.List.DoesNotExist:
+        return redirect(reverse("core:home"))

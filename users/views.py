@@ -10,6 +10,7 @@ from django.shortcuts import redirect, reverse, render
 from django.db.utils import IntegrityError
 from django.core.paginator import Paginator
 from . import forms, models, mixins
+from lists import models as list_models
 from .exception import (
     GithubException,
     KakaoException,
@@ -281,9 +282,11 @@ def log_out(request):
 def userDetail(request, pk):
     try:
         user_obj = models.User.objects.get(pk=pk)
+        the_list = list_models.List.objects.get(user=request.user)
+        list_room_count = the_list.rooms.count()
+
         page = int(request.GET.get("page", 1))
-        page_sector = (page - 1) // 5
-        page_sector = page_sector * 5
+        page_sector = ((page - 1) // 5) * 5
         qs = user_obj.rooms.all()
         paginator = Paginator(qs, 12, orphans=6)
         rooms = paginator.get_page(page)
@@ -291,7 +294,12 @@ def userDetail(request, pk):
         return render(
             request,
             "pages/users/profile.html",
-            context={"user_obj": user_obj, "rooms": rooms, "page_sector": page_sector},
+            context={
+                "user_obj": user_obj,
+                "rooms": rooms,
+                "page_sector": page_sector,
+                "list_room_count": list_room_count,
+            },
         )
     except models.User.DoesNotExist:
         messages.error(request, "User does not exist")
