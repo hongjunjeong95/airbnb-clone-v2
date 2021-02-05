@@ -1,3 +1,5 @@
+{% load on_favs %}
+
 <ul class="grid grid-cols-4 grid-rows-2-300px auto-rows-300px gap-4 gap-y-6">
   {% for room in rooms %}
     <li class="w-full">
@@ -7,11 +9,20 @@
         <a href="{% url 'rooms:room-detail' room.pk %}">
       {% endif %}
         <div class="rounded-lg bg-cover bg-center h-3/4 mb-2" style="background-image:url('{{room.get_first_photo}}')">
-          <div class="flex items-center {% if room.host.superhost %}justify-between{% else %}justify-end{% endif %}">
+          <div class="flex items-center relative top-4 {% if room.host.superhost %}justify-between{% else %}justify-end{% endif %}">
             {% if room.host.superhost %}
-              <span class="bg-white p-2 ml-2  mt-2 rounded-lg font-semibold justify-start">Superhost</span>
+              <span class="bg-white p-2 ml-3 rounded-lg font-semibold justify-start">Superhost</span>
             {% endif %}
-            <i class="far fa-heart mr-2 mt-2 text-2xl text-white justify-end text-center"></i>
+            {% on_favs room as on_favs_boolean %}
+            {% if on_favs_boolean %}
+              <a href="{% url 'lists:toggle-list' room.pk %}?action=remove" class="mr-3">
+                <i class="fas text-red-500 fa-heart  text-2xl justify-end text-center"></i>
+              </a>
+            {% else %}
+              <a href="{% url 'lists:toggle-list' room.pk %}?action=add" class="mr-3">
+                <i class="far fa-heart  text-2xl text-white justify-end text-center"></i>
+              </a>
+            {% endif %}
           </div>
         </div>
         <div class="h-1/4">
