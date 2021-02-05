@@ -1,7 +1,5 @@
 from django.shortcuts import render, redirect, reverse
-from django.db.models import Q
 from django.contrib import messages
-from django.db.models.query import EmptyQuerySet
 from . import models as conversation_models
 from rooms import models as room_models
 from users import models as user_models
@@ -11,12 +9,14 @@ def go_conversation(request, room_pk, host_pk, guest_pk):
     room = room_models.Room.objects.get(pk=room_pk)
     host = user_models.User.objects.get(pk=host_pk)
     guest = user_models.User.objects.get(pk=guest_pk)
-
-    conversation = conversation_models.Conversation.objects.filter(
-        participants=host
-    ).get(participants=guest)
-
-    if not conversation:
+    print(host, guest)
+    if host == guest:
+        return redirect(reverse("core:home"))
+    try:
+        conversation = conversation_models.Conversation.objects.filter(
+            participants=host
+        ).get(participants=guest)
+    except conversation_models.Conversation.DoesNotExist:
         conversation = conversation_models.Conversation.objects.create()
         conversation.participants.add(host, guest)
     return render(

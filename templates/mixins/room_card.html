@@ -2,7 +2,7 @@
 
 <ul class="grid grid-cols-4 grid-rows-2-300px auto-rows-300px gap-4 gap-y-6">
   {% for room in rooms %}
-    <li class="w-full">
+    <li class="w-full relative">
       {% if url_page == 'reservations:host-room-list' %}
         <a href="{% url url_page request.user.pk room.pk %}">
       {% else %}
@@ -14,15 +14,6 @@
               <span class="bg-white p-2 ml-3 rounded-lg font-semibold justify-start">Superhost</span>
             {% endif %}
             {% on_favs room as on_favs_boolean %}
-            {% if on_favs_boolean %}
-              <a href="{% url 'lists:toggle-list' room.pk %}?action=remove" class="mr-3">
-                <i class="fas text-red-500 fa-heart  text-2xl justify-end text-center"></i>
-              </a>
-            {% else %}
-              <a href="{% url 'lists:toggle-list' room.pk %}?action=add" class="mr-3">
-                <i class="far fa-heart  text-2xl text-white justify-end text-center"></i>
-              </a>
-            {% endif %}
           </div>
         </div>
         <div class="h-1/4">
@@ -36,6 +27,15 @@
           </div>
         </div>
       </a>
+      {% if on_favs_boolean %}
+        <a href="{% url 'lists:toggle-list' room.pk %}?action=remove" class="mr-3 absolute top-5 right-2">
+          <i class="fas text-red-500 fa-heart  text-2xl justify-end text-center"></i>
+        </a>
+      {% else %}
+        <a href="{% url 'lists:toggle-list' room.pk %}?action=add" class="mr-3 absolute top-5 right-2">
+          <i class="far fa-heart  text-2xl text-white justify-end text-center"></i>
+        </a>
+      {% endif %}
     </li>
   {% endfor %}
 </ul>
