@@ -1,13 +1,13 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{% block page_title %}{% endblock page_title %} | Hair bnb</title>
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
-  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-</head>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block page_title %}{% endblock page_title %} | Hair bnb</title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+  </head>
   <body class="text-gray-800 font-light mt-28 ">
     {% include 'partials/messages.html' %}
     <header class='grid grid-cols-3 justify-between items-center px-14 border-b-2 mb-9 fixed w-full h-20 bg-white inset-0'>
