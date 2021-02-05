@@ -2,6 +2,7 @@ from django.shortcuts import redirect, reverse, render
 from django.core.paginator import Paginator
 from . import models as list_models
 from rooms import models as room_models
+from django.contrib import messages
 
 
 def toggleList(request, room_pk):
@@ -42,4 +43,5 @@ def favs(request):
             context={"rooms": rooms, "page_sector": page_sector},
         )
     except list_models.List.DoesNotExist:
+        messages.error(request, "List does not exist")
         return redirect(reverse("core:home"))

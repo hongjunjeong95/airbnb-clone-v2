@@ -197,7 +197,9 @@
                         <div class="flex flex-col">
                             <span class="mb-4">Response rate : 100%</span>
                             <span class="mb-6">Response time : In one hour</span>
-                            <button class="button px-1 py-2 w-1/2">Contact the host</button>
+                            <button class="button px-1 py-2 w-1/2">
+                                <a href="{% url 'conversations:conversation' room.pk room.host.pk user.pk %}">Contact the host</a>
+                            </button>
                         </div>
                     </div>
                 </div>
