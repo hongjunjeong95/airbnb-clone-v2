@@ -9,6 +9,8 @@ from django.urls import reverse_lazy
 from django.shortcuts import redirect, reverse, render
 from django.db.utils import IntegrityError
 from django.core.paginator import Paginator
+from django.utils import translation
+from django.http import HttpResponse
 from . import forms, models, mixins
 from lists import models as list_models
 from conversations import models as conversation_models
@@ -506,3 +508,10 @@ def switch_hosting(request):
     except KeyError:
         request.session["is_hosting"] = True
     return redirect(reverse("core:home"))
+
+
+def switch_language(request):
+    lang = request.GET.get("lang", None)
+    if lang is not None:
+        request.session[translation.LANGUAGE_SESSION_KEY] = lang
+    return HttpResponse(status=200)

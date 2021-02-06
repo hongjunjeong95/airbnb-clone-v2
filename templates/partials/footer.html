@@ -1,3 +1,21 @@
-<footer class="py-8 border-t border-gray-200 mt-16">
-  <span class="flex justify-center">&copy; {{year}} HairBnb, Inc. All rights reserved</span>
+{% load i18n %}
+<footer class="pt-16 pb-32 border-t border-gray-200 mt-16">
+  <span class="flex justify-center">&copy; {{year}} HairBnb, Inc.
+    {% blocktrans %} All rights reserved{% endblocktrans %}
+  </span>
+  <form action="" id="jsLanguageForm" class="border border-gray-500 p-4 w-40 ml-32 rounded">
+    {% get_current_language as LANGUAGE_CODE %}
+    <select name="language" id="js-lang" class="w-full">
+      <option value="en" 
+        {% if LANGUAGE_CODE == 'en' %}
+          selected
+        {% endif %}
+        >English</option>
+      <option value="ko"
+        {% if LANGUAGE_CODE == 'ko' %}
+          selected
+        {% endif %}
+        >Korean</option>
+    </select>
+  </form>
 </footer>

@@ -1,8 +1,9 @@
+{% load i18n %}
 {% if page.has_previous %}
   {% if page_sector|add:-4 <= 1 %}
-    <a href="?page=1" class="mr-3 text-lg font-semibold">Prev</a>
+    <a href="?page=1" class="mr-3 text-lg font-semibold">{% trans 'Prev' %}</a>
   {% else %}
-    <a href="?page={{page_sector|add:-4}}" class="mr-3 text-lg font-semibold">Prev</a>
+    <a href="?page={{page_sector|add:-4}}" class="mr-3 text-lg font-semibold">{% trans 'Prev' %}</a>
   {% endif %}
 {% endif %}
 
@@ -14,8 +15,8 @@
 
 {% if page.has_next %}
   {% if page_sector|add:6 >= page.paginator.num_pages %}
-    <a href="?page={{page.paginator.num_pages}}" class="ml-1 text-lg font-semibold">Next</a>
+    <a href="?page={{page.paginator.num_pages}}" class="ml-1 text-lg font-semibold">{% trans 'Next' %}</a>
   {% else %}
-    <a href="?page={{page_sector|add:6}}" class="ml-1 text-lg font-semibold">Next</a>
+    <a href="?page={{page_sector|add:6}}" class="ml-1 text-lg font-semibold">{% trans 'Next' %}</a>
   {% endif %}
 {% endif %}

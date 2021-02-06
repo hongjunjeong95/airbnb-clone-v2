@@ -31,4 +31,5 @@ urlpatterns = [
         name="complete-verification",
     ),
     path("switch-hosting", user_views.switch_hosting, name="switch-hosting"),
+    path("switch-language", user_views.switch_language, name="switch-language"),
 ]
