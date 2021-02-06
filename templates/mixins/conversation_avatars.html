@@ -1,0 +1,6 @@
+{% for participant in conversation.participants.all %}
+    {% include 'mixins/avatar.html' with user=participant %}
+    {% if forloop.first %}
+        <span class="font-bold text-xl mx-6">&</span>
+    {% endif %}
+{% endfor %}

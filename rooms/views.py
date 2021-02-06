@@ -132,7 +132,7 @@ def roomDetail(request, pk):
 
         return render(
             request,
-            "pages/rooms/detail.html",
+            "pages/rooms/room_detail.html",
             context={"room": room, "joined_month": month},
         )
     except room_models.Room.DoesNotExist:
@@ -363,8 +363,7 @@ def photoDetail(request, pk):
         else:
             page = int(page)
 
-        page_sector = (page - 1) // 5
-        page_sector = page_sector * 5
+        page_sector = ((page - 1) // 5)*5
 
         room = room_models.Room.objects.get(pk=pk)
         qs = room.photos.all()

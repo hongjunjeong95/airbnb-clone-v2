@@ -11,6 +11,7 @@ from django.db.utils import IntegrityError
 from django.core.paginator import Paginator
 from . import forms, models, mixins
 from lists import models as list_models
+from conversations import models as conversation_models
 from .exception import (
     GithubException,
     KakaoException,
@@ -282,8 +283,6 @@ def log_out(request):
 def userDetail(request, pk):
     try:
         user_obj = models.User.objects.get(pk=pk)
-        the_list = list_models.List.objects.get(user=request.user)
-        list_room_count = the_list.rooms.count()
 
         page = int(request.GET.get("page", 1))
         page_sector = ((page - 1) // 5) * 5
@@ -291,19 +290,30 @@ def userDetail(request, pk):
         paginator = Paginator(qs, 12, orphans=6)
         rooms = paginator.get_page(page)
 
-        return render(
-            request,
-            "pages/users/profile.html",
-            context={
-                "user_obj": user_obj,
-                "rooms": rooms,
-                "page_sector": page_sector,
-                "list_room_count": list_room_count,
-            },
+        conversations = conversation_models.Conversation.objects.filter(
+            participants=request.user
         )
+        conversation_count = conversations.count()
+
+        the_list = list_models.List.objects.get(user=request.user)
+        list_room_count = the_list.rooms.count()
+
     except models.User.DoesNotExist:
         messages.error(request, "User does not exist")
         return redirect(reverse("core:home"))
+    except list_models.List.DoesNotExist:
+        list_room_count = 0
+    return render(
+        request,
+        "pages/users/profile.html",
+        context={
+            "user_obj": user_obj,
+            "rooms": rooms,
+            "page_sector": page_sector,
+            "list_room_count": list_room_count,
+            "conversation_count": conversation_count,
+        },
+    )
 
 
 def updateProfile(request, pk):

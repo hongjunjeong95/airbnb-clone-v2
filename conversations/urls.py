@@ -6,12 +6,22 @@ app_name = "conversations"
 
 urlpatterns = [
     path(
-        "<int:room_pk>/<int:host_pk>/<int:guest_pk>/",
-        views.go_conversation,
-        name="conversation",
+        "<int:host_pk>/<int:guest_pk>/",
+        views.createConversation,
+        name="create-conversation",
     ),
     path(
-        "<int:room_pk>/<int:conversation_pk>/",
+        "conversation-list/",
+        views.conversationList,
+        name="conversation-list",
+    ),
+    path(
+        "<int:pk>/conversation-detail/",
+        views.conversationDetail,
+        name="conversation-detail",
+    ),
+    path(
+        "<int:conversation_pk>/messages/",
         views.createMessage,
         name="create-message",
     ),

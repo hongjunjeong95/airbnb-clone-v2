@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block page_title %}
+    {{request.user}}'s Conversation List
+{% endblock page_title %}
+
+{% block content %}
+    <div class="flex flex-col items-center justify-items-center">
+        <div class="w-10/12">
+                <div class="grid grid-cols-4 gap-4">
+                    {% for conversation in conversations %}
+                        <a href="{% url 'conversations:conversation-detail' conversation.pk %}" class="border border-gray-500 p-6 rounded-lg flex justify-center items-center">
+                            {% include 'mixins/conversation_avatars.html' with conversation=conversation %}
+                        </a>
+                    {% endfor %}
+                </div>
+            <div class="flex justify-center mt-20 itmes-center">
+                {% include 'mixins/page_number.html' with page=rooms %}
+            </div>
+        </div>
+    </div>
+{% endblock content %}
