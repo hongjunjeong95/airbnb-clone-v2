@@ -9,8 +9,11 @@
     "@babel/register": "^7.12.10",
     "@tailwindcss/line-clamp": "^0.2.0",
     "autoprefixer": "^10.2.3",
+    "babelify": "^10.0.0",
+    "del": "^6.0.0",
     "gulp": "^4.0.2",
     "gulp-autoprefixer": "^7.0.1",
+    "gulp-bro": "^2.0.0",
     "gulp-csso": "^4.0.1",
     "gulp-postcss": "^9.0.0",
     "gulp-sass": "^4.1.0",
@@ -19,8 +22,8 @@
   },
   "devDependencies": {},
   "scripts": {
-    "dev": "gulp dev",
-    "css": "gulp css"
+    "build": "gulp build",
+    "dev": "gulp dev"
   },
   "repository": {
     "type": "git",
