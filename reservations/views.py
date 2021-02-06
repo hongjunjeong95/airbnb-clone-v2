@@ -19,7 +19,9 @@ def createReservation(request, room_pk, year, month, day):
             raise LoggedInOnlyView("Login First Please.")
         date_obj = datetime.datetime(year, month, day)
         room = room_models.Room.objects.get(pk=room_pk)
-        reservation_models.BookedDay.objects.get(day=date_obj, reservation__room=room)
+        reservation_models.BookedDay.objects.get_or_none(
+            day=date_obj, reservation__room=room
+        )
         raise CreateError()
     except (room_models.Room.DoesNotExist, CreateError):
         messages.error(request, "Can't reserve that room")
@@ -41,152 +43,146 @@ def createReservation(request, room_pk, year, month, day):
 
 
 def reservationList(request, user_pk):
-    try:
-        qs = reservation_models.Reservation.objects.filter(guest_id=user_pk)
-
-        for reservation in qs:
-            # Route Protection
-            if reservation.guest != request.user:
-                raise Http404()
-
-        page = request.GET.get("page", 1)
-        if page == "":
-            page = 1
-        else:
-            page = int(page)
-        page_sector = (page - 1) // 5
-        page_sector = page_sector * 5
-        paginator = Paginator(qs, 8, orphans=4)
-        reservations = paginator.get_page(page)
-        return render(
-            request,
-            "pages/reservations/reservation_list.html",
-            context={"reservations": reservations, "page_sector": page_sector},
-        )
-    except reservation_models.Reservation.DoesNotExist:
+    qs = reservation_models.Reservation.objects.filter(guest_id=user_pk)
+    if qs is None:
         messages.error(request, "Rservation does not exist")
         return redirect(reverse("core:home"))
+
+    for reservation in qs:
+        # Route Protection
+        if reservation.guest != request.user:
+            raise Http404()
+
+    page = request.GET.get("page", 1)
+    if page == "":
+        page = 1
+    else:
+        page = int(page)
+    page_sector = (page - 1) // 5
+    page_sector = page_sector * 5
+    paginator = Paginator(qs, 8, orphans=4)
+    reservations = paginator.get_page(page)
+    return render(
+        request,
+        "pages/reservations/reservation_list.html",
+        context={"reservations": reservations, "page_sector": page_sector},
+    )
 
 
 def reservationDetail(request, pk):
-    try:
-        reservation = reservation_models.Reservation.objects.get(pk=pk)
-        if reservation.guest != request.user:
-            raise Http404()
-        bookedDays = reservation.bookedDays.all()
-        days = []
-
-        for day in bookedDays:
-            day = str(day)
-            day = int(day.split("-")[2])
-            days.append(day)
-
-        room = reservation.room
-        return render(
-            request,
-            "pages/reservations/reservation_detail.html",
-            context={"room": room, "reservation": reservation, "days": days},
-        )
-    except room_models.Room.DoesNotExist:
+    reservation = reservation_models.Reservation.objects.get_or_none(pk=pk)
+    if reservation is None:
         messages.error(request, "Reservation does not exist")
         return redirect(reverse("core:home"))
+    if reservation.guest != request.user:
+        raise Http404()
+    bookedDays = reservation.bookedDays.all()
+    days = []
+
+    for day in bookedDays:
+        day = str(day)
+        day = int(day.split("-")[2])
+        days.append(day)
+
+    room = reservation.room
+    return render(
+        request,
+        "pages/reservations/reservation_detail.html",
+        context={"room": room, "reservation": reservation, "days": days},
+    )
 
 
 def cancelReservation(request, pk):
-    try:
-        reservation = reservation_models.Reservation.objects.get(pk=pk)
-        if reservation.guest != request.user or request.user != reservation.room.host:
-            raise Http404()
-        room = reservation.room
-        reservation.delete()
-        return redirect(reverse("rooms:room-detail", kwargs={"pk": room.pk}))
-    except reservation_models.Reservation.DoesNotExist:
+    reservation = reservation_models.Reservation.objects.get_or_none(pk=pk)
+    if reservation is None:
         messages.error(request, "Rservation does not exist")
         return redirect(reverse("core:home"))
+    if reservation.guest != request.user or request.user != reservation.room.host:
+        raise Http404()
+    room = reservation.room
+    reservation.delete()
+    return redirect(reverse("rooms:room-detail", kwargs={"pk": room.pk}))
 
 
 def confirmReservation(request, pk):
-    try:
-        reservation = reservation_models.Reservation.objects.get(pk=pk)
-        # Route Protection
-        if reservation.room.host != request.user:
-            raise Http404()
-        reservation.status = reservation_models.Reservation.STATUS_CONFIRMED
-        reservation.save()
-
-        room = reservation.room
-
-        user_pk = request.user.pk
-        room_pk = room.pk
-
-        return redirect(
-            reverse(
-                "reservations:host-room-list",
-                kwargs={
-                    "user_pk": user_pk,
-                    "room_pk": room_pk,
-                },
-            )
-        )
-    except reservation_models.Reservation.DoesNotExist:
+    reservation = reservation_models.Reservation.objects.get_or_none(pk=pk)
+    if reservation is None:
         messages.error(request, "Rservation does not exist")
         return redirect(reverse("core:home"))
+    # Route Protection
+    if reservation.room.host != request.user:
+        raise Http404()
+    reservation.status = reservation_models.Reservation.STATUS_CONFIRMED
+    reservation.save()
+
+    room = reservation.room
+
+    user_pk = request.user.pk
+    room_pk = room.pk
+
+    return redirect(
+        reverse(
+            "reservations:host-room-list",
+            kwargs={
+                "user_pk": user_pk,
+                "room_pk": room_pk,
+            },
+        )
+    )
 
 
 def reservationHostList(request, pk):
-    try:
-        reservations = reservation_models.Reservation.objects.filter(room__host_id=pk)
-        qs = []
-        for reservation in reservations:
-            # Route Protection
-            if reservation.room.host != request.user:
-                raise Http404()
-            if reservation.room not in qs:
-                qs.append(reservation.room)
-        page = request.GET.get("page", 1)
-        if page == "":
-            page = 1
-        else:
-            page = int(page)
-        page_sector = (page - 1) // 5
-        page_sector = page_sector * 5
-        paginator = Paginator(qs, 8, orphans=4)
-        rooms = paginator.get_page(page)
-        return render(
-            request,
-            "pages/reservations/reservation_host_list.html",
-            context={"rooms": rooms, "page_sector": page_sector},
-        )
-    except reservation_models.Reservation.DoesNotExist:
+    reservations = reservation_models.Reservation.objects.filter(room__host_id=pk)
+    if reservation is None:
         messages.error(request, "Rservation does not exist")
         return redirect(reverse("core:home"))
+    qs = []
+    for reservation in reservations:
+        # Route Protection
+        if reservation.room.host != request.user:
+            raise Http404()
+        if reservation.room not in qs:
+            qs.append(reservation.room)
+    page = request.GET.get("page", 1)
+    if page == "":
+        page = 1
+    else:
+        page = int(page)
+    page_sector = (page - 1) // 5
+    page_sector = page_sector * 5
+    paginator = Paginator(qs, 8, orphans=4)
+    rooms = paginator.get_page(page)
+    return render(
+        request,
+        "pages/reservations/reservation_host_list.html",
+        context={"rooms": rooms, "page_sector": page_sector},
+    )
 
 
 def reservationHostRoomList(request, user_pk, room_pk):
-    try:
-        qs = reservation_models.Reservation.objects.filter(
-            room__host_id=user_pk, room_id=room_pk
-        )
-        if qs[0].room.host != request.user:
-            raise Http404()
-        room_name = qs[0].room.name
-
-        page = request.GET.get("page", 1)
-
-        if page == "":
-            page = 1
-        else:
-            page = int(page)
-
-        page_sector = (page - 1) // 5
-        page_sector = page_sector * 5
-        paginator = Paginator(qs, 8, orphans=4)
-        reservations = paginator.get_page(page)
-        return render(
-            request,
-            "pages/reservations/reservation_host_room_list.html",
-            context={"reservations": reservations, "room_name": room_name},
-        )
-    except reservation_models.Reservation.DoesNotExist:
+    qs = reservation_models.Reservation.objects.filter(
+        room__host_id=user_pk, room_id=room_pk
+    )
+    if qs is None:
         messages.error(request, "Rservation does not exist")
         return redirect(reverse("core:home"))
+    if qs[0].room.host != request.user:
+        raise Http404()
+    room_name = qs[0].room.name
+
+    page = request.GET.get("page", 1)
+
+    if page == "":
+        page = 1
+    else:
+        page = int(page)
+
+    page_sector = (page - 1) // 5
+    page_sector = page_sector * 5
+    paginator = Paginator(qs, 8, orphans=4)
+    reservations = paginator.get_page(page)
+    return render(
+        request,
+        "pages/reservations/reservation_host_room_list.html",
+        context={"reservations": reservations, "room_name": room_name},
+    )

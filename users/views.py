@@ -155,11 +155,11 @@ def github_login_callback(request):
         if bio is None:
             raise GithubException("Can't get bio from profile_request")
 
-        try:
-            user = models.User.objects.get(email=email)
+        user = models.User.objects.get_or_none(email=email)
+        if user is not None:
             if user.login_method != models.User.LOGIN_GITHUB:
                 raise GithubException(f"Please login with {user.login_method}")
-        except models.User.DoesNotExist:
+        else:
             user = models.User.objects.create(
                 username=email,
                 first_name=name,
@@ -235,11 +235,11 @@ def kakao_login_callback(request):
         email = kakao_account.get("email", None)
         gender = kakao_account.get("gender", None)
 
-        try:
-            user = models.User.objects.get(email=email)
+        user = models.User.objects.get_or_none(email=email)
+        if user is not None:
             if user.login_method != models.User.LOGIN_KAKAO:
                 raise GithubException(f"Please login with {user.login_method}")
-        except models.User.DoesNotExist:
+        else:
             user = models.User.objects.create_user(
                 email=email,
                 username=email,
@@ -281,28 +281,28 @@ def log_out(request):
 
 
 def userDetail(request, pk):
-    try:
-        user_obj = models.User.objects.get(pk=pk)
-
-        page = int(request.GET.get("page", 1))
-        page_sector = ((page - 1) // 5) * 5
-        qs = user_obj.rooms.all()
-        paginator = Paginator(qs, 12, orphans=6)
-        rooms = paginator.get_page(page)
-
-        conversations = conversation_models.Conversation.objects.filter(
-            participants=request.user
-        )
-        conversation_count = conversations.count()
-
-        the_list = list_models.List.objects.get(user=request.user)
-        list_room_count = the_list.rooms.count()
-
-    except models.User.DoesNotExist:
+    user_obj = models.User.objects.get_or_none(pk=pk)
+    if user_obj is None:
         messages.error(request, "User does not exist")
         return redirect(reverse("core:home"))
-    except list_models.List.DoesNotExist:
+
+    page = int(request.GET.get("page", 1))
+    page_sector = ((page - 1) // 5) * 5
+    qs = user_obj.rooms.all()
+    paginator = Paginator(qs, 12, orphans=6)
+    rooms = paginator.get_page(page)
+
+    conversations = conversation_models.Conversation.objects.filter(
+        participants=request.user
+    )
+    conversation_count = conversations.count()
+
+    the_list = list_models.List.objects.get_or_none(user=request.user)
+    if the_list is None:
         list_room_count = 0
+    else:
+        list_room_count = the_list.rooms.count()
+
     return render(
         request,
         "pages/users/profile.html",
@@ -325,7 +325,10 @@ def updateProfile(request, pk):
             if request.user.pk != pk:
                 raise VerifyUser("Page Not found")
 
-            user = models.User.objects.get(pk=pk)
+            user = models.User.objects.get_or_none(pk=pk)
+            if user is None:
+                messages.error(request, "User does not exist")
+                return redirect(reverse("core:home"))
             genders = models.User.GENDER_CHOICES
             languages = models.User.LANGUAGE_CHOICES
             currencies = models.User.CURRENCY_CHOICES
@@ -343,9 +346,6 @@ def updateProfile(request, pk):
                 "pages/users/update_profile.html",
                 context={"user": user, **choices},
             )
-        except models.User.DoesNotExist:
-            messages.error(request, "User does not exist")
-            return redirect(reverse("core:home"))
         except LoggedInOnlyView as error:
             messages.error(request, error)
             return redirect("users:login")
@@ -359,7 +359,10 @@ def updateProfile(request, pk):
             if request.user.pk != pk:
                 raise VerifyUser("Page Not found")
 
-            user = models.User.objects.get(pk=pk)
+            user = models.User.objects.get_or_none(pk=pk)
+            if user is None:
+                messages.error(request, "User does not exist")
+                return redirect(reverse("core:home"))
 
             avatar = request.POST.get("avatar")
             if avatar is not None:
@@ -405,9 +408,7 @@ def updateProfile(request, pk):
             user.save()
             messages.success(request, f"{user.email} profile update succeded")
             return redirect(reverse("users:profile", kwargs={"pk": pk}))
-        except models.User.DoesNotExist:
-            messages.error(request, "User does not exist")
-            return redirect(reverse("core:home"))
+
         except LoggedInOnlyView as error:
             messages.error(request, error)
             return redirect("users:login")
@@ -420,18 +421,19 @@ def complete_verification(request, key):
     try:
         if request.user.is_authenticated:
             raise LoggedOutOnlyView("Please verify email first")
-        user = models.User.objects.get(email_secret=key)
+        user = models.User.objects.get_or_none(email_secret=key)
+        if user is None:
+            messages.error(request, "User does not exist")
+            return redirect(reverse("core:home"))
         user.email_secret = ""
         user.email_verified = True
         user.save()
         login(request, user)
         messages.success(request, f"{user.email} verification is completed")
-    except models.User.DoesNotExist:
-        messages.error(request, "User does not exist")
+        return redirect(reverse("core:home"))
     except LoggedOutOnlyView as error:
         messages.error(request, error)
         return redirect("core:home")
-    return redirect(reverse("core:home"))
 
 
 def change_password(request, pk):
@@ -443,16 +445,15 @@ def change_password(request, pk):
                 raise EmailLoggedInOnly("Page not found 404")
             if request.user.pk != pk:
                 raise VerifyUser("Page Not found 404")
-            user = models.User.objects.get(pk=pk)
-
+            user = models.User.objects.get_or_none(pk=pk)
+            if user is None:
+                messages.error(request, "User does not exist")
+                return redirect(reverse("core:home"))
             return render(
                 request,
                 "pages/users/change_password.html",
                 context={"user": user},
             )
-        except models.User.DoesNotExist:
-            print("User does not exist")
-            return redirect(reverse("core:home"))
         except LoggedInOnlyView as error:
             messages.error(request, error)
             return redirect("users:login")

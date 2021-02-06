@@ -25,7 +25,7 @@ def homeView(request):
         now = timezone.now()
         this_year = now.year
     except room_models.Room.DoesNotExist:
-        print("Model does not exsit")
+        messages.error(request, "Room does not exsit")
     except EmptyPage:
         print("Empty page")
 
@@ -126,18 +126,17 @@ def searchView(request):
 
 
 def roomDetail(request, pk):
-    try:
-        room = room_models.Room.objects.get(pk=pk)
-        month = room.host.date_joined.strftime("%b")
-
-        return render(
-            request,
-            "pages/rooms/room_detail.html",
-            context={"room": room, "joined_month": month},
-        )
-    except room_models.Room.DoesNotExist:
-        print("Model does not exsit")
+    room = room_models.Room.objects.get_or_none(pk=pk)
+    if room is None:
+        messages.error(request, "Room does not exsit")
         return redirect(reverse("core:home"))
+    month = room.host.date_joined.strftime("%b")
+
+    return render(
+        request,
+        "pages/rooms/room_detail.html",
+        context={"room": room, "joined_month": month},
+    )
 
 
 def createRoom(request):
@@ -234,7 +233,10 @@ def editRoom(request, pk):
                 raise LoggedInOnlyView("Page Not Found")
             if not request.session.get("is_hosting"):
                 raise HostOnly("Page Not Found")
-            room = room_models.Room.objects.get(pk=pk)
+            room = room_models.Room.objects.get_or_none(pk=pk)
+            if room is None:
+                messages.error(request, "Room does not exsit")
+                return redirect(reverse("core:home"))
 
             if request.user.pk != room.host.pk:
                 raise VerifyUser("Page Not Found")
@@ -266,9 +268,7 @@ def editRoom(request, pk):
                 "pages/rooms/edit_room.html",
                 context={"room": room, **form, **choices},
             )
-        except room_models.Room.DoesNotExist:
-            print("Model does not exsit")
-            return redirect(reverse("core:home"))
+
         except LoggedInOnlyView as error:
             messages.error(request, error)
             return redirect(reverse("core:home"))
@@ -334,16 +334,16 @@ def deleteRoom(request, pk):
     try:
         if not request.session.get("is_hosting"):
             raise HostOnly("Page Not Found")
-        room = room_models.Room.objects.get(pk=pk)
+        room = room_models.Room.objects.get_or_none(pk=pk)
+        if room is None:
+            messages.error(request, "Room does not exsit")
+            return redirect(reverse("core:home"))
 
         if request.user.pk != room.host.pk:
             raise VerifyUser("Page Not Found")
         room.delete()
         messages.success(request, f"Delete {room.name} successfully")
         return redirect(reverse("users:profile", kwargs={"pk": request.user.pk}))
-    except room_models.Room.DoesNotExist:
-        print("Model does not exsit")
-        return redirect(reverse("core:home"))
     except HostOnly as error:
         messages.error(request, error)
         return redirect(reverse("core:home"))
@@ -363,9 +363,13 @@ def photoDetail(request, pk):
         else:
             page = int(page)
 
-        page_sector = ((page - 1) // 5)*5
+        page_sector = ((page - 1) // 5) * 5
 
-        room = room_models.Room.objects.get(pk=pk)
+        room = room_models.Room.objects.get_or_none(pk=pk)
+        if room is None:
+            messages.error(request, "Room does not exsit")
+            return redirect(reverse("rooms:room-detail", kwargs={"pk": room.pk}))
+
         qs = room.photos.all()
         paginator = Paginator(qs, 10, orphans=5)
         photos = paginator.get_page(page)
@@ -382,9 +386,6 @@ def photoDetail(request, pk):
                 "room": room,
             },
         )
-    except room_models.Room.DoesNotExist:
-        print("Model does not exsit")
-        return redirect(reverse("rooms:room-detail", kwargs={"pk": room.pk}))
     except VerifyUser as error:
         messages.error(request, error)
         return redirect(reverse("core:home"))
@@ -488,7 +489,11 @@ def deletePhoto(request, room_pk, photo_pk):
     try:
         if not request.session.get("is_hosting"):
             raise HostOnly("Page Not Found")
-        room = room_models.Room.objects.get(pk=room_pk)
+        room = room_models.Room.objects.get_or_none(pk=room_pk)
+        if room is None:
+            messages.error(request, "Room does not exsit")
+            return redirect(reverse("core:home"))
+
         if request.user.pk != room.host.pk:
             raise VerifyUser("Page Not Found")
 
@@ -496,9 +501,6 @@ def deletePhoto(request, room_pk, photo_pk):
         photo.delete()
         messages.success(request, f"Delete {photo} successfully")
         return redirect(reverse("rooms:photo-detail", kwargs={"pk": room.pk}))
-    except room_models.Room.DoesNotExist:
-        print("Model does not exsit")
-        return redirect(reverse("core:home"))
     except HostOnly as error:
         messages.error(request, error)
         return redirect(reverse("core:home"))

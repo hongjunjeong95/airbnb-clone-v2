@@ -7,6 +7,8 @@ from django.utils.html import strip_tags
 from django.shortcuts import reverse
 from config import settings
 
+from . import managers
+
 
 class User(AbstractUser):
 
@@ -52,6 +54,8 @@ class User(AbstractUser):
         max_length=6, choices=LOGIN_CHOICES, default=LOGIN_EMAIL
     )
 
+    objects = managers.CustomUserModelManager()
+
     def verify_email(self):
         if self.email_verified is False:
             secret = uuid.uuid4().hex[:20]
@@ -72,3 +76,10 @@ class User(AbstractUser):
 
     def get_absolute_url(self):
         return reverse("users:profile", kwargs={"pk": self.pk})
+
+    def get_or_none(self, *args, **kwargs):
+        print(kwargs)
+        try:
+            return self.get(**kwargs)
+        except self.model.DoesNotExist:
+            return None

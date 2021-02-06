@@ -9,20 +9,13 @@ from users import models as user_models
 def createConversation(request, host_pk, guest_pk):
     host = user_models.User.objects.get(pk=host_pk)
     guest = user_models.User.objects.get(pk=guest_pk)
-    # if host == guest:
-    #     return redirect(reverse("core:home"))
-    try:
-        conversation = conversation_models.Conversation.objects.filter(
-            participants=guest
-        ).get(participants=host)
-        print(host, guest)
-        # for participant in conversation.participants.all():
-
-    except conversation_models.Conversation.DoesNotExist:
-        # if host == guest:
-        #     return redirect(reverse("rooms:room-detail", kwargs={"pk": room_pk}))
+    conversation = conversation_models.Conversation.objects.filter(
+        participants=guest
+    ).get_or_none(participants=host)
+    if conversation is None:
         conversation = conversation_models.Conversation.objects.create()
         conversation.participants.add(host, guest)
+
     return redirect(
         reverse("conversations:conversation-detail", kwargs={"pk": conversation.pk})
     )
