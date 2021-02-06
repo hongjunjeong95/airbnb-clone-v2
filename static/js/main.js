@@ -10,7 +10,7 @@ var jsLang = document.getElementById("js-lang");
 
 var handleChange = function handleChange() {
   var selected = jsLang.value;
-  fetch("users/switch-language?lang=".concat(selected)).then(function () {
+  fetch("/users/switch-language?lang=".concat(selected)).then(function () {
     return window.location.reload();
   });
 };
