@@ -52,10 +52,10 @@ class HouseRule(AbstractItem):
 
 
 class Room(core_models.TimeStampedModel):
-    name = models.CharField(max_length=140)
+    name = models.CharField(max_length=50)
     country = CountryField()
-    city = models.CharField(max_length=140)
-    address = models.CharField(max_length=140)
+    city = models.CharField(max_length=50)
+    address = models.CharField(max_length=50)
     price = models.IntegerField()
     guests = models.IntegerField()
     bedrooms = models.IntegerField()
