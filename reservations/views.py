@@ -95,7 +95,7 @@ def cancelReservation(request, pk):
     if reservation is None:
         messages.error(request, "Rservation does not exist")
         return redirect(reverse("core:home"))
-    if reservation.guest != request.user or request.user != reservation.room.host:
+    if request.user != reservation.guest and request.user != reservation.room.host:
         raise Http404()
     room = reservation.room
     reservation.delete()
