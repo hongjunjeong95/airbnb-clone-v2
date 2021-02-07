@@ -2,23 +2,26 @@ from django.shortcuts import render, redirect, reverse
 from django.contrib import messages
 from django.core.paginator import Paginator
 from . import models as conversation_models
-from rooms import models as room_models
 from users import models as user_models
 
 
 def createConversation(request, host_pk, guest_pk):
-    host = user_models.User.objects.get(pk=host_pk)
-    guest = user_models.User.objects.get(pk=guest_pk)
-    conversation = conversation_models.Conversation.objects.filter(
-        participants=guest
-    ).get_or_none(participants=host)
-    if conversation is None:
+    try:
+        host = user_models.User.objects.get(pk=host_pk)
+        guest = user_models.User.objects.get(pk=guest_pk)
+        conversation = conversation_models.Conversation.objects.filter(
+            participants=guest
+        ).get(participants=host)
+
+        return redirect(
+            reverse("conversations:conversation-detail", kwargs={"pk": conversation.pk})
+        )
+    except conversation_models.Conversation.DoesNotExist:
         conversation = conversation_models.Conversation.objects.create()
         conversation.participants.add(host, guest)
-
-    return redirect(
-        reverse("conversations:conversation-detail", kwargs={"pk": conversation.pk})
-    )
+        return redirect(
+            reverse("rooms:conversation-detail", kwargs={"pk": conversation.pk})
+        )
 
 
 def conversationList(request):
