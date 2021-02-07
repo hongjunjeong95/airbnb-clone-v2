@@ -20,7 +20,7 @@ def createConversation(request, host_pk, guest_pk):
         conversation = conversation_models.Conversation.objects.create()
         conversation.participants.add(host, guest)
         return redirect(
-            reverse("rooms:conversation-detail", kwargs={"pk": conversation.pk})
+            reverse("conversations:conversation-detail", kwargs={"pk": conversation.pk})
         )
 
 
