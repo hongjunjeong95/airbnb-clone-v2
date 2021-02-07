@@ -376,8 +376,8 @@ def updateProfile(request, pk):
                 messages.error(request, "User does not exist")
                 return redirect(reverse("core:home"))
 
-            avatar = request.POST.get("avatar")
-            if avatar is not None:
+            avatar = request.FILES.get("avatar")
+            if avatar is not None and avatar != "":
                 user.avatar = avatar
 
             first_name = request.POST.get("first_name")

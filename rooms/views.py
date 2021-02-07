@@ -187,7 +187,7 @@ def createRoom(request):
             facilities = request.POST.getlist("facilities")
             house_rules = request.POST.getlist("house_rules")
             caption = request.POST.get("caption")
-            photo = request.POST.get("photo")
+            photo = request.FILES.get("photo")
             instant_book = bool(request.POST.get("instant_book"))
 
             room = room_models.Room.objects.create(
@@ -423,7 +423,7 @@ def createPhoto(request, pk):
             if not request.session.get("is_hosting"):
                 raise HostOnly("Page Not Found")
             caption = request.POST.get("caption")
-            photo = request.POST.get("photo")
+            photo = request.FILES.get("photo")
 
             room = room_models.Room.objects.get(pk=pk)
             photo = photo_models.Photo.objects.create(
@@ -431,7 +431,7 @@ def createPhoto(request, pk):
             )
 
             messages.success(request, f"Create {caption}-photo successfully")
-            return redirect(reverse("rooms:edit-room", kwargs={"pk": room.pk}))
+            return redirect(reverse("rooms:photo-detail", kwargs={"pk": room.pk}))
         except LoggedInOnlyView as error:
             messages.error(request, error)
             return redirect(reverse("core:home"))
