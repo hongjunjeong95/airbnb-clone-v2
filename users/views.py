@@ -24,6 +24,8 @@ from .exception import (
     EmailLoggedInOnly,
 )
 
+DEBUG = bool(os.environ.get("DEBUG"))
+
 
 # Sign Up CBV
 class SignUpView(mixins.LoggedOutOnlyView, FormView):
@@ -96,7 +98,10 @@ def github_login(request):
         if request.user.is_authenticated:
             raise LoggedOutOnlyView("User already logged in")
         client_id = os.environ.get("GH_ID")
-        redirect_uri = "http://127.0.0.1:8000/users/login/github/callback/"
+        if DEBUG:
+            redirect_uri = "http://127.0.0.1:8000/users/login/github/callback/"
+        else:
+            redirect_uri = "http://13.209.15.160:8000/users/login/github/callback/"
         scope = "read:user"
         return redirect(
             f"https://github.com/login/oauth/authorize?client_id={client_id}&redirect_uri={redirect_uri}&scope={scope}"
@@ -191,7 +196,10 @@ def kakao_login(request):
         if request.user.is_authenticated:
             raise LoggedOutOnlyView("User already logged in")
         client_id = os.environ.get("KAKAO_ID")
-        redirect_uri = "http://127.0.0.1:8000/users/login/kakao/callback/"
+        if DEBUG:
+            redirect_uri = "http://127.0.0.1:8000/users/login/kakao/callback/"
+        else:
+            redirect_uri = "http://13.209.15.160:8000/users/login/kakao/callback/"
         return redirect(
             f"https://kauth.kakao.com/oauth/authorize?client_id={client_id}&redirect_uri={redirect_uri}&response_type=code"
         )
@@ -211,7 +219,10 @@ def kakao_login_callback(request):
         if code is None:
             KakaoException("Can't get code")
         client_id = os.environ.get("KAKAO_ID")
-        redirect_uri = "http://127.0.0.1:8000/users/login/kakao/callback/"
+        if DEBUG:
+            redirect_uri = "http://127.0.0.1:8000/users/login/kakao/callback/"
+        else:
+            redirect_uri = "http://13.209.15.160:8000/users/login/kakao/callback/"
         client_secret = os.environ.get("KAKAO_SECRET")
         request_access_token = requests.post(
             f"https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id={client_id}&redirect_uri={redirect_uri}&code={code}&client_secret={client_secret}",
