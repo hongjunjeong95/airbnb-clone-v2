@@ -19,9 +19,7 @@ def createReservation(request, room_pk, year, month, day):
             raise LoggedInOnlyView("Login First Please.")
         date_obj = datetime.datetime(year, month, day)
         room = room_models.Room.objects.get(pk=room_pk)
-        reservation_models.BookedDay.objects.get_or_none(
-            day=date_obj, reservation__room=room
-        )
+        reservation_models.BookedDay.objects.get(day=date_obj, reservation__room=room)
         raise CreateError()
     except (room_models.Room.DoesNotExist, CreateError):
         messages.error(request, "Can't reserve that room")
