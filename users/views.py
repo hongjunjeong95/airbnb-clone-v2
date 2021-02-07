@@ -253,7 +253,6 @@ def kakao_login_callback(request):
 
             if avatar_url is not None:
                 avatar_request = requests.get(avatar_url)
-                # print(avatar_request.content())
                 user.avatar.save(
                     f"{nickname}-avatar", ContentFile(avatar_request.content)
                 )
@@ -512,7 +511,6 @@ def switch_hosting(request):
 
 def switch_language(request):
     lang = request.GET.get("lang", None)
-    print(lang)
     if lang is not None:
         request.session[translation.LANGUAGE_SESSION_KEY] = lang
     return HttpResponse(status=200)

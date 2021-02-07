@@ -4,6 +4,7 @@ from django.core.mail import send_mail
 from django.db import models
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
+from django.utils.translation import gettext_lazy as _
 from django.shortcuts import reverse
 from config import settings
 
@@ -18,14 +19,17 @@ class User(AbstractUser):
     GENDER_FEMALE = "Female"
     GENDER_OTHER = "Other"
     GENDER_CHOICES = (
-        (GENDER_MALE, "Male"),
-        (GENDER_FEMALE, "Female"),
-        (GENDER_OTHER, "Other"),
+        (GENDER_MALE, _("Male")),
+        (GENDER_FEMALE, _("Female")),
+        (GENDER_OTHER, _("Other")),
     )
 
     LANGUAGE_KOREAN = "KR"
     LANGUAGE_ENGLISH = "EN"
-    LANGUAGE_CHOICES = ((LANGUAGE_KOREAN, "Korean"), (LANGUAGE_ENGLISH, "English"))
+    LANGUAGE_CHOICES = (
+        (LANGUAGE_KOREAN, _("Korean")),
+        (LANGUAGE_ENGLISH, _("English")),
+    )
 
     CURRENCY_KRW = "KRW"
     CURRENCY_USD = "USD"
@@ -36,9 +40,9 @@ class User(AbstractUser):
     LOGIN_KAKAO = "kakao"
 
     LOGIN_CHOICES = (
-        (LOGIN_EMAIL, "Email"),
-        (LOGIN_GITHUB, "Github"),
-        (LOGIN_KAKAO, "Kakao"),
+        (LOGIN_EMAIL, _("Email")),
+        (LOGIN_GITHUB, _("Github")),
+        (LOGIN_KAKAO, _("Kakao")),
     )
 
     avatar = models.ImageField(blank=True)

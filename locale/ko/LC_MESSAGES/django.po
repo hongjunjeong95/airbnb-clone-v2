@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-06 15:04+0900\n"
+"POT-Creation-Date: 2021-02-07 12:17+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,12 +22,12 @@ msgstr ""
 msgid "Searching By City"
 msgstr "검색"
 
-#: .\templates\mixins\page_number.html:3 .\templates\mixins\page_number.html:5
+#: .\templates\mixins\page_number.html:4 .\templates\mixins\page_number.html:6
 msgid "Prev"
 msgstr "이전"
 
-#: .\templates\mixins\page_number.html:17
-#: .\templates\mixins\page_number.html:19
+#: .\templates\mixins\page_number.html:18
+#: .\templates\mixins\page_number.html:20
 msgid "Next"
 msgstr "다음"
 
@@ -66,3 +66,35 @@ msgstr "로그인"
 #: .\templates\partials\nav.html:32
 msgid "Sign Up"
 msgstr "회원가입"
+
+#: .\users\models.py:22
+msgid "Male"
+msgstr "남자"
+
+#: .\users\models.py:23
+msgid "Female"
+msgstr "여자"
+
+#: .\users\models.py:24
+msgid "Other"
+msgstr "다른 성"
+
+#: .\users\models.py:30
+msgid "Korean"
+msgstr "한국어"
+
+#: .\users\models.py:31
+msgid "English"
+msgstr "영어"
+
+#: .\users\models.py:43
+msgid "Email"
+msgstr "이메일"
+
+#: .\users\models.py:44
+msgid "Github"
+msgstr "깃허브"
+
+#: .\users\models.py:45
+msgid "Kakao"
+msgstr "카카오"
